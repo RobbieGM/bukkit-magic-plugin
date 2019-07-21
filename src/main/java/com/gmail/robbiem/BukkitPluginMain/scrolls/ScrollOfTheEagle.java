@@ -31,13 +31,11 @@ public class ScrollOfTheEagle extends Scroll {
 
 	@Override
 	public long getCooldown() {
-		// TODO Auto-generated method stub
 		return LENGTH_SECONDS * 1000;
 	}
 
 	@Override
 	public Material getCraftingRecipeCenterItem() {
-		// TODO Auto-generated method stub
 		return Material.FEATHER;
 	}
 
