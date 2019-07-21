@@ -1,0 +1,8 @@
+name: BukkitModPlugin
+main: com.gmail.robbiem.BukkitPluginMain.Main
+version: 0.1
+api-version: 1.14
+commands:
+  go:
+    description: Starts the hunger games.
+    usage: /go
