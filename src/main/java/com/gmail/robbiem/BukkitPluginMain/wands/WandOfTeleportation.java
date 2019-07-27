@@ -6,6 +6,7 @@ import org.bukkit.Particle;
 import org.bukkit.Server;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.WorldBorder;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -19,6 +20,7 @@ public class WandOfTeleportation extends Wand {
 	public void use(ItemStack wandItem, Player player, World world, JavaPlugin plugin, Server server) {
 		Location previousLocation = player.getLocation();
 		Location targetedLocation = player.getTargetBlock(null, TELEPORTER_STICK_RANGE).getLocation();
+		targetedLocation = clampToWorldBorder(targetedLocation, world);
 		Location highestBlockLocation = world.getHighestBlockAt(targetedLocation).getLocation();
 		if (targetedLocation.getY() > highestBlockLocation.getY()) { // Avoid teleporting into air, but allow teleporting under trees.
 			targetedLocation.setY(highestBlockLocation.getY());
@@ -31,11 +33,24 @@ public class WandOfTeleportation extends Wand {
 		int vectorMag = (int) locationDifference.length();
 		server.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 			for (int i = 1; i <= vectorMag; i++) {
-				world.spawnParticle(Particle.PORTAL, previousLocationVector.clone().add(locationDifference.clone().multiply((double) i / vectorMag)).toLocation(world), 5, 0.5, 0.5, 0.5);
+				world.spawnParticle(Particle.PORTAL, previousLocationVector.clone().add(locationDifference.clone().multiply((double) i / vectorMag)).toLocation(world), 10, 0.5, 0.5, 0.5);
 			}
 		}, 1);
 		player.teleport(targetedLocation);
 		world.playSound(targetedLocation, Sound.ITEM_CHORUS_FRUIT_TELEPORT, 1, 1);
+	}
+	
+	Location clampToWorldBorder(Location orig, World world) {
+		WorldBorder border = world.getWorldBorder();
+		if (orig.getX() < border.getCenter().getX() - border.getSize() / 2)
+			orig.setX(border.getCenter().getX() - border.getSize() / 2);
+		if (orig.getX() > border.getCenter().getX() + border.getSize() / 2)
+			orig.setX(border.getCenter().getX() + border.getSize() / 2);
+		if (orig.getZ() < border.getCenter().getZ() - border.getSize() / 2)
+			orig.setZ(border.getCenter().getZ() - border.getSize() / 2);
+		if (orig.getZ() > border.getCenter().getZ() + border.getSize() / 2)
+			orig.setZ(border.getCenter().getZ() + border.getSize() / 2);
+		return orig;
 	}
 	
 	public long getCooldown() {
@@ -45,5 +60,10 @@ public class WandOfTeleportation extends Wand {
 	@Override
 	public ShapedRecipe getCraftingRecipeFromResultingItem(ShapedRecipe startingRecipe) {
 		return startingRecipe.shape("  p", " s ", "p  ").setIngredient('p', Material.ENDER_PEARL).setIngredient('s', Material.STICK);
+	}
+
+	@Override
+	public String getLore() {
+		return "Teleports you where you're looking,\nbut can't make you go into the sky";
 	}
 }

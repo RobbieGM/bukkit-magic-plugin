@@ -39,4 +39,9 @@ public class ScrollOfTheEagle extends Scroll {
 		return Material.FEATHER;
 	}
 
+	@Override
+	public String getLore() {
+		return "Lets you fly around in spectator mode for 15 seconds,\nthen puts you back where you were";
+	}
+
 }

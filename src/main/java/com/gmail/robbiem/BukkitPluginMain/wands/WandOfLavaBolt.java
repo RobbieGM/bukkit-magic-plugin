@@ -13,34 +13,51 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class WandOfLavaBolt extends Wand {
+	
+	List<Material> unbreakable;
+	
+	public WandOfLavaBolt(List<Material> unbreakable) {
+		this.unbreakable = unbreakable;
+	}
 
 	@Override
 	public void use(ItemStack wandItem, Player player, World world, JavaPlugin plugin, Server server) {
-		List<Block> blocks = player.getLineOfSight(null, 20);
+		List<Block> blocks = player.getLineOfSight(null, 40);
 		for (int i = 0; i < blocks.size() - 1; i++) {
 			if (blocks.get(i).getLocation().distanceSquared(player.getLocation()) < 2 * 2)
 				continue;
 			final int innerI = i; // Otherwise Java throws an error
 			server.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-				blocks.get(innerI).setType(Material.LAVA);
-				world.spawnParticle(Particle.LAVA, blocks.get(innerI).getLocation(), 3, 0.5, 0.5, 0.5);
+				setBlock(blocks.get(innerI), Material.LAVA);
+				if (Math.random() > 0.5) // Particles can be laggy
+					world.spawnParticle(Particle.LAVA, blocks.get(innerI).getLocation(), 3, 0.5, 0.5, 0.5);
 				server.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-					blocks.get(innerI).setType(Material.AIR);
+					setBlock(blocks.get(innerI), Material.AIR);
 				}, 20);
 			}, i);
 		}
+	}
+	
+	void setBlock(Block block, Material type) {
+		if (!unbreakable.contains(type))
+			block.setType(type);
 	}
 
 	@Override
 	public long getCooldown() {
 		// TODO Auto-generated method stub
-		return 1000l;
+		return 600l;
 	}
 
 	@Override
 	public ShapedRecipe getCraftingRecipeFromResultingItem(ShapedRecipe startingRecipe) {
 		// TODO Auto-generated method stub
 		return startingRecipe.shape("  l", " s ", "p  ").setIngredient('l', Material.LAVA_BUCKET).setIngredient('s', Material.STICK).setIngredient('p', Material.ENDER_PEARL);
+	}
+
+	@Override
+	public String getLore() {
+		return "Creates a stream of lava in the\ndirection you look, lasting 1 second";
 	}
 
 }

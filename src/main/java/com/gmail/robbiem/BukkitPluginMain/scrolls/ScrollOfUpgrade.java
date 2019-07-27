@@ -65,4 +65,9 @@ public class ScrollOfUpgrade extends Scroll {
         return item;
     }
 
+	@Override
+	public String getLore() {
+		return "Upgrades all your armor";
+	}
+
 }

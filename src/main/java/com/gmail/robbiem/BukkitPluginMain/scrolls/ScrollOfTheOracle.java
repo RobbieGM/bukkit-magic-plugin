@@ -36,4 +36,9 @@ public class ScrollOfTheOracle extends Scroll {
 		return Material.ENDER_EYE;
 	}
 
+	@Override
+	public String getLore() {
+		return "Gives you a crystal ball revealing the\nend coordinates of the world border";
+	}
+
 }

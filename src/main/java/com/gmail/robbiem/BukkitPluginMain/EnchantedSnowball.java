@@ -10,6 +10,7 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -43,23 +44,28 @@ public class EnchantedSnowball implements Listener {
 	
 	@EventHandler
 	public void onSnowballThrow(ProjectileLaunchEvent e) {
-		if (e.getEntity() instanceof Snowball) {
-			snowballIds.add(e.getEntity().getUniqueId());
+		if (e.getEntity() instanceof Snowball && e.getEntity().getShooter() instanceof Player) {
+			Player p = (Player) e.getEntity().getShooter();
+			if (p.getInventory().getItemInMainHand().hasItemMeta() && p.getInventory().getItemInMainHand().getItemMeta().hasDisplayName() && p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals("Enchanted Snowball")) {
+				snowballIds.add(e.getEntity().getUniqueId());
+			}
 		}
 	}
 	
 	@EventHandler
 	public void onSnowballHit(ProjectileHitEvent e) {
-		if (e.getEntity() instanceof Snowball) {
+		if (e.getEntity() instanceof Snowball && snowballIds.contains(e.getEntity().getUniqueId())) {
 			snowballIds.remove(e.getEntity().getUniqueId());
 			if (e.getHitEntity() instanceof LivingEntity) {
 				LivingEntity hit = (LivingEntity) e.getHitEntity();
-				hit.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 20 * 2, 128)); // Jump boost 128 = no jumping to evade slowness
-				hit.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 2, 2));
+				if (!hit.hasPotionEffect(PotionEffectType.JUMP)) {
+					hit.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 20 * 1, 128)); // Jump boost 128 = no jumping to evade slowness
+					hit.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 1, 255));
+				}
 				if (e.getEntity().getShooter() instanceof Entity) {
-					hit.damage(2, (Entity) e.getEntity().getShooter());
+					hit.damage(4, (Entity) e.getEntity().getShooter());
 				} else {
-					hit.damage(2);
+					hit.damage(4);
 				}
 				hit.getWorld().playSound(hit.getLocation(), Sound.BLOCK_CHORUS_FLOWER_DEATH, 1, 1.5f);
 				hit.getWorld().spawnParticle(Particle.SNOWBALL, hit.getLocation(), 30, 0.25, 0.25, 0.25);

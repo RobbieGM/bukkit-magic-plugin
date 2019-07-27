@@ -92,4 +92,9 @@ public class ScrollOfInvisibility extends Scroll implements Listener {
 		return true;
 	}
 
+	@Override
+	public String getLore() {
+		return "Makes you truly invisible for\na minute, or until you attack\nsomeone or use a wand";
+	}
+
 }

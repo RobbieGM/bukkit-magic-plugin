@@ -36,4 +36,9 @@ public class ScrollOfFlight extends Scroll {
 		return Material.ELYTRA;
 	}
 
+	@Override
+	public String getLore() {
+		return "Lets you fly for 10 seconds\nas if in creative mode";
+	}
+
 }

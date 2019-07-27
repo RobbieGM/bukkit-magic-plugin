@@ -8,7 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class RuneOfBackstabbing extends Rune implements Listener {
+public class RuneOfBackstabbing extends Rune {
 
 	public RuneOfBackstabbing(JavaPlugin plugin) {
 		super(plugin);

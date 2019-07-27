@@ -7,7 +7,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public interface UseableItem {
-	public void use(ItemStack wandItem, Player player, World world, JavaPlugin plugin, Server server);
+	public void use(ItemStack item, Player player, World world, JavaPlugin plugin, Server server);
 	public long getCooldown();
+	public String getLore();
 	public boolean isEventHandler();
 }

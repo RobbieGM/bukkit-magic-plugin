@@ -7,6 +7,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.CraftItemEvent;
@@ -23,7 +24,11 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class Main extends JavaPlugin implements Listener {
 	
+	public static final String HUNGER_GAMES_WORLD = "HungerGames";
+	public static final String HUNGER_GAMES_WAITING_ROOM = "Hunger Games Waiting Room";
+	
 	ModdedItemManager moddedItemManager;
+	World hungerGames;
 	
 	public Main() {
 		moddedItemManager = new ModdedItemManager(this);
@@ -36,10 +41,12 @@ public class Main extends JavaPlugin implements Listener {
 		pm.registerEvents(this, this);
 		pm.registerEvents(new BlockProtector(), this);
 		pm.registerEvents(moddedItemManager, this);
-		pm.registerEvents(new EventSnooper(this), this);
+//		pm.registerEvents(new EventSnooper(this), this);
 		pm.registerEvents(new AutoSpectatorMode(), this);
+		pm.registerEvents(new PhantomSpawnPreventor(), this);
 		moddedItemManager.onEnable();
 		this.getCommand("go").setExecutor(new GoCommand(this));
+		this.getCommand("go-again").setExecutor(new RestartGameCommand(this));
 		ShapedRecipe tridentRecipe = new ShapedRecipe(new NamespacedKey(this, "custom_trident"), new ItemStack(Material.TRIDENT, 1));
 		tridentRecipe.shape("dsd", " s ", " s ").setIngredient('d', Material.DIAMOND).setIngredient('s', Material.STICK);
 		getServer().addRecipe(tridentRecipe);

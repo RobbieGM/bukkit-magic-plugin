@@ -6,38 +6,33 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
-public class ScrollOfTheHuntersVision extends Scroll {
+public class ScrollOfBlindness extends Scroll {
 
 	@Override
 	public void use(ItemStack wandItem, Player player, World world, JavaPlugin plugin, Server server) {
 		for (Player p: world.getPlayers()) {
 			if (!p.equals(player)) {
-				p.setGlowing(true);
+				p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 10, 1));
 			}
 		}
-		server.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-			for (Player p: world.getPlayers()) {
-				if (!p.equals(player)) {
-					p.setGlowing(false);
-				}
-			}
-		}, 20 * 10);
 	}
 
 	@Override
 	public long getCooldown() {
-		return 5000l;
+		return 1000l;
 	}
 
 	@Override
 	public Material getCraftingRecipeCenterItem() {
-		return Material.GLOWSTONE;
+		return Material.SPIDER_EYE;
 	}
 
 	@Override
 	public String getLore() {
-		return "Makes all other players glow";
+		return "Blinds all players\naround you";
 	}
 
 }

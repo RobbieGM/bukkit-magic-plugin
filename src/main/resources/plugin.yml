@@ -6,3 +6,6 @@ commands:
   go:
     description: Starts the hunger games.
     usage: /go
+  go-again:
+    description: Restarts the server for a new round.
+    usage: /restart

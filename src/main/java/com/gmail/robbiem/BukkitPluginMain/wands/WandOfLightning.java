@@ -1,39 +1,40 @@
 package com.gmail.robbiem.BukkitPluginMain.wands;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
-import org.bukkit.entity.LargeFireball;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.RayTraceResult;
 
-public class WandOfOP extends Wand {
+public class WandOfLightning extends Wand {
 
 	@Override
 	public void use(ItemStack wandItem, Player player, World world, JavaPlugin plugin, Server server) {
-		Location loc = player.getEyeLocation().toVector().add(player.getLocation().getDirection().multiply(6)).toLocation(world, player.getLocation().getYaw(), player.getLocation().getPitch());
-		LargeFireball fireball = world.spawn(loc, LargeFireball.class);
-		fireball.setYield(10f);
-		fireball.setShooter(player);
+		RayTraceResult rayTrace = player.rayTraceBlocks(100);
+		if (rayTrace != null && rayTrace.getHitBlock() != null) {
+			Location loc = rayTrace.getHitPosition().toLocation(world);
+			world.strikeLightning(loc);
+		}
 	}
 
 	@Override
 	public long getCooldown() {
-		// TODO Auto-generated method stub
-		return 250l;
+		return 2000l;
 	}
 
 	@Override
 	public ShapedRecipe getCraftingRecipeFromResultingItem(ShapedRecipe startingRecipe) {
-		// TODO Auto-generated method stub
-		return null;
+		return startingRecipe.shape("  t", " s ", "p  ").setIngredient('t', Material.TRIDENT).setIngredient('s', Material.STICK).setIngredient('p', Material.ENDER_PEARL);
 	}
 
 	@Override
 	public String getLore() {
-		return "It's pretty OP";
+		return "Makes lightning strike where\nyou're looking";
 	}
-	
+
 }

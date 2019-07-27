@@ -38,4 +38,9 @@ public class ScrollOfEquineSummoning extends Scroll {
 		return Material.LEATHER;
 	}
 
+	@Override
+	public String getLore() {
+		return "Summons a horse that you\ncan ride for 30 seconds";
+	}
+
 }

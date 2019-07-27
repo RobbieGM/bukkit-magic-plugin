@@ -115,4 +115,9 @@ public class WandOfAvalanche extends Wand implements Listener {
 		return true;
 	}
 
+	@Override
+	public String getLore() {
+		return "Waits half a second, then opens a\ngaping hole in the ground";
+	}
+
 }

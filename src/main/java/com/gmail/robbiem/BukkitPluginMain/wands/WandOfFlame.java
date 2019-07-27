@@ -17,19 +17,24 @@ public class WandOfFlame extends Wand {
 	public void use(ItemStack wandItem, Player player, World world, JavaPlugin plugin, Server server) {
 		Location loc = player.getEyeLocation().toVector().add(player.getLocation().getDirection().multiply(6)).toLocation(world, player.getLocation().getYaw(), player.getLocation().getPitch());
 		LargeFireball fireball = world.spawn(loc, LargeFireball.class);
-		fireball.setYield(2f);
+		fireball.setYield(1.6f);
 		fireball.setShooter(player);
 		world.playSound(player.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 1, 1.5f);
 	}
 
 	@Override
 	public long getCooldown() {
-		return 2000l;
+		return 1250l;
 	}
 
 	@Override
 	public ShapedRecipe getCraftingRecipeFromResultingItem(ShapedRecipe startingRecipe) {
 		return startingRecipe.shape("  t", " r ", "p  ").setIngredient('p', Material.ENDER_PEARL).setIngredient('r', Material.BLAZE_ROD).setIngredient('t', Material.TORCH);
+	}
+
+	@Override
+	public String getLore() {
+		return "Launches a fireball in the\ndirection you're looking";
 	}
 
 }

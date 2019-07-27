@@ -44,4 +44,9 @@ public class ScrollOfTeleportation extends Scroll {
 		return Material.IRON_BOOTS;
 	}
 
+	@Override
+	public String getLore() {
+		return "Puts you in a random place\ninside the world border";
+	}
+
 }

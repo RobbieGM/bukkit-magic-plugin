@@ -3,41 +3,36 @@ package com.gmail.robbiem.BukkitPluginMain.scrolls;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class ScrollOfTheHuntersVision extends Scroll {
+public class ScrollOfScavenging extends Scroll {
 
 	@Override
 	public void use(ItemStack wandItem, Player player, World world, JavaPlugin plugin, Server server) {
-		for (Player p: world.getPlayers()) {
-			if (!p.equals(player)) {
-				p.setGlowing(true);
-			}
-		}
-		server.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-			for (Player p: world.getPlayers()) {
-				if (!p.equals(player)) {
-					p.setGlowing(false);
-				}
-			}
-		}, 20 * 10);
+		world.getEntitiesByClass(Item.class).forEach(item -> {
+			item.teleport(player);
+		});
 	}
 
 	@Override
 	public long getCooldown() {
-		return 5000l;
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	@Override
 	public Material getCraftingRecipeCenterItem() {
-		return Material.GLOWSTONE;
+		return Material.CHEST;
 	}
 
 	@Override
 	public String getLore() {
-		return "Makes all other players glow";
+		return "Teleports all items on\nthe ground to you";
 	}
 
 }
