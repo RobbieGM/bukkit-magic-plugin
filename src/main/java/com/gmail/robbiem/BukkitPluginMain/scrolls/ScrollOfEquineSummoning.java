@@ -9,12 +9,16 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
+import com.gmail.robbiem.BukkitPluginMain.Main;
 
 public class ScrollOfEquineSummoning extends Scroll {
 
+	public ScrollOfEquineSummoning(Main plugin) {
+		super(plugin);
+	}
+
 	@Override
-	public void use(ItemStack wandItem, Player player, World world, JavaPlugin plugin, Server server) {
+	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
 		Horse horse = (Horse) world.spawnEntity(player.getLocation(), EntityType.HORSE);
 		horse.setTamed(true);
 		horse.setOwner(player);
@@ -26,10 +30,11 @@ public class ScrollOfEquineSummoning extends Scroll {
 			world.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 2);
 			horse.remove();
 		}, 20 * 30);
+		return true;
 	}
 
 	@Override
-	public long getCooldown() {
+	public long getPlayerCooldown() {
 		return 100l;
 	}
 
@@ -41,6 +46,11 @@ public class ScrollOfEquineSummoning extends Scroll {
 	@Override
 	public String getLore() {
 		return "Summons a horse that you\ncan ride for 30 seconds";
+	}
+
+	@Override
+	public String getName() {
+		return "Scroll of Equine Summoning";
 	}
 
 }

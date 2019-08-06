@@ -1,38 +1,51 @@
 package com.gmail.robbiem.BukkitPluginMain.scrolls;
 
+import java.util.Collection;
+
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
+import com.gmail.robbiem.BukkitPluginMain.Main;
 
 public class ScrollOfScavenging extends Scroll {
 
-	@Override
-	public void use(ItemStack wandItem, Player player, World world, JavaPlugin plugin, Server server) {
-		world.getEntitiesByClass(Item.class).forEach(item -> {
-			item.teleport(player);
-		});
+	public ScrollOfScavenging(Main plugin) {
+		super(plugin);
 	}
 
 	@Override
-	public long getCooldown() {
+	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
+		Collection<Item> items = world.getEntitiesByClass(Item.class);
+		if (items.size() == 0)
+			return false;
+		items.forEach(item -> {
+			item.teleport(player);
+		});
+		return true;
+	}
+
+	@Override
+	public long getPlayerCooldown() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public Material getCraftingRecipeCenterItem() {
-		return Material.CHEST;
+		return Material.HOPPER;
 	}
 
 	@Override
 	public String getLore() {
 		return "Teleports all items on\nthe ground to you";
+	}
+
+	@Override
+	public String getName() {
+		return "Scroll of Scavenging";
 	}
 
 }

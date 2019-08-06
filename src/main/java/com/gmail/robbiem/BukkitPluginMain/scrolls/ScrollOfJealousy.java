@@ -4,35 +4,44 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
+import com.gmail.robbiem.BukkitPluginMain.Main;
 
 public class ScrollOfJealousy extends Scroll implements Listener {
 
+	public ScrollOfJealousy(Main plugin) {
+		super(plugin);
+	}
+
 	@Override
-	public void use(ItemStack item, Player player, World world, JavaPlugin plugin, Server server) {
+	public boolean use(ItemStack item, Player player, World world, Server server) {
 		Player closest = null;
 		for (Player p: world.getPlayers()) {
-			if ((closest == null || p.getLocation().distanceSquared(player.getLocation()) < closest.getLocation().distanceSquared(player.getLocation())) && p.getGameMode() == GameMode.SURVIVAL && !p.equals(closest)) {
+			if ((closest == null || p.getLocation().distanceSquared(player.getLocation()) < closest.getLocation().distanceSquared(player.getLocation())) && p.getGameMode() == GameMode.SURVIVAL && !p.equals(player)) {
 				closest = p;
 			}
 		}
 		if (closest != null) {
 			player.openInventory(closest.getInventory());
+			return true;
 		} else {
 			player.sendMessage("No other players were detected. Are they in survival mode?");
+			return false;
 		}
 	}
 	
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent e) {
-		InventoryHolder holder = e.getClickedInventory().getHolder();
+		Inventory inv = e.getClickedInventory();
+		if (inv == null)
+			return;
+		InventoryHolder holder = inv.getHolder();
 		if (holder instanceof Player && e.getWhoClicked() instanceof Player && !holder.equals(e.getWhoClicked())) {
 			e.setCancelled(true);
 		}
@@ -44,7 +53,7 @@ public class ScrollOfJealousy extends Scroll implements Listener {
 	}
 
 	@Override
-	public long getCooldown() {
+	public long getPlayerCooldown() {
 		return 0;
 	}
 
@@ -56,6 +65,11 @@ public class ScrollOfJealousy extends Scroll implements Listener {
 	@Override
 	public Material getCraftingRecipeCenterItem() {
 		return Material.BARREL;
+	}
+
+	@Override
+	public String getName() {
+		return "Scroll of Jealousy";
 	}
 
 }

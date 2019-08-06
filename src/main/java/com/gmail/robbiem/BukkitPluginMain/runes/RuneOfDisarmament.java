@@ -6,11 +6,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
+import com.gmail.robbiem.BukkitPluginMain.Main;
 
 public class RuneOfDisarmament extends Rune {
 
-	public RuneOfDisarmament(JavaPlugin plugin) {
+	public RuneOfDisarmament(Main plugin) {
 		super(plugin);
 	}
 	

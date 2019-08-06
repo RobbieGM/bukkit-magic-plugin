@@ -11,17 +11,22 @@ import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
+
+import com.gmail.robbiem.BukkitPluginMain.Main;
 
 public class WandOfForce extends Wand {
 
+	public WandOfForce(Main plugin) {
+		super(plugin);
+	}
+
 	@Override
-	public void use(ItemStack wandItem, Player player, World world, JavaPlugin plugin, Server server) {
+	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
 		List<LivingEntity> mobs = world.getLivingEntities();
-		world.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1.5f);
+		boolean pushedMob = false;
 		for (LivingEntity mob: mobs) {
+			pushedMob = true;
 			if (mob instanceof Player && ((Player) mob).getGameMode() != GameMode.SURVIVAL)
 				continue;
 			Vector mobLocation = mob.getLocation().toVector();
@@ -35,21 +40,29 @@ public class WandOfForce extends Wand {
 				mob.setVelocity(propelVector);
 			}
 		}
+		if (pushedMob)
+			world.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1.5f);
+		return pushedMob;
 	}
 
 	@Override
-	public long getCooldown() {
+	public long getPlayerCooldown() {
 		return 2500l; 
-	}
-
-	@Override
-	public ShapedRecipe getCraftingRecipeFromResultingItem(ShapedRecipe startingRecipe) {
-		return startingRecipe.shape("  g", " s ", "p  ").setIngredient('p', Material.ENDER_PEARL).setIngredient('s', Material.STICK).setIngredient('g', Material.GUNPOWDER);
 	}
 
 	@Override
 	public String getLore() {
 		return "Pushes all mobs and players away from\nyou with considerable velocity";
+	}
+
+	@Override
+	public Material getWandTip() {
+		return Material.GUNPOWDER;
+	}
+
+	@Override
+	public String getName() {
+		return "Wand of Force";
 	}
 
 }

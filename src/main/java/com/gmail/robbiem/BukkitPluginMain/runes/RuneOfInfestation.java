@@ -6,15 +6,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Silverfish;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.plugin.java.JavaPlugin;
+import com.gmail.robbiem.BukkitPluginMain.Main;
 
 public class RuneOfInfestation extends Rune {
 	
 	public static final int DISTANCE = 10;
 
-	public RuneOfInfestation(JavaPlugin plugin) {
+	public RuneOfInfestation(Main plugin) {
 		super(plugin);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@EventHandler

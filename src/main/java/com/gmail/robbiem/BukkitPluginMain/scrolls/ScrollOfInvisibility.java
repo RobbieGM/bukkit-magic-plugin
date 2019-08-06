@@ -16,25 +16,27 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 
+import com.gmail.robbiem.BukkitPluginMain.Main;
 import com.gmail.robbiem.BukkitPluginMain.ModdedWeaponUsedEvent;
 
 public class ScrollOfInvisibility extends Scroll implements Listener {
 	
+	public ScrollOfInvisibility(Main plugin) {
+		super(plugin);
+	}
+
 	ArrayList<Player> invisiblePlayers = new ArrayList<>();
 	JavaPlugin plugin;
 	static final int LENGTH_SECONDS = 60;
-	
-	public ScrollOfInvisibility(JavaPlugin plugin) {
-		this.plugin = plugin;
-	}
 
 	@Override
-	public void use(ItemStack wandItem, Player player, World world, JavaPlugin plugin, Server server) {
+	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
 		player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 20 * LENGTH_SECONDS, 1, false, false));
 		setPlayerVisibility(player, false);
 		server.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 			setPlayerVisibility(player, true);
 		}, 20 * LENGTH_SECONDS);
+		return true;
 	}
 	
 	public void setPlayerVisibility(Player player, boolean visible) {
@@ -76,7 +78,7 @@ public class ScrollOfInvisibility extends Scroll implements Listener {
 	}
 
 	@Override
-	public long getCooldown() {
+	public long getPlayerCooldown() {
 		// TODO Auto-generated method stub
 		return 1000l;
 	}
@@ -95,6 +97,11 @@ public class ScrollOfInvisibility extends Scroll implements Listener {
 	@Override
 	public String getLore() {
 		return "Makes you truly invisible for\na minute, or until you attack\nsomeone or use a wand";
+	}
+
+	@Override
+	public String getName() {
+		return "Scroll of Invisibility";
 	}
 
 }

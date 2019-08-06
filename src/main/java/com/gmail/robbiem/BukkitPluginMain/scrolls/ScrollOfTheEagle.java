@@ -8,14 +8,18 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
+import com.gmail.robbiem.BukkitPluginMain.Main;
 
 public class ScrollOfTheEagle extends Scroll {
 	
-	static final int LENGTH_SECONDS = 15;
+	public ScrollOfTheEagle(Main plugin) {
+		super(plugin);
+	}
+
+	static final int LENGTH_SECONDS = 20;
 
 	@Override
-	public void use(ItemStack wandItem, Player player, World world, JavaPlugin plugin, Server server) {
+	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
 		Location originalLocation = player.getLocation();
 		player.setGameMode(GameMode.SPECTATOR);
 		int particleTaskId = server.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
@@ -27,10 +31,11 @@ public class ScrollOfTheEagle extends Scroll {
 			player.teleport(originalLocation);
 			player.setGameMode(GameMode.SURVIVAL);
 		}, 20 * LENGTH_SECONDS);
+		return true;
 	}
 
 	@Override
-	public long getCooldown() {
+	public long getPlayerCooldown() {
 		return LENGTH_SECONDS * 1000;
 	}
 
@@ -42,6 +47,11 @@ public class ScrollOfTheEagle extends Scroll {
 	@Override
 	public String getLore() {
 		return "Lets you fly around in spectator mode for 15 seconds,\nthen puts you back where you were";
+	}
+
+	@Override
+	public String getName() {
+		return "Scroll of the Eagle";
 	}
 
 }

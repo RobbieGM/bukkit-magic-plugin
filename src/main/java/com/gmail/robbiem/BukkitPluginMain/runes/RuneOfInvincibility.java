@@ -4,13 +4,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.plugin.java.JavaPlugin;
+import com.gmail.robbiem.BukkitPluginMain.Main;
 
 public class RuneOfInvincibility extends Rune {
 	
-	public RuneOfInvincibility(JavaPlugin plugin) {
+	public RuneOfInvincibility(Main plugin) {
 		super(plugin);
-		// TODO Auto-generated constructor stub
 	}
 
 	@EventHandler(priority=EventPriority.HIGH)

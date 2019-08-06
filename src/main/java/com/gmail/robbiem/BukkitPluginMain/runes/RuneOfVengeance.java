@@ -6,13 +6,12 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.plugin.java.JavaPlugin;
+import com.gmail.robbiem.BukkitPluginMain.Main;
 
 public class RuneOfVengeance extends Rune {
 
-	public RuneOfVengeance(JavaPlugin plugin) {
+	public RuneOfVengeance(Main plugin) {
 		super(plugin);
-		// TODO Auto-generated constructor stub
 	}
 
 	@EventHandler

@@ -6,13 +6,18 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
+
+import com.gmail.robbiem.BukkitPluginMain.Main;
 
 public class ScrollOfFlight extends Scroll {
 
+	public ScrollOfFlight(Main plugin) {
+		super(plugin);
+	}
+
 	@Override
-	public void use(ItemStack wandItem, Player player, World world, JavaPlugin plugin, Server server) {
+	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
 		player.setAllowFlight(true);
 		player.setVelocity(new Vector(0, 3, 0));
 		player.setFlying(true);
@@ -24,10 +29,11 @@ public class ScrollOfFlight extends Scroll {
 			player.setAllowFlight(false);
 			player.setFlying(false);
 		}, 20 * 10);
+		return true;
 	}
 
 	@Override
-	public long getCooldown() {
+	public long getPlayerCooldown() {
 		return 1000l;
 	}
 
@@ -39,6 +45,11 @@ public class ScrollOfFlight extends Scroll {
 	@Override
 	public String getLore() {
 		return "Lets you fly for 10 seconds\nas if in creative mode";
+	}
+
+	@Override
+	public String getName() {
+		return "Scroll of Flight";
 	}
 
 }

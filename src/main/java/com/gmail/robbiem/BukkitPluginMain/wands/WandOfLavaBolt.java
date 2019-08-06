@@ -9,19 +9,17 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.plugin.java.JavaPlugin;
+import com.gmail.robbiem.BukkitPluginMain.Main;
+import com.gmail.robbiem.BukkitPluginMain.ModdedItemManager;
 
 public class WandOfLavaBolt extends Wand {
-	
-	List<Material> unbreakable;
-	
-	public WandOfLavaBolt(List<Material> unbreakable) {
-		this.unbreakable = unbreakable;
+
+	public WandOfLavaBolt(Main plugin) {
+		super(plugin);
 	}
 
 	@Override
-	public void use(ItemStack wandItem, Player player, World world, JavaPlugin plugin, Server server) {
+	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
 		List<Block> blocks = player.getLineOfSight(null, 40);
 		for (int i = 0; i < blocks.size() - 1; i++) {
 			if (blocks.get(i).getLocation().distanceSquared(player.getLocation()) < 2 * 2)
@@ -34,30 +32,35 @@ public class WandOfLavaBolt extends Wand {
 				server.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 					setBlock(blocks.get(innerI), Material.AIR);
 				}, 20);
-			}, i);
+			}, (int) (i * 0.25));
 		}
+		return true;
 	}
 	
 	void setBlock(Block block, Material type) {
-		if (!unbreakable.contains(type))
+		if (!ModdedItemManager.UNBREAKABLE_AND_SHULKERS.contains(type))
 			block.setType(type);
 	}
 
 	@Override
-	public long getCooldown() {
+	public long getPlayerCooldown() {
 		// TODO Auto-generated method stub
 		return 600l;
 	}
 
 	@Override
-	public ShapedRecipe getCraftingRecipeFromResultingItem(ShapedRecipe startingRecipe) {
-		// TODO Auto-generated method stub
-		return startingRecipe.shape("  l", " s ", "p  ").setIngredient('l', Material.LAVA_BUCKET).setIngredient('s', Material.STICK).setIngredient('p', Material.ENDER_PEARL);
+	public String getLore() {
+		return "Creates a stream of lava in the\ndirection you look, lasting 1 second";
 	}
 
 	@Override
-	public String getLore() {
-		return "Creates a stream of lava in the\ndirection you look, lasting 1 second";
+	public Material getWandTip() {
+		return Material.LAVA_BUCKET;
+	}
+
+	@Override
+	public String getName() {
+		return "Wand of Lava Bolt";
 	}
 
 }

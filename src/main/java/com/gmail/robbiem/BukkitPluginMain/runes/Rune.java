@@ -9,14 +9,15 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.projectiles.ProjectileSource;
+
+import com.gmail.robbiem.BukkitPluginMain.Main;
 
 public abstract class Rune implements Listener {
 	
-	JavaPlugin plugin;
+	Main plugin;
 	
-	public Rune(JavaPlugin plugin) {
+	public Rune(Main plugin) {
 		this.plugin = plugin;
 	}
 	

@@ -10,13 +10,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.plugin.java.JavaPlugin;
+import com.gmail.robbiem.BukkitPluginMain.Main;
 
 public class RuneOfBounce extends Rune {
 	
 	List<Projectile> bouncingProjectiles = new ArrayList<>();
 
-	public RuneOfBounce(JavaPlugin plugin) {
+	public RuneOfBounce(Main plugin) {
 		super(plugin);
 	}
 	

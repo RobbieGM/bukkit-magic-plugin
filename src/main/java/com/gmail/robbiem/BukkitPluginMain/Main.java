@@ -13,6 +13,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.PluginManager;
@@ -24,29 +26,39 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class Main extends JavaPlugin implements Listener {
 	
-	public static final String HUNGER_GAMES_WORLD = "HungerGames";
-	public static final String HUNGER_GAMES_WAITING_ROOM = "Hunger Games Waiting Room";
+	public static final String DEFAULT_WORLD_NAME = "HungerGames";
+	public String primaryWorldName = "HungerGames";
+	public World primaryWorld;
 	
-	ModdedItemManager moddedItemManager;
+	public ModdedItemManager moddedItemManager;
+	BoxKeyManager boxKeyManager;
 	World hungerGames;
 	
 	public Main() {
 		moddedItemManager = new ModdedItemManager(this);
 	}
 	
+	@EventHandler
+	public void onRespawn(PlayerRespawnEvent e) {
+		e.setRespawnLocation(primaryWorld.getSpawnLocation()); // The player by default respawns in the default world rather than the current one
+	}
+	
 	@Override
 	public void onEnable() {
+		primaryWorld = getServer().getWorlds().get(0);
 		getLogger().info("Plugin was enabled.");
+		boxKeyManager = new BoxKeyManager(this);
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(this, this);
 		pm.registerEvents(new BlockProtector(), this);
 		pm.registerEvents(moddedItemManager, this);
+		pm.registerEvents(boxKeyManager, this);
 //		pm.registerEvents(new EventSnooper(this), this);
 		pm.registerEvents(new AutoSpectatorMode(), this);
 		pm.registerEvents(new PhantomSpawnPreventor(), this);
 		moddedItemManager.onEnable();
 		this.getCommand("go").setExecutor(new GoCommand(this));
-		this.getCommand("go-again").setExecutor(new RestartGameCommand(this));
+		this.getCommand("new-world").setExecutor(new CreateNewWorldCommand(this));
 		ShapedRecipe tridentRecipe = new ShapedRecipe(new NamespacedKey(this, "custom_trident"), new ItemStack(Material.TRIDENT, 1));
 		tridentRecipe.shape("dsd", " s ", " s ").setIngredient('d', Material.DIAMOND).setIngredient('s', Material.STICK);
 		getServer().addRecipe(tridentRecipe);
@@ -57,6 +69,11 @@ public class Main extends JavaPlugin implements Listener {
 		getLogger().info("Plugin was disabled.");
 		getServer().resetRecipes();
 		moddedItemManager.onDisable();
+	}
+	
+	@EventHandler
+	public void onPlayerJoin(PlayerJoinEvent e) {
+		e.getPlayer().teleport(primaryWorld.getSpawnLocation());
 	}
 	
 //	@Override

@@ -11,21 +11,26 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.plugin.java.JavaPlugin;
+import com.gmail.robbiem.BukkitPluginMain.Main;
 
 public class ScrollOfUpgrade extends Scroll {
 
+	public ScrollOfUpgrade(Main plugin) {
+		super(plugin);
+	}
+
 	@Override
-	public void use(ItemStack wandItem, Player player, World world, JavaPlugin plugin, Server server) {
+	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
 		PlayerInventory inv = player.getInventory();
 		inv.setHelmet(upgrade(inv.getHelmet(), Material.LEATHER_HELMET, Material.IRON_HELMET, Material.DIAMOND_HELMET));
 		inv.setChestplate(upgrade(inv.getChestplate(), Material.LEATHER_CHESTPLATE, Material.IRON_CHESTPLATE, Material.DIAMOND_CHESTPLATE));
 		inv.setLeggings(upgrade(inv.getLeggings(), Material.LEATHER_LEGGINGS, Material.IRON_LEGGINGS, Material.DIAMOND_LEGGINGS));
 		inv.setBoots(upgrade(inv.getBoots(), Material.LEATHER_BOOTS, Material.IRON_BOOTS, Material.DIAMOND_BOOTS));
+		return true;
 	}
 
 	@Override
-	public long getCooldown() {
+	public long getPlayerCooldown() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -35,7 +40,7 @@ public class ScrollOfUpgrade extends Scroll {
 		return Material.ENCHANTED_BOOK;
 	}
 	
-	public ItemStack upgrade(ItemStack item, Material... upgradeTiers) {
+	ItemStack upgrade(ItemStack item, Material... upgradeTiers) {
 		if (item == null) return null;
 		List<Material> upgrades = Arrays.asList(upgradeTiers);
 		int currentIndex = upgrades.indexOf(item.getType());
@@ -48,7 +53,7 @@ public class ScrollOfUpgrade extends Scroll {
 		}
 	}
 	
-    public ItemStack randomEnchantment(ItemStack item) {
+    ItemStack randomEnchantment(ItemStack item) {
         List<Enchantment> possible = new ArrayList<Enchantment>();
      
         for (Enchantment ench: Enchantment.values()) {
@@ -68,6 +73,11 @@ public class ScrollOfUpgrade extends Scroll {
 	@Override
 	public String getLore() {
 		return "Upgrades all your armor";
+	}
+
+	@Override
+	public String getName() {
+		return "Scroll of Upgrade";
 	}
 
 }

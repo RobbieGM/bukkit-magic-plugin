@@ -11,14 +11,18 @@ import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
+
+import com.gmail.robbiem.BukkitPluginMain.Main;
 
 public class WandOfMagnetism extends Wand {
 	
+	public WandOfMagnetism(Main plugin) {
+		super(plugin);
+	}
+
 	@Override
-	public void use(ItemStack wandItem, Player player, World world, JavaPlugin plugin, Server server) {
+	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
 		Location center = player.getTargetBlock(null, 40).getLocation();
 		for (int i = 0; i < 150; i++) {
 			makeSuctionParticle(center, 20);
@@ -28,7 +32,7 @@ public class WandOfMagnetism extends Wand {
 			for (LivingEntity entity: world.getLivingEntities()) {
 				if (entity.getLocation().distance(center) > 20) continue;
 				entity.setFallDistance(0);
-//				if (entity.equals(player)) continue;
+				if (entity.equals(player)) continue;
 				Vector propelVector = center.clone().subtract(entity.getLocation()).toVector().multiply(0.2);
 				propelVector.setY(propelVector.getY() + 0.1);
 				entity.setVelocity(propelVector);
@@ -37,6 +41,7 @@ public class WandOfMagnetism extends Wand {
 		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 			plugin.getServer().getScheduler().cancelTask(taskId);
 		}, 10);
+		return true;
 	}
 	
 	void makeSuctionParticle(Location center, float radius) {
@@ -51,7 +56,12 @@ public class WandOfMagnetism extends Wand {
 	}
 
 	@Override
-	public long getCooldown() {
+	public long getPlayerCooldown() {
+		return 500l;
+	}
+	
+	@Override
+	public long getItemCooldown() {
 		return 2000l;
 	}
 
@@ -61,8 +71,13 @@ public class WandOfMagnetism extends Wand {
 	}
 
 	@Override
-	public ShapedRecipe getCraftingRecipeFromResultingItem(ShapedRecipe startingRecipe) {
-		return startingRecipe.shape("  c", " s ", "p  ").setIngredient('p', Material.ENDER_PEARL).setIngredient('s', Material.STICK).setIngredient('c', Material.COMPASS);
+	public Material getWandTip() {
+		return Material.COMPASS;
+	}
+
+	@Override
+	public String getName() {
+		return "Wand of Magnetism";
 	}
 
 }

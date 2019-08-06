@@ -1,13 +1,13 @@
 package com.gmail.robbiem.BukkitPluginMain;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -22,25 +22,25 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import com.gmail.robbiem.BukkitPluginMain.runes.*;
 import com.gmail.robbiem.BukkitPluginMain.scrolls.*;
 import com.gmail.robbiem.BukkitPluginMain.wands.*;
 
 public class ModdedItemManager implements Listener {
 	
-	Map<UUID, Long> cooldowns = new HashMap<UUID, Long>();
-	Map<String, Wand> wands = new HashMap<>();
-	Map<String, Scroll> scrolls = new HashMap<>();
+	public PlayerCooldownManager cooldownManager;
+	List<Wand> wands = new ArrayList<>();
+	List<Scroll> scrolls = new ArrayList<>();
 	List<Rune> runes = new ArrayList<>();
-	JavaPlugin plugin;
-	static final List<Material> SHULKER_BOXES = Arrays.asList(new Material[] {Material.RED_SHULKER_BOX, Material.PURPLE_SHULKER_BOX, Material.BLACK_SHULKER_BOX, Material.LIGHT_GRAY_SHULKER_BOX, Material.GREEN_SHULKER_BOX, Material.WHITE_SHULKER_BOX, Material.BLUE_SHULKER_BOX, Material.YELLOW_SHULKER_BOX});
-	static final List<Material> UNBREAKABLE = Arrays.asList(new Material[] {Material.BEDROCK, Material.BARRIER, Material.COMMAND_BLOCK, Material.CHAIN_COMMAND_BLOCK});
-	List<Material> unbreakableAndShulkers = new ArrayList<Material>();
+	Main plugin;
+	static final List<Material> SHULKER_BOXES = Arrays.asList(Material.RED_SHULKER_BOX, Material.CYAN_SHULKER_BOX, Material.WHITE_SHULKER_BOX, Material.LIGHT_GRAY_SHULKER_BOX, Material.GREEN_SHULKER_BOX, Material.YELLOW_SHULKER_BOX, Material.LIGHT_BLUE_SHULKER_BOX, Material.ORANGE_SHULKER_BOX);
+	static final List<Material> UNBREAKABLE = Arrays.asList(Material.BEDROCK, Material.BARRIER, Material.COMMAND_BLOCK, Material.CHAIN_COMMAND_BLOCK);
+	public static final List<Material> UNBREAKABLE_AND_SHULKERS = Stream.concat(SHULKER_BOXES.stream(), UNBREAKABLE.stream()).collect(Collectors.toList());
 	Glow glow;
 	
-	public ModdedItemManager(JavaPlugin plugin) {
+	public ModdedItemManager(Main plugin) {
+		
+		cooldownManager = new PlayerCooldownManager(plugin);
 		this.plugin = plugin;
 		try {
 			Field f = Enchantment.class.getDeclaredField("acceptingNew");
@@ -51,45 +51,37 @@ public class ModdedItemManager implements Listener {
 		} catch (Exception e) {
 			plugin.getLogger().info("Registering enchantment threw error because the enchantment was already registered (this is probably fine)");
 		}
-		unbreakableAndShulkers.addAll(UNBREAKABLE);
-		unbreakableAndShulkers.addAll(SHULKER_BOXES);
+		
+	}
+	
+	<T> List<T> createInstancesOfClasses(List<Class<? extends T>> classes) {
+		return classes.stream().map(clazz -> {
+			try {
+				return clazz.getConstructor(Main.class).newInstance(plugin);
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			} catch (NoSuchMethodException e) {
+				e.printStackTrace();
+			} catch (SecurityException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}).collect(Collectors.toList());
 	}
 	
 	void initItems() {
-		wands.put("Wand of Teleportation", new WandOfTeleportation());
-		wands.put("Wand of Flame", new WandOfFlame());
-		wands.put("Wand of Force", new WandOfForce());
-		wands.put("Wand of Avalanche", new WandOfAvalanche(unbreakableAndShulkers));
-		wands.put("Wand of Arrowstorm", new WandOfArrowStorm());
-		wands.put("Wand of Polymorph", new WandOfPolymorph());
-		wands.put("Wand of Lava Bolt", new WandOfLavaBolt(unbreakableAndShulkers));
-		wands.put("Wand of Frost", new WandOfFrost());
-		wands.put("Wand of Lightning", new WandOfLightning());
-		wands.put("Wand of Magic Missile", new WandOfMagicMissile());
-		wands.put("Wand of Poison", new WandOfPoison());
-		wands.put("Wand of Decay", new WandOfDecay());
-		wands.put("Wand of Magnetism", new WandOfMagnetism());
-		wands.put("Wand of OP", new WandOfOP());
-		scrolls.put("Scroll of Flight", new ScrollOfFlight());
-		scrolls.put("Scroll of Teleportation", new ScrollOfTeleportation());
-		scrolls.put("Scroll of Equine Summoning", new ScrollOfEquineSummoning());
-		scrolls.put("Scroll of the Oracle", new ScrollOfTheOracle());
-		scrolls.put("Scroll of the Hunter's Vision", new ScrollOfTheHuntersVision());
-		scrolls.put("Scroll of Invisibility", new ScrollOfInvisibility(plugin));
-		scrolls.put("Scroll of the Eagle", new ScrollOfTheEagle());
-		scrolls.put("Scroll of Upgrade", new ScrollOfUpgrade());
-		scrolls.put("Scroll of Scavenging", new ScrollOfScavenging());
-		scrolls.put("Scroll of Blindness", new ScrollOfBlindness());
-		scrolls.put("Scroll of Protection", new ScrollOfProtection(unbreakableAndShulkers));
-		scrolls.put("Scroll of Necromancy", new ScrollOfNecromancy());
-		scrolls.put("Scroll of Jealousy", new ScrollOfJealousy());
-		scrolls.put("Scroll of Surprise", new ScrollOfSurprise());
-		runes.add(new RuneOfVengeance(plugin));
-		runes.add(new RuneOfBackstabbing(plugin));
-		runes.add(new RuneOfInvincibility(plugin));
-		runes.add(new RuneOfInfestation(plugin));
-		runes.add(new RuneOfBounce(plugin));
-		runes.add(new RuneOfDisarmament(plugin));
+		List<Class<? extends Wand>> wandClasses = Arrays.asList(WandOfArchitecture.class, WandOfArrowStorm.class, WandOfAvalanche.class, WandOfDecay.class, WandOfFlak.class, WandOfFlame.class, WandOfForce.class, WandOfForceField.class, WandOfFrost.class, WandOfGrappling.class, WandOfLavaBolt.class, WandOfLightning.class, WandOfMagicMissile.class, WandOfMagnetism.class, WandOfOP.class, WandOfPoison.class, WandOfPolymorph.class, WandOfPropulsion.class, WandOfScience.class, WandOfTeleportation.class, WandOfTrapping.class);
+		List<Class<? extends Scroll>> scrollClasses = Arrays.asList(ScrollOfAntiMagic.class, ScrollOfBlindness.class, ScrollOfElements.class, ScrollOfEquineSummoning.class, ScrollOfFlight.class, ScrollOfInvisibility.class, ScrollOfJealousy.class, ScrollOfNecromancy.class, ScrollOfOrganization.class, ScrollOfPlunder.class, ScrollOfProtection.class, ScrollOfScavenging.class, ScrollOfSurprise.class, ScrollOfTeleportation.class, ScrollOfTheEagle.class, ScrollOfTheHuntersVision.class, ScrollOfTheOracle.class, ScrollOfUpgrade.class);
+		List<Class<? extends Rune>> runeClasses = Arrays.asList(RuneOfBackstabbing.class, RuneOfBounce.class, RuneOfDisarmament.class, RuneOfFeatherFalling.class, RuneOfInfestation.class, RuneOfInvincibility.class, RuneOfVengeance.class);
+		wands = createInstancesOfClasses(wandClasses);
+		scrolls = createInstancesOfClasses(scrollClasses);
+		runes = createInstancesOfClasses(runeClasses);
 	}
 	
 	public void onEnable() {
@@ -97,17 +89,17 @@ public class ModdedItemManager implements Listener {
 		PluginManager pm = plugin.getServer().getPluginManager();
 		pm.registerEvents(new GrassOfHerbalHealing(), plugin);
 		pm.registerEvents(new WellNourishedSapling(), plugin);
-		pm.registerEvents(new ChunkPlacer(unbreakableAndShulkers), plugin);
-		pm.registerEvents(new ChunkMiner(unbreakableAndShulkers), plugin);
+		pm.registerEvents(new ChunkPlacer(UNBREAKABLE_AND_SHULKERS), plugin);
+		pm.registerEvents(new ChunkMiner(UNBREAKABLE_AND_SHULKERS), plugin);
 		pm.registerEvents(new ExplosiveBow(plugin), plugin);
 		ExplosiveBow.registerCraftingRecipe(plugin);
 		EnchantedSnowball snowballListener = new EnchantedSnowball();
 		snowballListener.registerRecipe(plugin);
 		pm.registerEvents(snowballListener, plugin);
 		
-		wands.forEach((String wandName, Wand wand) -> {
-			ShapedRecipe startingWandRecipe = createRecipeFromResult(Material.STICK, wandName, wand.getLore());
-			ShapedRecipe wandRecipe = wand.getCraftingRecipeFromResultingItem(startingWandRecipe);
+		wands.forEach((Wand wand) -> {
+			ShapedRecipe wandRecipe = createRecipeFromResult(Material.STICK, wand.getName(), wand.getLore());
+			wandRecipe.shape("  x", " s ", "p  ").setIngredient('x', wand.getWandTip()).setIngredient('s', Material.STICK).setIngredient('p', Material.ENDER_PEARL);
 			if (wandRecipe != null) {
 				plugin.getServer().addRecipe(wandRecipe);
 			}
@@ -115,8 +107,8 @@ public class ModdedItemManager implements Listener {
 				pm.registerEvents((Listener) wand, plugin);
 			}
 		});
-		scrolls.forEach((String scrollName, Scroll scroll) -> {
-			ShapedRecipe scrollRecipe = createRecipeFromResult(Material.PAPER, scrollName, scroll.getLore());
+		scrolls.forEach((Scroll scroll) -> {
+			ShapedRecipe scrollRecipe = createRecipeFromResult(Material.PAPER, scroll.getName(), scroll.getLore());
 			scrollRecipe.shape("ppp", "pxp", "ppp").setIngredient('p', Material.PAPER).setIngredient('x', scroll.getCraftingRecipeCenterItem());
 			if (scrollRecipe != null) {
 				plugin.getServer().addRecipe(scrollRecipe);
@@ -147,6 +139,11 @@ public class ModdedItemManager implements Listener {
 		return new ShapedRecipe(new NamespacedKey(plugin, keyName), item);
 	}
 	
+	public <T extends UseableItem> T getUseableItem(List<T> items, String name) {
+		Optional<T> optional = items.stream().filter(item -> item.getName().equals(name)).findFirst();
+		return optional.isPresent() ? optional.get() : null;
+	}
+	
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent e) {
 		ItemStack item = e.getItem();
@@ -155,36 +152,34 @@ public class ModdedItemManager implements Listener {
 		boolean isRightClick = e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK;
 		boolean isOtherInteraction = e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getClickedBlock().getType().isInteractable();
 		
-		if (item != null && playerMayUseSpell(player) && isRightClick && !isOtherInteraction) {
+		if (item != null && isRightClick && !isOtherInteraction) {
 			String itemName = item.getItemMeta().getDisplayName();
 			boolean isStick = item.getType() == Material.STICK;
 			boolean isPaper = item.getType() == Material.PAPER;
 			
-			if (wands.containsKey(itemName) && isStick) {
-				Wand wand = wands.get(itemName);
-				wand.use(item, player, world, plugin, plugin.getServer());
-				setPlayerCooldown(player, wand.getCooldown());
-				if (wand.isWeapon())
-					plugin.getServer().getPluginManager().callEvent(new ModdedWeaponUsedEvent(player));
+			Wand wand = getUseableItem(wands, itemName);
+			if (wand != null && isStick) {
+				if (cooldownManager.playerMayUseItem(player, wand)) {
+					boolean wandUsed = wand.use(item, player, world, plugin.getServer());
+					if (wandUsed) {
+						cooldownManager.useItem(player, wand);
+						if (wand.isWeapon()) {
+							plugin.getServer().getPluginManager().callEvent(new ModdedWeaponUsedEvent(player));
+						}
+					}
+				}
 			}
 			
-			if (scrolls.containsKey(itemName) && isPaper) {
-				Scroll scroll = scrolls.get(itemName);
-				scroll.use(item, player, world, plugin, plugin.getServer());
-				item.setAmount(item.getAmount() - 1);
-				setPlayerCooldown(player, scroll.getCooldown());
+			Scroll scroll = getUseableItem(scrolls, itemName);
+			if (scroll != null && isPaper) {
+				if (cooldownManager.playerMayUseItem(player, scroll)) {
+					boolean scrollUsed = scroll.use(item, player, world, plugin.getServer());
+					if (scrollUsed) {
+						cooldownManager.useItem(player, scroll);
+						item.setAmount(item.getAmount() - 1);
+					}
+				}
 			}
 		}
-	}
-	
-	public boolean playerMayUseSpell(Player player) {
-		if (!cooldowns.containsKey(player.getUniqueId()))
-			return true;
-		long now = new Date().getTime();
-		return now > cooldowns.get(player.getUniqueId());
-	}
-	
-	public void setPlayerCooldown(Player player, long cooldownMillis) {
-		cooldowns.put(player.getUniqueId(), new Date().getTime() + cooldownMillis);
 	}
 }

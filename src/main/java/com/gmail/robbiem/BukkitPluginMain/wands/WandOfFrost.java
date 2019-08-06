@@ -17,17 +17,21 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import com.gmail.robbiem.BukkitPluginMain.Main;
+
 public class WandOfFrost extends ParticleWand implements Listener {
 	
+	public WandOfFrost(Main plugin) {
+		super(plugin);
+	}
+
 	Map<UUID, Long> frozenPlayers = new HashMap<>();
 
 	@Override
-	public void use(ItemStack wandItem, Player player, World world, JavaPlugin plugin, Server server) {
+	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
 		cast(player, plugin, (location) -> {
 			world.spawnParticle(Particle.SNOWBALL, location, 20, 0.5, 0.5, 0.5);
 			world.playSound(location, Sound.BLOCK_CHORUS_FLOWER_DEATH, 1, 1.5f);
@@ -38,6 +42,7 @@ public class WandOfFrost extends ParticleWand implements Listener {
 			if (entity instanceof Player)
 				frozenPlayers.put(entity.getUniqueId(), new Date().getTime() + 1000 * 3);
 		});
+		return true;
 	}
 	
 	@EventHandler
@@ -57,13 +62,8 @@ public class WandOfFrost extends ParticleWand implements Listener {
 	}
 
 	@Override
-	public long getCooldown() {
+	public long getPlayerCooldown() {
 		return 1500l;
-	}
-
-	@Override
-	public ShapedRecipe getCraftingRecipeFromResultingItem(ShapedRecipe startingRecipe) {
-		return startingRecipe.shape("  b", " s ", "p  ").setIngredient('b', Material.SNOWBALL).setIngredient('s', Material.STICK).setIngredient('p', Material.ENDER_PEARL);
 	}
 
 	@Override
@@ -78,12 +78,22 @@ public class WandOfFrost extends ParticleWand implements Listener {
 
 	@Override
 	float getEffectRadius() {
-		return 5;
+		return 4f;
 	}
 
 	@Override
 	void spawnWandParticle(Location particleLocation) {
 		particleLocation.getWorld().spawnParticle(Particle.END_ROD, particleLocation, 5, 0, 0, 0, 0.02);
+	}
+
+	@Override
+	public Material getWandTip() {
+		return Material.SNOWBALL;
+	}
+
+	@Override
+	public String getName() {
+		return "Wand of Frost";
 	}
 
 }

@@ -14,19 +14,24 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.util.Vector;
 
+import com.gmail.robbiem.BukkitPluginMain.Main;
+
 public class WandOfMagicMissile extends Wand {
 	
+	public WandOfMagicMissile(Main plugin) {
+		super(plugin);
+	}
+
 	static final int RANGE = 100;
 	
 	Map<Player, MagicMissile> playerMissileMap = new HashMap<>();
 
 	@Override
-	public void use(ItemStack wandItem, Player player, World world, JavaPlugin plugin, Server server) {
+	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
 		if (playerMissileMap.containsKey(player)) {
 			playerMissileMap.get(player).stopTask(server.getScheduler());
 		}
@@ -40,6 +45,7 @@ public class WandOfMagicMissile extends Wand {
 			}
 		});
 		playerMissileMap.put(player, missile);
+		return true;
 	}
 	
 	Location getPlayerLookTarget(Player p, int range) {
@@ -51,19 +57,23 @@ public class WandOfMagicMissile extends Wand {
 	}
 
 	@Override
-	public long getCooldown() {
+	public long getPlayerCooldown() {
 		return 2500l;
-	}
-
-	@Override
-	public ShapedRecipe getCraftingRecipeFromResultingItem(ShapedRecipe startingRecipe) {
-		// TODO Auto-generated method stub
-		return startingRecipe.shape("  n", " s ", "p  ").setIngredient('n', Material.NETHER_WART).setIngredient('s', Material.STICK).setIngredient('p', Material.ENDER_PEARL);
 	}
 
 	@Override
 	public String getLore() {
 		return "Creates an RPG-like magic missile that\nfollows your cursor until it explodes";
+	}
+
+	@Override
+	public Material getWandTip() {
+		return Material.NETHER_WART;
+	}
+
+	@Override
+	public String getName() {
+		return "Wand of Magic Missile";
 	}
 }
 
@@ -114,7 +124,7 @@ class MagicMissile {
 		location.getWorld().playSound(location, Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 1, 1);
 		for (LivingEntity entity: location.getWorld().getLivingEntities()) {
 			if (entity.getLocation().distanceSquared(location) <= 4 * 4)
-				entity.damage(12, shooter);
+				entity.damage(10, shooter);
 		}
 	}
 

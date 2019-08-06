@@ -4,37 +4,33 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Server;
-import org.bukkit.Sound;
 import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
+
+import com.gmail.robbiem.BukkitPluginMain.Main;
 
 public class WandOfPoison extends ParticleWand {
 	
+	public WandOfPoison(Main plugin) {
+		super(plugin);
+	}
+
 	@Override
-	public void use(ItemStack item, Player player, World world, JavaPlugin plugin, Server server) {
+	public boolean use(ItemStack item, Player player, World world, Server server) {
 		cast(player, plugin, (location) -> {
 			location.getWorld().spawnParticle(Particle.SNEEZE, location, 100, 0.5, 0.5, 0.5, 0.2);
 		}, (entity, spellLocation) -> {
-			entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * 5, 1));
+			entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * 5, 255));
 		});
+		return true;
 	}
 
 	@Override
-	public long getCooldown() {
+	public long getPlayerCooldown() {
 		return 500l;
-	}
-
-	@Override
-	public ShapedRecipe getCraftingRecipeFromResultingItem(ShapedRecipe startingRecipe) {
-		return startingRecipe.shape("  e", " s ", "p  ").setIngredient('e', Material.SPIDER_EYE).setIngredient('s', Material.STICK).setIngredient('p', Material.ENDER_PEARL);
 	}
 
 	@Override
@@ -55,6 +51,16 @@ public class WandOfPoison extends ParticleWand {
 	@Override
 	void spawnWandParticle(Location particleLocation) {
 		particleLocation.getWorld().spawnParticle(Particle.SNEEZE, particleLocation, 5, 0, 0, 0, 0.05);
+	}
+
+	@Override
+	public Material getWandTip() {
+		return Material.SPIDER_EYE;
+	}
+
+	@Override
+	public String getName() {
+		return "Wand of Poison";
 	}
 	
 }

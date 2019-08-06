@@ -9,17 +9,22 @@ import org.bukkit.World;
 import org.bukkit.WorldBorder;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
+import com.gmail.robbiem.BukkitPluginMain.Main;
+
 public class WandOfTeleportation extends Wand {
-	static final int TELEPORTER_STICK_RANGE = 100;
+	
+	public WandOfTeleportation(Main plugin) {
+		super(plugin);
+	}
+
+	static final int RANGE = 100;
 	
 	@Override
-	public void use(ItemStack wandItem, Player player, World world, JavaPlugin plugin, Server server) {
+	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
 		Location previousLocation = player.getLocation();
-		Location targetedLocation = player.getTargetBlock(null, TELEPORTER_STICK_RANGE).getLocation();
+		Location targetedLocation = player.getTargetBlock(null, RANGE).getLocation();
 		targetedLocation = clampToWorldBorder(targetedLocation, world);
 		Location highestBlockLocation = world.getHighestBlockAt(targetedLocation).getLocation();
 		if (targetedLocation.getY() > highestBlockLocation.getY()) { // Avoid teleporting into air, but allow teleporting under trees.
@@ -38,6 +43,7 @@ public class WandOfTeleportation extends Wand {
 		}, 1);
 		player.teleport(targetedLocation);
 		world.playSound(targetedLocation, Sound.ITEM_CHORUS_FRUIT_TELEPORT, 1, 1);
+		return true;
 	}
 	
 	Location clampToWorldBorder(Location orig, World world) {
@@ -53,17 +59,32 @@ public class WandOfTeleportation extends Wand {
 		return orig;
 	}
 	
-	public long getCooldown() {
+	public long getPlayerCooldown() {
+		return 1000l;
+	}
+	
+	@Override
+	public long getItemCooldown() {
 		return 5000l;
 	}
 
 	@Override
-	public ShapedRecipe getCraftingRecipeFromResultingItem(ShapedRecipe startingRecipe) {
-		return startingRecipe.shape("  p", " s ", "p  ").setIngredient('p', Material.ENDER_PEARL).setIngredient('s', Material.STICK);
+	public boolean isWeapon() {
+		return false;
 	}
 
 	@Override
 	public String getLore() {
 		return "Teleports you where you're looking,\nbut can't make you go into the sky";
+	}
+
+	@Override
+	public Material getWandTip() {
+		return Material.ENDER_PEARL;
+	}
+
+	@Override
+	public String getName() {
+		return "Wand of Teleportation";
 	}
 }

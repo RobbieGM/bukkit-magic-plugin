@@ -1,6 +1,7 @@
 package com.gmail.robbiem.BukkitPluginMain;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 
 import org.bukkit.Material;
@@ -29,7 +30,7 @@ public class ExplosiveBow implements Listener {
 	
 	@EventHandler
 	public void onArrowShoot(EntityShootBowEvent e) {
-		if (e.getBow().getItemMeta().getDisplayName().equals("Explosive Bow")) {
+		if (Arrays.asList("Explosive Bow", "Explosive Crossbow").contains(e.getBow().getItemMeta().getDisplayName())) {
 			explosiveArrowIDs.add(e.getProjectile().getUniqueId());
 			LivingEntity entity = e.getEntity();
 			if (entity instanceof Player)
@@ -55,9 +56,18 @@ public class ExplosiveBow implements Listener {
 		ItemMeta bowMeta = explosiveBow.getItemMeta();
 		bowMeta.setDisplayName("Explosive Bow");
 		explosiveBow.setItemMeta(bowMeta);
-		ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(plugin, "explosive_bow"), explosiveBow);
-		recipe.addIngredient(Material.BOW);
-		recipe.addIngredient(Material.TNT);
-		plugin.getServer().addRecipe(recipe);
+		ShapelessRecipe bowRecipe = new ShapelessRecipe(new NamespacedKey(plugin, "explosive_bow"), explosiveBow);
+		bowRecipe.addIngredient(Material.BOW);
+		bowRecipe.addIngredient(Material.TNT);
+		plugin.getServer().addRecipe(bowRecipe);
+		
+		ItemStack explosiveCrossbow = new ItemStack(Material.CROSSBOW, 1);
+		ItemMeta crossbowMeta = explosiveBow.getItemMeta();
+		crossbowMeta.setDisplayName("Explosive Crossbow");
+		explosiveCrossbow.setItemMeta(crossbowMeta);
+		ShapelessRecipe crossbowRecipe = new ShapelessRecipe(new NamespacedKey(plugin, "explosive_crossbow"), explosiveCrossbow);
+		crossbowRecipe.addIngredient(Material.CROSSBOW);
+		crossbowRecipe.addIngredient(Material.TNT);
+		plugin.getServer().addRecipe(crossbowRecipe);
 	}
 }

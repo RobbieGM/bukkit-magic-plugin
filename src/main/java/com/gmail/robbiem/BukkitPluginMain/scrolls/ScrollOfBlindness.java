@@ -5,23 +5,29 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import com.gmail.robbiem.BukkitPluginMain.Main;
+
 public class ScrollOfBlindness extends Scroll {
 
+	public ScrollOfBlindness(Main plugin) {
+		super(plugin);
+	}
+
 	@Override
-	public void use(ItemStack wandItem, Player player, World world, JavaPlugin plugin, Server server) {
+	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
 		for (Player p: world.getPlayers()) {
 			if (!p.equals(player)) {
 				p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 10, 1));
 			}
 		}
+		return true;
 	}
 
 	@Override
-	public long getCooldown() {
+	public long getPlayerCooldown() {
 		return 1000l;
 	}
 
@@ -33,6 +39,11 @@ public class ScrollOfBlindness extends Scroll {
 	@Override
 	public String getLore() {
 		return "Blinds all players\naround you";
+	}
+
+	@Override
+	public String getName() {
+		return "Scroll of Blindness";
 	}
 
 }

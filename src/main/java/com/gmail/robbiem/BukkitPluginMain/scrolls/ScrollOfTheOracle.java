@@ -10,12 +10,16 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.java.JavaPlugin;
+import com.gmail.robbiem.BukkitPluginMain.Main;
 
 public class ScrollOfTheOracle extends Scroll {
 
+	public ScrollOfTheOracle(Main plugin) {
+		super(plugin);
+	}
+
 	@Override
-	public void use(ItemStack wandItem, Player player, World world, JavaPlugin plugin, Server server) {
+	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
 		Location center = world.getWorldBorder().getCenter();
 		ItemStack heartOfTheSea = new ItemStack(Material.HEART_OF_THE_SEA);
 		ItemMeta meta = heartOfTheSea.getItemMeta();
@@ -24,10 +28,11 @@ public class ScrollOfTheOracle extends Scroll {
 		heartOfTheSea.setItemMeta(meta);
 		player.getInventory().addItem(heartOfTheSea);
 		world.playSound(player.getLocation(), Sound.BLOCK_END_PORTAL_FRAME_FILL, 1, 1);
+		return true;
 	}
 
 	@Override
-	public long getCooldown() {
+	public long getPlayerCooldown() {
 		return 0;
 	}
 
@@ -39,6 +44,11 @@ public class ScrollOfTheOracle extends Scroll {
 	@Override
 	public String getLore() {
 		return "Gives you a crystal ball revealing the\nend coordinates of the world border";
+	}
+
+	@Override
+	public String getName() {
+		return "Scroll of the Oracle";
 	}
 
 }

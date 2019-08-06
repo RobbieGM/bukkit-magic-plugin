@@ -3,30 +3,28 @@ package com.gmail.robbiem.BukkitPluginMain.scrolls;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
+import com.gmail.robbiem.BukkitPluginMain.Main;
+import com.gmail.robbiem.BukkitPluginMain.ModdedItemManager;
 
 public class ScrollOfProtection extends Scroll {
 	
+	public ScrollOfProtection(Main plugin) {
+		super(plugin);
+	}
+
 	static final int HEIGHT = 50;
 	static final int OFFSET_Y = -5;
 	static final int RADIUS = 10;
 	static final int DURATION = 20 * 60;
-	
-	List<Material> unbreakable;
-	
-	public ScrollOfProtection(List<Material> unbreakable) {
-		this.unbreakable = unbreakable;
-	}
 
 	@Override
-	public void use(ItemStack wandItem, Player player, World world, JavaPlugin plugin, Server server) {
+	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
 		Block l = player.getLocation().getBlock();
 		List<Block> changedBlocks = new ArrayList<>();
 		
@@ -68,19 +66,20 @@ public class ScrollOfProtection extends Scroll {
 		}
 		
 		for (Block b: changedBlocks) {
-			if (!unbreakable.contains(b.getType()))
+			if (!ModdedItemManager.UNBREAKABLE_AND_SHULKERS.contains(b.getType()))
 				b.setType(Material.BARRIER);
 		}
 		server.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 			for (Block b: changedBlocks) {
-				if (!unbreakable.contains(b.getType()) || b.getType() == Material.BARRIER)
+				if (!ModdedItemManager.UNBREAKABLE_AND_SHULKERS.contains(b.getType()) || b.getType() == Material.BARRIER)
 					b.setType(Material.AIR);
 			}
 		}, DURATION);
+		return true;
 	}
 
 	@Override
-	public long getCooldown() {
+	public long getPlayerCooldown() {
 		return 0;
 	}
 
@@ -92,6 +91,11 @@ public class ScrollOfProtection extends Scroll {
 	@Override
 	public String getLore() {
 		return "Constructs a large barrier cuboid\naround you that lasts for 1 minute";
+	}
+
+	@Override
+	public String getName() {
+		return "Scroll of Protection";
 	}
 
 }

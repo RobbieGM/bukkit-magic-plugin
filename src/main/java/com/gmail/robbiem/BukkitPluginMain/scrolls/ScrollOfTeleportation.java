@@ -8,14 +8,19 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import com.gmail.robbiem.BukkitPluginMain.Main;
+
 public class ScrollOfTeleportation extends Scroll {
 
+	public ScrollOfTeleportation(Main plugin) {
+		super(plugin);
+	}
+
 	@Override
-	public void use(ItemStack wandItem, Player player, World world, JavaPlugin plugin, Server server) {
+	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
 		Location teleportLocation = world.getWorldBorder().getCenter();
 		double diameter = world.getWorldBorder().getSize();
 		double radius = diameter / 2;
@@ -32,10 +37,11 @@ public class ScrollOfTeleportation extends Scroll {
 			player.teleport(teleportLocation);
 			world.playSound(teleportLocation, Sound.BLOCK_PORTAL_TRAVEL, 0.5f, 1);
 		}, 20 * 1);
+		return true;
 	}
 
 	@Override
-	public long getCooldown() {
+	public long getPlayerCooldown() {
 		return 2500l;
 	}
 
@@ -47,6 +53,11 @@ public class ScrollOfTeleportation extends Scroll {
 	@Override
 	public String getLore() {
 		return "Puts you in a random place\ninside the world border";
+	}
+
+	@Override
+	public String getName() {
+		return "Scroll of Teleportation";
 	}
 
 }

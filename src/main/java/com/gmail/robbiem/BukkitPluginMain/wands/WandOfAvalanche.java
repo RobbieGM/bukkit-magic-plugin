@@ -1,12 +1,11 @@
 package com.gmail.robbiem.BukkitPluginMain.wands;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Server;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.FallingBlock;
@@ -15,25 +14,24 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.util.Vector;
 
+import com.gmail.robbiem.BukkitPluginMain.Main;
+import com.gmail.robbiem.BukkitPluginMain.ModdedItemManager;
+
 public class WandOfAvalanche extends Wand implements Listener {
-	static final double RADIUS = 5;
-	
-	List<Material> unbreakable;
-	
-	public WandOfAvalanche(List<Material> unbreakable) {
-		this.unbreakable = unbreakable;
+	public WandOfAvalanche(Main plugin) {
+		super(plugin);
 	}
 
+	static final double RADIUS = 5;
+
 	@Override
-	public void use(ItemStack wandItem, Player player, World world, JavaPlugin plugin, Server server) {
+	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
 		Location playerLocation = player.getLocation();
-		world.playSound(playerLocation, "block.ender_chest.open", 0.5f, 0.5f);
+		world.playSound(playerLocation, Sound.BLOCK_ENDER_CHEST_OPEN, 0.5f, 0.5f);
 		ArrayList<Block> fallingBlocks = new ArrayList<>();
 		for (int x = (int) -RADIUS; x <= RADIUS; x++) {
 			for (int z = (int) -RADIUS; z <= RADIUS; z++) {
@@ -58,7 +56,7 @@ public class WandOfAvalanche extends Wand implements Listener {
 		scheduler.scheduleSyncDelayedTask(plugin, () -> {
 			server.getScheduler().cancelTask(particleSpawnerTaskId);
 			for (Block block: fallingBlocks) {
-				Location blockLocation = block.getLocation();
+				Location blockLocation = block.getLocation().add(0.5, 0, 0.5);
 				double distance = taxicabDistance(playerLocation, blockLocation);
 				double delay = distance / 3;
 				scheduler.scheduleSyncDelayedTask(plugin, () -> {
@@ -73,10 +71,11 @@ public class WandOfAvalanche extends Wand implements Listener {
 				}, (long) (20 * delay));
 			}
 		}, (long) (20 * 0.5));
+		return true;
 	}
 
 	@Override
-	public long getCooldown() {
+	public long getPlayerCooldown() {
 		return 2500l;
 	}
 	
@@ -89,14 +88,9 @@ public class WandOfAvalanche extends Wand implements Listener {
 			Location currentLocation = location.clone();
 			currentLocation.setY(y);
 			Block block = currentLocation.getBlock();
-			if (!unbreakable.contains(block.getType()))
+			if (!ModdedItemManager.UNBREAKABLE_AND_SHULKERS.contains(block.getType()))
 				block.setType(Material.AIR);
 		}
-	}
-
-	@Override
-	public ShapedRecipe getCraftingRecipeFromResultingItem(ShapedRecipe startingRecipe) {
-		return startingRecipe.shape("  c", " s ", "p  ").setIngredient('p', Material.ENDER_PEARL).setIngredient('s', Material.STICK).setIngredient('c', Material.COBBLESTONE);
 	}
 	
 	/**
@@ -118,6 +112,16 @@ public class WandOfAvalanche extends Wand implements Listener {
 	@Override
 	public String getLore() {
 		return "Waits half a second, then opens a\ngaping hole in the ground";
+	}
+
+	@Override
+	public Material getWandTip() {
+		return Material.COBBLESTONE;
+	}
+
+	@Override
+	public String getName() {
+		return "Wand of Avalanche";
 	}
 
 }
