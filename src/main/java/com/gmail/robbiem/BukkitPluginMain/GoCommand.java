@@ -116,12 +116,12 @@ public class GoCommand implements CommandExecutor {
 		enableFriendlyFireTask = plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 			world.setPVP(true);
 			for (Player p: world.getPlayers()) {
-				List<Material> freeItems = Arrays.asList(Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS, Material.ENDER_PEARL, Material.ENDER_PEARL, Material.IRON_SWORD);
+				List<Material> freeItems = Arrays.asList(Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS, Material.GHAST_TEAR, Material.GHAST_TEAR, Material.GHAST_TEAR, Material.GHAST_TEAR, Material.IRON_SWORD);
 				p.getInventory().addItem(freeItems.stream().map((Material m) -> new ItemStack(m, 1)).toArray(ItemStack[]::new));
 			}
 		}, 20 * 60 * 2);
 		shrinkBorderTask = plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-			world.getWorldBorder().setSize(1, 1000);
+			world.getWorldBorder().setSize(20, 1000);
 			world.getPlayers().forEach(p -> p.sendMessage("The world border is shrinking!"));
 		}, 20 * 60 * 5);
 		return true;
@@ -183,7 +183,7 @@ public class GoCommand implements CommandExecutor {
 	
 	@SuppressWarnings("deprecation")
 	void placeChestsRandomly(World world, int numChests, double borderCenterX, double borderCenterZ, int borderWidth) {
-		List<Location> locations = spreadLocations(world, numChests, borderCenterX, borderCenterZ, borderWidth, 10, 0.2f, true, false);
+		List<Location> locations = spreadLocations(world, numChests, borderCenterX, borderCenterZ, borderWidth, 10, 0.2f, true, true);
 		for (Location l: locations) {
 			Block chestBlock = world.getBlockAt(l);
 			chestBlock.setType(Material.CHEST);

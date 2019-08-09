@@ -18,7 +18,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
+
 import com.gmail.robbiem.BukkitPluginMain.Main;
+import com.gmail.robbiem.BukkitPluginMain.ModdedItemManager;
 
 public class WandOfTrapping extends Wand implements Listener {
 	
@@ -29,14 +32,12 @@ public class WandOfTrapping extends Wand implements Listener {
 	List<Trap> traps = new ArrayList<>();
 
 	@Override
-	public Material getWandTip() {
-		return Material.TRIPWIRE_HOOK;
-	}
-
-	@Override
 	public boolean use(ItemStack item, Player player, World world, Server server) {
 		Block b = player.getTargetBlockExact(7);
 		if (b != null) {
+			if (b.getType() == Material.GRASS) {
+				b = b.getLocation().add(0, -1, 0).getBlock();
+			}
 			world.spawnParticle(Particle.REDSTONE, b.getLocation().add(0.5, 1, 0.5), 0, 0, 1, 0, 1, new Particle.DustOptions(Color.WHITE, 2f));
 			traps.add(new Trap(b, player));
 			return true;
@@ -56,7 +57,8 @@ public class WandOfTrapping extends Wand implements Listener {
 		OptionalInt trapIndex = IntStream.range(0, traps.size()).filter(i -> traps.get(i).block.equals(steppedOn)).findFirst();
 		if (trapIndex.isPresent() && e.getPlayer().getGameMode() == GameMode.SURVIVAL) {
 			e.getPlayer().getWorld().playSound(steppedOn.getLocation(), Sound.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON, 1, 1);
-			e.getPlayer().damage(7);
+			e.getPlayer().damage(18);
+			e.getPlayer().setVelocity(new Vector(-0.5 + Math.random(), 1, -0.5 + Math.random()));
 			traps.get(trapIndex.getAsInt()).placer.sendMessage("One of your traps was activated!");;
 			traps.remove(trapIndex.getAsInt());
 		}
@@ -69,7 +71,17 @@ public class WandOfTrapping extends Wand implements Listener {
 	
 	@Override
 	public long getItemCooldown() {
-		return 500l;
+		return 250l;
+	}
+	
+	@Override
+	public Material getWandTip() {
+		return Material.TRIPWIRE_HOOK;
+	}
+	
+	@Override
+	public Material getWandBase() {
+		return ModdedItemManager.LESSER_WAND_BASE;
 	}
 
 	@Override

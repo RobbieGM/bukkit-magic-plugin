@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import com.gmail.robbiem.BukkitPluginMain.Main;
+import com.gmail.robbiem.BukkitPluginMain.ModdedItemManager;
 
 public class WandOfPropulsion extends Wand {
 	
@@ -21,16 +22,13 @@ public WandOfPropulsion(Main plugin) {
 	public boolean use(ItemStack item, Player player, World world, Server server) {
 		if (player.getInventory().getChestplate() != null && player.getInventory().getChestplate().getType() == Material.ELYTRA) {
 			player.setGliding(true);
-			Vector vel = player.getLocation().getDirection().multiply(2);
-//			if (vel.length() > TERMINAL_VELOCITY) {
-//				vel.multiply(TERMINAL_VELOCITY / vel.length());
-//			}
-			player.setVelocity(vel);
-			return true;
-		} else {
-			player.sendTitle("Sorry", "You need an elytra to use this wand.", 10, 70, 20);
-			return false;
 		}
+		Vector vel = player.getLocation().getDirection().multiply(2);
+//		if (vel.length() > TERMINAL_VELOCITY) {
+//			vel.multiply(TERMINAL_VELOCITY / vel.length());
+//		}
+		player.setVelocity(vel);
+		return true;
 	}
 
 	@Override
@@ -56,6 +54,11 @@ public WandOfPropulsion(Main plugin) {
 	@Override
 	public Material getWandTip() {
 		return Material.FIREWORK_ROCKET;
+	}
+	
+	@Override
+	public Material getWandBase() {
+		return ModdedItemManager.LESSER_WAND_BASE;
 	}
 
 	@Override

@@ -33,17 +33,14 @@ public class CooldownBossBar implements Listener {
 		ItemStack item = player.getInventory().getItem(slot);
 		if (item != null && item.getItemMeta() != null && item.getItemMeta().hasDisplayName()) {
 			return item.getItemMeta().getDisplayName();
-		} else return null;
+		} else {
+			return null;
+		}
 	}
 	
-	public void useItem(UseableItem item, int slot) {
-		String itemName = getItemNameBySlot(slot);
-		if (itemName == null) {
-			throw new IllegalArgumentException("Item in slot did not have a display name but was used.");
-		}
-		useableItemSlots.put(itemName, item);
+	public void useItem(UseableItem item) {
+		useableItemSlots.put(item.getName(), item);
 		bossBar.setProgress(1);
-		cooldownManager.setPlayerCooldown(player, item.getPlayerCooldown());
 		update();
 	}
 	

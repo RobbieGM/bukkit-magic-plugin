@@ -62,9 +62,15 @@ public class ScrollOfUpgrade extends Scroll {
             }
         }
         
-        if (possible.size() >= 1) {
-            Enchantment chosen = possible.get((int) (Math.random() * possible.size()));
-            item.addEnchantment(chosen, 1 + (int) (Math.random() * ((chosen.getMaxLevel() - 1) + 1)));
+        for (int i = 0; i < 2; ) {
+        	if (possible.size() >= 1) {
+				Enchantment chosen = possible.get((int) (Math.random() * possible.size()));
+				if (!chosen.isCursed()) {
+					possible.remove(chosen);
+					item.addEnchantment(chosen, 1 + (int) (Math.random() * ((chosen.getMaxLevel() - 1) + 1)));
+					i++;
+				} else continue;
+	        }
         }
 
         return item;

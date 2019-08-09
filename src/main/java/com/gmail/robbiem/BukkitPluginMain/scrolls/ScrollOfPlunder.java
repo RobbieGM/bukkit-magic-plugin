@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
 import com.gmail.robbiem.BukkitPluginMain.Main;
 
 public class ScrollOfPlunder extends Scroll implements Listener {
@@ -19,7 +20,7 @@ public class ScrollOfPlunder extends Scroll implements Listener {
 		super(plugin);
 	}
 
-	static final int NUM_CHESTS = 4;
+	static final int NUM_CHESTS = 2;
 
 	@Override
 	public Material getCraftingRecipeCenterItem() {
@@ -56,6 +57,7 @@ public class ScrollOfPlunder extends Scroll implements Listener {
 			player.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 				System.out.println("Chest contains sugarcane: " + chest.getInventory().contains(Material.SUGAR_CANE));
 				chest.getInventory().remove(Material.SUGAR_CANE);
+				chest.getBlock().setType(Material.AIR);
 			}, 2);
 //			chest.getInventory().remove(Material.PRISMARINE_SHARD);
 			chest.update();

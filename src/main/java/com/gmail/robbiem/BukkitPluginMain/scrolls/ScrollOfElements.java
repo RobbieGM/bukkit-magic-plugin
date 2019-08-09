@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.gmail.robbiem.BukkitPluginMain.Main;
+
 public class ScrollOfElements extends Scroll {
 
 	public ScrollOfElements(Main plugin) {

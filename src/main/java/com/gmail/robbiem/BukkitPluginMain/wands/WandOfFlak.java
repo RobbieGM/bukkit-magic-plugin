@@ -11,7 +11,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import com.gmail.robbiem.BukkitPluginMain.Main;
 
-public class WandOfFlak extends ParticleWand {
+public class WandOfFlak extends Wand implements ParticleWand {
 
 	public WandOfFlak(Main plugin) {
 		super(plugin);
@@ -32,7 +32,7 @@ public class WandOfFlak extends ParticleWand {
 			if (entity instanceof Player) {
 				Player hitPlayer = (Player) entity;
 				ItemStack elytra = hitPlayer.getInventory().getChestplate();
-				if (elytra != null && elytra.getType() == Material.ELYTRA) {
+				if (elytra != null && elytra.getType() == Material.ELYTRA && entity.isGliding()) {
 					Damageable meta = (Damageable) elytra.getItemMeta();
 					plugin.getLogger().info("Damage: " + meta.getDamage());
 					meta.setDamage(meta.getDamage() + 150);
@@ -46,12 +46,12 @@ public class WandOfFlak extends ParticleWand {
 
 	@Override
 	public long getPlayerCooldown() {
-		return 250l;
+		return 200l;
 	}
 	
 	@Override
-	float getSpeed() {
-		return 3f;
+	public float getSpeed() {
+		return 5f;
 	}
 
 	@Override
@@ -60,19 +60,19 @@ public class WandOfFlak extends ParticleWand {
 	}
 
 	@Override
-	int getRange() {
+	public int getRange() {
 		int min = 15;
 		int max = 50;
 		return min + (int) (Math.random() * (max - min));
 	}
 
 	@Override
-	float getEffectRadius() {
-		return 4.5f;
+	public float getEffectRadius() {
+		return 8f;
 	}
 
 	@Override
-	void spawnWandParticle(Location particleLocation) {
+	public void spawnWandParticle(Location particleLocation) {
 		particleLocation.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, particleLocation, 0, 0, 0, 0, 0);
 	}
 

@@ -20,19 +20,20 @@ public class WandOfLavaBolt extends Wand {
 
 	@Override
 	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
-		List<Block> blocks = player.getLineOfSight(null, 40);
+		int maxDist = (int) player.getTargetBlock(null, 20).getLocation().distance(player.getEyeLocation());
+		List<Block> blocks = player.getLineOfSight(null, maxDist);
 		for (int i = 0; i < blocks.size() - 1; i++) {
 			if (blocks.get(i).getLocation().distanceSquared(player.getLocation()) < 2 * 2)
 				continue;
 			final int innerI = i; // Otherwise Java throws an error
 			server.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 				setBlock(blocks.get(innerI), Material.LAVA);
-				if (Math.random() > 0.5) // Particles can be laggy
-					world.spawnParticle(Particle.LAVA, blocks.get(innerI).getLocation(), 3, 0.5, 0.5, 0.5);
+				if (Math.random() > 0.8) // Particles can be laggy
+					world.spawnParticle(Particle.LAVA, blocks.get(innerI).getLocation(), 2, 0.5, 0.5, 0.5);
 				server.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 					setBlock(blocks.get(innerI), Material.AIR);
-				}, 20);
-			}, (int) (i * 0.25));
+				}, 5);
+			}, (int) (i * 0.5));
 		}
 		return true;
 	}
@@ -45,7 +46,7 @@ public class WandOfLavaBolt extends Wand {
 	@Override
 	public long getPlayerCooldown() {
 		// TODO Auto-generated method stub
-		return 600l;
+		return 2000l;
 	}
 
 	@Override

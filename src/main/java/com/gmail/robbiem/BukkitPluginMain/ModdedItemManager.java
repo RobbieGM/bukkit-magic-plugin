@@ -20,6 +20,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 import com.gmail.robbiem.BukkitPluginMain.runes.*;
@@ -35,6 +36,7 @@ public class ModdedItemManager implements Listener {
 	Main plugin;
 	static final List<Material> SHULKER_BOXES = Arrays.asList(Material.RED_SHULKER_BOX, Material.CYAN_SHULKER_BOX, Material.WHITE_SHULKER_BOX, Material.LIGHT_GRAY_SHULKER_BOX, Material.GREEN_SHULKER_BOX, Material.YELLOW_SHULKER_BOX, Material.LIGHT_BLUE_SHULKER_BOX, Material.ORANGE_SHULKER_BOX);
 	static final List<Material> UNBREAKABLE = Arrays.asList(Material.BEDROCK, Material.BARRIER, Material.COMMAND_BLOCK, Material.CHAIN_COMMAND_BLOCK);
+	public static final Material LESSER_WAND_BASE = Material.GHAST_TEAR;
 	public static final List<Material> UNBREAKABLE_AND_SHULKERS = Stream.concat(SHULKER_BOXES.stream(), UNBREAKABLE.stream()).collect(Collectors.toList());
 	Glow glow;
 	
@@ -76,7 +78,7 @@ public class ModdedItemManager implements Listener {
 	}
 	
 	void initItems() {
-		List<Class<? extends Wand>> wandClasses = Arrays.asList(WandOfArchitecture.class, WandOfArrowStorm.class, WandOfAvalanche.class, WandOfDecay.class, WandOfFlak.class, WandOfFlame.class, WandOfForce.class, WandOfForceField.class, WandOfFrost.class, WandOfGrappling.class, WandOfLavaBolt.class, WandOfLightning.class, WandOfMagicMissile.class, WandOfMagnetism.class, WandOfOP.class, WandOfPoison.class, WandOfPolymorph.class, WandOfPropulsion.class, WandOfScience.class, WandOfTeleportation.class, WandOfTrapping.class);
+		List<Class<? extends Wand>> wandClasses = Arrays.asList(WandOfArchitecture.class, WandOfArrowStorm.class, WandOfAvalanche.class, WandOfDecay.class, WandOfDestruction.class, WandOfFlak.class, WandOfFlame.class, WandOfForce.class, WandOfForceField.class, WandOfFrost.class, WandOfGrappling.class, WandOfLavaBolt.class, WandOfLightning.class, WandOfMagicMissile.class, WandOfMagnetism.class, WandOfOP.class, WandOfPoison.class, WandOfPolymorph.class, WandOfPropulsion.class, WandOfScience.class, WandOfTeleportation.class, WandOfTrapping.class);
 		List<Class<? extends Scroll>> scrollClasses = Arrays.asList(ScrollOfAntiMagic.class, ScrollOfBlindness.class, ScrollOfElements.class, ScrollOfEquineSummoning.class, ScrollOfFlight.class, ScrollOfInvisibility.class, ScrollOfJealousy.class, ScrollOfNecromancy.class, ScrollOfOrganization.class, ScrollOfPlunder.class, ScrollOfProtection.class, ScrollOfScavenging.class, ScrollOfSurprise.class, ScrollOfTeleportation.class, ScrollOfTheEagle.class, ScrollOfTheHuntersVision.class, ScrollOfTheOracle.class, ScrollOfUpgrade.class);
 		List<Class<? extends Rune>> runeClasses = Arrays.asList(RuneOfBackstabbing.class, RuneOfBounce.class, RuneOfDisarmament.class, RuneOfFeatherFalling.class, RuneOfInfestation.class, RuneOfInvincibility.class, RuneOfVengeance.class);
 		wands = createInstancesOfClasses(wandClasses);
@@ -99,7 +101,7 @@ public class ModdedItemManager implements Listener {
 		
 		wands.forEach((Wand wand) -> {
 			ShapedRecipe wandRecipe = createRecipeFromResult(Material.STICK, wand.getName(), wand.getLore());
-			wandRecipe.shape("  x", " s ", "p  ").setIngredient('x', wand.getWandTip()).setIngredient('s', Material.STICK).setIngredient('p', Material.ENDER_PEARL);
+			wandRecipe.shape("  t", " s ", "b  ").setIngredient('t', wand.getWandTip()).setIngredient('s', Material.STICK).setIngredient('b', wand.getWandBase());
 			if (wandRecipe != null) {
 				plugin.getServer().addRecipe(wandRecipe);
 			}
@@ -150,28 +152,23 @@ public class ModdedItemManager implements Listener {
 		Player player = e.getPlayer();
 		World world = player.getWorld();
 		boolean isRightClick = e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK;
+		boolean isLeftClick = e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK;
 		boolean isOtherInteraction = e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getClickedBlock().getType().isInteractable();
-		
-		if (item != null && isRightClick && !isOtherInteraction) {
+		if (item != null && !isOtherInteraction) {
 			String itemName = item.getItemMeta().getDisplayName();
 			boolean isStick = item.getType() == Material.STICK;
 			boolean isPaper = item.getType() == Material.PAPER;
 			
 			Wand wand = getUseableItem(wands, itemName);
-			if (wand != null && isStick) {
+			if (wand != null && isStick && (isRightClick || isLeftClick)) {
 				if (cooldownManager.playerMayUseItem(player, wand)) {
-					boolean wandUsed = wand.use(item, player, world, plugin.getServer());
-					if (wandUsed) {
-						cooldownManager.useItem(player, wand);
-						if (wand.isWeapon()) {
-							plugin.getServer().getPluginManager().callEvent(new ModdedWeaponUsedEvent(player));
-						}
-					}
+					if (isLeftClick && wand instanceof LeftClickableWand) e.setCancelled(true);
+					useWand(wand, item, player, isLeftClick);
 				}
 			}
 			
 			Scroll scroll = getUseableItem(scrolls, itemName);
-			if (scroll != null && isPaper) {
+			if (scroll != null && isPaper && isRightClick) {
 				if (cooldownManager.playerMayUseItem(player, scroll)) {
 					boolean scrollUsed = scroll.use(item, player, world, plugin.getServer());
 					if (scrollUsed) {
@@ -179,6 +176,23 @@ public class ModdedItemManager implements Listener {
 						item.setAmount(item.getAmount() - 1);
 					}
 				}
+			}
+		}
+	}
+	
+	void useWand(Wand wand, ItemStack item, Player player, boolean useAlt) {
+		boolean wandUsed = false;
+		if (useAlt && wand instanceof LeftClickableWand)
+			wandUsed = ((LeftClickableWand) wand).useAlt(item, player, player.getWorld(), plugin.getServer());
+		else if (!useAlt)
+			wandUsed = wand.use(item, player, player.getWorld(), plugin.getServer());
+		if (wandUsed) {
+			if (useAlt)
+				cooldownManager.useItemAlt(player, (LeftClickableWand) wand);
+			else
+				cooldownManager.useItem(player, wand);
+			if (wand.isWeapon()) {
+				plugin.getServer().getPluginManager().callEvent(new ModdedWeaponUsedEvent(player));
 			}
 		}
 	}

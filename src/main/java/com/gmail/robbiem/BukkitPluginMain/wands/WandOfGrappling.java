@@ -11,8 +11,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import com.gmail.robbiem.BukkitPluginMain.Main;
+import com.gmail.robbiem.BukkitPluginMain.ModdedItemManager;
 
-public class WandOfGrappling extends ParticleWand {
+public class WandOfGrappling extends Wand implements ParticleWand {
 	
 	public WandOfGrappling(Main plugin) {
 		super(plugin);
@@ -32,7 +33,7 @@ public class WandOfGrappling extends ParticleWand {
 					if (mag > MAX_SPEED) {
 						propelVector.multiply(MAX_SPEED / mag);
 					}
-					propelVector.setY(propelVector.getY() + 0.1);
+					propelVector.setY(propelVector.getY() + 0.2);
 					player.setVelocity(propelVector);
 				} catch (IllegalArgumentException e) {}
 			}, 0, 1);
@@ -44,22 +45,22 @@ public class WandOfGrappling extends ParticleWand {
 	}
 	
 	@Override
-	float getSpeed() {
-		return 2f;
+	public float getSpeed() {
+		return 3f;
 	}
 
 	@Override
-	int getRange() {
+	public int getRange() {
 		return 50;
 	}
 
 	@Override
-	float getEffectRadius() {
+	public float getEffectRadius() {
 		return 0;
 	}
 
 	@Override
-	void spawnWandParticle(Location particleLocation) {
+	public void spawnWandParticle(Location particleLocation) {
 		particleLocation.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, particleLocation, 1);
 	}
 
@@ -70,7 +71,7 @@ public class WandOfGrappling extends ParticleWand {
 	
 	@Override
 	public long getItemCooldown() {
-		return 2000l;
+		return 1500l;
 	}
 	
 	@Override
@@ -86,6 +87,11 @@ public class WandOfGrappling extends ParticleWand {
 	@Override
 	public Material getWandTip() {
 		return Material.STRING;
+	}
+	
+	@Override
+	public Material getWandBase() {
+		return ModdedItemManager.LESSER_WAND_BASE;
 	}
 
 	@Override

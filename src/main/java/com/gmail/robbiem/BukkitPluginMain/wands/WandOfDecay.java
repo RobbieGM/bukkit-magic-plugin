@@ -11,8 +11,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import com.gmail.robbiem.BukkitPluginMain.Main;
+import com.gmail.robbiem.BukkitPluginMain.ModdedItemManager;
 
-public class WandOfDecay extends ParticleWand {
+public class WandOfDecay extends Wand implements ParticleWand {
 	
 	public WandOfDecay(Main plugin) {
 		super(plugin);
@@ -28,6 +29,11 @@ public class WandOfDecay extends ParticleWand {
 		});
 		return true;
 	}
+	
+	@Override
+	public float getSpeed() {
+		return 0.5f;
+	}
 
 	@Override
 	public long getPlayerCooldown() {
@@ -40,23 +46,28 @@ public class WandOfDecay extends ParticleWand {
 	}
 
 	@Override
-	int getRange() {
+	public int getRange() {
 		return 40;
 	}
 
 	@Override
-	float getEffectRadius() {
+	public float getEffectRadius() {
 		return 4f;
 	}
 
 	@Override
-	void spawnWandParticle(Location particleLocation) {
+	public void spawnWandParticle(Location particleLocation) {
 		particleLocation.getWorld().spawnParticle(Particle.SMOKE_LARGE, particleLocation, 0, 0, -1, 0, 0.05);
 	}
 
 	@Override
 	public Material getWandTip() {
 		return Material.WITHER_ROSE;
+	}
+	
+	@Override
+	public Material getWandBase() {
+		return ModdedItemManager.LESSER_WAND_BASE;
 	}
 
 	@Override

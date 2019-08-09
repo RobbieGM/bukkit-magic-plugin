@@ -1,6 +1,5 @@
 package com.gmail.robbiem.BukkitPluginMain.scrolls;
 
-import org.bukkit.EntityEffect;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.Sound;
@@ -9,6 +8,9 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+
 import com.gmail.robbiem.BukkitPluginMain.Main;
 
 public class ScrollOfEquineSummoning extends Scroll {
@@ -23,13 +25,12 @@ public class ScrollOfEquineSummoning extends Scroll {
 		horse.setTamed(true);
 		horse.setOwner(player);
 		horse.getInventory().setSaddle(new ItemStack(Material.SADDLE, 1));
+		horse.setJumpStrength(2);
+		horse.setAdult();
+		horse.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 60 * 5, 2));
+		horse.setInvulnerable(true);
 		horse.addPassenger(player);
 		world.playSound(player.getLocation(), Sound.ENTITY_HORSE_AMBIENT, 1, 1);
-		server.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-			horse.playEffect(EntityEffect.ENTITY_POOF);
-			world.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 2);
-			horse.remove();
-		}, 20 * 30);
 		return true;
 	}
 

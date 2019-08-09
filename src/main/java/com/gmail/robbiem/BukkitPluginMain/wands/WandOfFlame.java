@@ -7,10 +7,11 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.LargeFireball;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.SmallFireball;
 import org.bukkit.inventory.ItemStack;
 import com.gmail.robbiem.BukkitPluginMain.Main;
 
-public class WandOfFlame extends Wand {
+public class WandOfFlame extends LeftClickableWand {
 
 	public WandOfFlame(Main plugin) {
 		super(plugin);
@@ -22,13 +23,27 @@ public class WandOfFlame extends Wand {
 		LargeFireball fireball = world.spawn(loc, LargeFireball.class);
 		fireball.setYield(1.6f);
 		fireball.setShooter(player);
-		world.playSound(player.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 1, 1.5f);
+		world.playSound(player.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 1, 1.4f);
+		return true;
+	}
+	
+	@Override
+	public boolean useAlt(ItemStack item, Player player, World world, Server server) {
+		Location loc = player.getEyeLocation().toVector().add(player.getLocation().getDirection().multiply(2)).toLocation(world, player.getLocation().getYaw(), player.getLocation().getPitch());
+		SmallFireball fireball = world.spawn(loc, SmallFireball.class);
+		fireball.setShooter(player);
+		world.playSound(player.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 1, 1.7f);
 		return true;
 	}
 
 	@Override
 	public long getPlayerCooldown() {
 		return 1250l;
+	}
+
+	@Override
+	public long getAltPlayerCooldown() {
+		return 500l;
 	}
 
 	@Override

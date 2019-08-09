@@ -25,7 +25,8 @@ public class WandOfTeleportation extends Wand {
 	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
 		Location previousLocation = player.getLocation();
 		Location targetedLocation = player.getTargetBlock(null, RANGE).getLocation();
-		targetedLocation = clampToWorldBorder(targetedLocation, world);
+		targetedLocation = clampToWorldBorder(targetedLocation);
+		targetedLocation = moveUpUntilStandable(targetedLocation);
 		Location highestBlockLocation = world.getHighestBlockAt(targetedLocation).getLocation();
 		if (targetedLocation.getY() > highestBlockLocation.getY()) { // Avoid teleporting into air, but allow teleporting under trees.
 			targetedLocation.setY(highestBlockLocation.getY());
@@ -46,8 +47,18 @@ public class WandOfTeleportation extends Wand {
 		return true;
 	}
 	
-	Location clampToWorldBorder(Location orig, World world) {
-		WorldBorder border = world.getWorldBorder();
+	Location moveUpUntilStandable(Location orig) {
+		Location l = orig.clone();
+		for (int i = 0; i < 10; i++) {
+			if (l.getBlock().isPassable()) return l;
+			l.add(0, 1, 0);
+		}
+		l.setY(orig.getWorld().getHighestBlockYAt(orig));
+		return l;
+	}
+	
+	Location clampToWorldBorder(Location orig) {
+		WorldBorder border = orig.getWorld().getWorldBorder();
 		if (orig.getX() < border.getCenter().getX() - border.getSize() / 2)
 			orig.setX(border.getCenter().getX() - border.getSize() / 2);
 		if (orig.getX() > border.getCenter().getX() + border.getSize() / 2)

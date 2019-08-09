@@ -30,14 +30,16 @@ public class WandOfAvalanche extends Wand implements Listener {
 
 	@Override
 	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
-		Location playerLocation = player.getLocation();
-		world.playSound(playerLocation, Sound.BLOCK_ENDER_CHEST_OPEN, 0.5f, 0.5f);
+		Block targetedBlock = player.getTargetBlockExact(10);
+		if (targetedBlock == null) return false;
+		Location targetLocation = targetedBlock.getLocation();
+		world.playSound(targetLocation, Sound.BLOCK_ENDER_CHEST_OPEN, 0.5f, 0.5f);
 		ArrayList<Block> fallingBlocks = new ArrayList<>();
 		for (int x = (int) -RADIUS; x <= RADIUS; x++) {
 			for (int z = (int) -RADIUS; z <= RADIUS; z++) {
-				Location l = playerLocation.clone().add(x, 0, z);
+				Location l = targetLocation.clone().add(x, 0, z);
 				double edgeJaggedness = Math.random();
-				double distance = l.distance(playerLocation);
+				double distance = l.distance(targetLocation);
 				if (distance > RADIUS - edgeJaggedness) continue;
 				l.setY(world.getHighestBlockYAt(l) - 1);
 				Material previousMaterial = l.getBlock().getType();
@@ -47,7 +49,7 @@ public class WandOfAvalanche extends Wand implements Listener {
 		}
 		int particleSpawnerTaskId = server.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
 			for (int i = 0; i < 5; i++) {
-				playerLocation.clone().add(new Vector(-RADIUS + Math.random() * RADIUS * 2, 0, -RADIUS + Math.random() * RADIUS * 2));
+				targetLocation.clone().add(new Vector(-RADIUS + Math.random() * RADIUS * 2, 0, -RADIUS + Math.random() * RADIUS * 2));
 				Block randomBlock = fallingBlocks.get((int) (fallingBlocks.size() * Math.random()));
 				world.spawnParticle(Particle.BLOCK_CRACK, randomBlock.getLocation(), 3, 0.2, 0.2, 0.2, server.createBlockData(randomBlock.getType()));
 			}
@@ -57,16 +59,18 @@ public class WandOfAvalanche extends Wand implements Listener {
 			server.getScheduler().cancelTask(particleSpawnerTaskId);
 			for (Block block: fallingBlocks) {
 				Location blockLocation = block.getLocation().add(0.5, 0, 0.5);
-				double distance = taxicabDistance(playerLocation, blockLocation);
+				double distance = taxicabDistance(targetLocation, blockLocation);
 				double delay = distance / 3;
 				scheduler.scheduleSyncDelayedTask(plugin, () -> {
 					Material previousMaterial = block.getType();
 					createColumnOfAirTo(blockLocation);
 					world.spawnParticle(Particle.BLOCK_CRACK, blockLocation, 3, 0.2, 0.2, 0.2, server.createBlockData(previousMaterial));
 					scheduler.scheduleSyncDelayedTask(plugin, () -> {
-						FallingBlock fallingBlock = world.spawnFallingBlock(blockLocation, server.createBlockData(previousMaterial));
-						fallingBlock.setVelocity(new Vector(0, -1 + 0.6 * Math.random(), 0));
-						fallingBlock.setMetadata("shouldNotSolidify", new FixedMetadataValue(plugin, true));
+						if (!ModdedItemManager.UNBREAKABLE_AND_SHULKERS.contains(previousMaterial)) {
+							FallingBlock fallingBlock = world.spawnFallingBlock(blockLocation, server.createBlockData(previousMaterial));
+							fallingBlock.setVelocity(new Vector(0, -1 + 0.6 * Math.random(), 0));
+							fallingBlock.setMetadata("shouldNotSolidify", new FixedMetadataValue(plugin, true));
+						}
 					}, 4);
 				}, (long) (20 * delay));
 			}

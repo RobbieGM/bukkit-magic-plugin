@@ -11,8 +11,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import com.gmail.robbiem.BukkitPluginMain.Main;
+import com.gmail.robbiem.BukkitPluginMain.ModdedItemManager;
 
-public class WandOfPoison extends ParticleWand {
+public class WandOfPoison extends Wand implements ParticleWand {
 	
 	public WandOfPoison(Main plugin) {
 		super(plugin);
@@ -27,10 +28,20 @@ public class WandOfPoison extends ParticleWand {
 		});
 		return true;
 	}
+	
+	@Override
+	public float getSpeed() {
+		return 0.5f;
+	}
 
 	@Override
-	public long getPlayerCooldown() {
+	public long getItemCooldown() {
 		return 500l;
+	}
+	
+	@Override
+	public long getPlayerCooldown() {
+		return 300l;
 	}
 
 	@Override
@@ -39,23 +50,28 @@ public class WandOfPoison extends ParticleWand {
 	}
 
 	@Override
-	int getRange() {
-		return 40;
+	public int getRange() {
+		return 50;
 	}
 
 	@Override
-	float getEffectRadius() {
+	public float getEffectRadius() {
 		return 3.5f;
 	}
 
 	@Override
-	void spawnWandParticle(Location particleLocation) {
+	public void spawnWandParticle(Location particleLocation) {
 		particleLocation.getWorld().spawnParticle(Particle.SNEEZE, particleLocation, 5, 0, 0, 0, 0.05);
 	}
 
 	@Override
 	public Material getWandTip() {
 		return Material.SPIDER_EYE;
+	}
+	
+	@Override
+	public Material getWandBase() {
+		return ModdedItemManager.LESSER_WAND_BASE;
 	}
 
 	@Override

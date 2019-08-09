@@ -6,7 +6,9 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Server;
 import org.bukkit.World;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.inventory.ItemStack;
 import com.gmail.robbiem.BukkitPluginMain.Main;
 
@@ -28,6 +30,10 @@ public class ScrollOfTheEagle extends Scroll {
 		}, 0, 1);
 		server.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 			server.getScheduler().cancelTask(particleTaskId);
+			TNTPrimed tnt = (TNTPrimed) world.spawnEntity(player.getLocation(), EntityType.PRIMED_TNT);
+			tnt.setYield(3f);
+			tnt.setIsIncendiary(true);
+			tnt.setFuseTicks(0);
 			player.teleport(originalLocation);
 			player.setGameMode(GameMode.SURVIVAL);
 		}, 20 * LENGTH_SECONDS);

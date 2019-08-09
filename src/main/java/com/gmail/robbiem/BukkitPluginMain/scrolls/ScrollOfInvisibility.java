@@ -11,7 +11,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
@@ -26,7 +25,6 @@ public class ScrollOfInvisibility extends Scroll implements Listener {
 	}
 
 	ArrayList<Player> invisiblePlayers = new ArrayList<>();
-	JavaPlugin plugin;
 	static final int LENGTH_SECONDS = 60;
 
 	@Override
@@ -79,13 +77,11 @@ public class ScrollOfInvisibility extends Scroll implements Listener {
 
 	@Override
 	public long getPlayerCooldown() {
-		// TODO Auto-generated method stub
 		return 1000l;
 	}
 
 	@Override
 	public Material getCraftingRecipeCenterItem() {
-		// TODO Auto-generated method stub
 		return Material.GOLDEN_CARROT;
 	}
 	

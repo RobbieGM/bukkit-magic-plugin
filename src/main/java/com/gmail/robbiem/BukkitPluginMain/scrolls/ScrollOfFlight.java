@@ -28,7 +28,7 @@ public class ScrollOfFlight extends Scroll {
 			server.getScheduler().cancelTask(particleSpawnerTask);
 			player.setAllowFlight(false);
 			player.setFlying(false);
-		}, 20 * 10);
+		}, 20 * 30);
 		return true;
 	}
 
@@ -39,7 +39,7 @@ public class ScrollOfFlight extends Scroll {
 
 	@Override
 	public Material getCraftingRecipeCenterItem() {
-		return Material.ELYTRA;
+		return Material.FIREWORK_ROCKET;
 	}
 
 	@Override

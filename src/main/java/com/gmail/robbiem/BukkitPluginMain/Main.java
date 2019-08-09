@@ -17,6 +17,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -61,7 +62,10 @@ public class Main extends JavaPlugin implements Listener {
 		this.getCommand("new-world").setExecutor(new CreateNewWorldCommand(this));
 		ShapedRecipe tridentRecipe = new ShapedRecipe(new NamespacedKey(this, "custom_trident"), new ItemStack(Material.TRIDENT, 1));
 		tridentRecipe.shape("dsd", " s ", " s ").setIngredient('d', Material.DIAMOND).setIngredient('s', Material.STICK);
+		ShapelessRecipe enderPearlFromGhastTear = new ShapelessRecipe(new NamespacedKey(this, "ender_pearl_from_tear"), new ItemStack(Material.ENDER_PEARL, 1));
+		enderPearlFromGhastTear.addIngredient(2, Material.GHAST_TEAR);
 		getServer().addRecipe(tridentRecipe);
+		getServer().addRecipe(enderPearlFromGhastTear);
 	}
 	
 	@Override

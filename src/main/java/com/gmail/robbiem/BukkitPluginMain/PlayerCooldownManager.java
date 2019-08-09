@@ -10,6 +10,8 @@ import java.util.UUID;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.gmail.robbiem.BukkitPluginMain.wands.LeftClickableWand;
+
 public class PlayerCooldownManager {
 	
 	public static class Cooldown {
@@ -64,11 +66,16 @@ public class PlayerCooldownManager {
 		return bb;
 	}
 	
+	public void useItemAlt(Player player, LeftClickableWand item) {
+		setPlayerCooldown(player, item.getAltPlayerCooldown());
+		itemSpecificCooldowns.put(new ItemCooldownKey(player, item), new Cooldown(item.getAltItemCooldown()));
+		getBossBar(player).useItem(item);
+	}
+	
 	public void useItem(Player player, UseableItem item) {
 		setPlayerCooldown(player, item.getPlayerCooldown());
 		itemSpecificCooldowns.put(new ItemCooldownKey(player, item), new Cooldown(item.getItemCooldown()));
-		int slot = player.getInventory().getHeldItemSlot();
-		getBossBar(player).useItem(item, slot);
+		getBossBar(player).useItem(item);
 	}
 	
 	public void setPlayerCooldown(Player player, long cooldown) {

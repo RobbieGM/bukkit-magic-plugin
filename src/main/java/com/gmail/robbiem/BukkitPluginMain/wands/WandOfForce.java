@@ -15,7 +15,7 @@ import org.bukkit.util.Vector;
 
 import com.gmail.robbiem.BukkitPluginMain.Main;
 
-public class WandOfForce extends Wand {
+public class WandOfForce extends LeftClickableWand {
 
 	public WandOfForce(Main plugin) {
 		super(plugin);
@@ -44,12 +44,29 @@ public class WandOfForce extends Wand {
 			world.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1.5f);
 		return pushedMob;
 	}
+	
+	@Override
+	public boolean useAlt(ItemStack item, Player player, World world, Server server) {
+		world.spawnParticle(Particle.CLOUD, player.getLocation(), 10, 0, 0, 0, 0.05);
+		player.setVelocity(player.getVelocity().add(new Vector(0, 1, 0)));
+		return true;
+	}
 
 	@Override
 	public long getPlayerCooldown() {
 		return 2500l; 
 	}
-
+	
+	@Override
+	public long getAltPlayerCooldown() {
+		return 0;
+	}
+	
+	@Override
+	public long getAltItemCooldown() {
+		return 1000l;
+	}
+	
 	@Override
 	public String getLore() {
 		return "Pushes all mobs and players away from\nyou with considerable velocity";

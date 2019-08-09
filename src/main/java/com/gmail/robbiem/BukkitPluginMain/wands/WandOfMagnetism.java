@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import com.gmail.robbiem.BukkitPluginMain.Main;
+import com.gmail.robbiem.BukkitPluginMain.ModdedItemManager;
 
 public class WandOfMagnetism extends Wand {
 	
@@ -23,7 +24,7 @@ public class WandOfMagnetism extends Wand {
 
 	@Override
 	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
-		Location center = player.getTargetBlock(null, 40).getLocation();
+		Location center = Wand.getTarget(player, 40, true);
 		for (int i = 0; i < 150; i++) {
 			makeSuctionParticle(center, 20);
 		}
@@ -40,7 +41,7 @@ public class WandOfMagnetism extends Wand {
 		}, 0, 1);
 		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 			plugin.getServer().getScheduler().cancelTask(taskId);
-		}, 10);
+		}, 15);
 		return true;
 	}
 	
@@ -57,7 +58,7 @@ public class WandOfMagnetism extends Wand {
 
 	@Override
 	public long getPlayerCooldown() {
-		return 500l;
+		return 0;
 	}
 	
 	@Override
@@ -73,6 +74,11 @@ public class WandOfMagnetism extends Wand {
 	@Override
 	public Material getWandTip() {
 		return Material.COMPASS;
+	}
+	
+	@Override
+	public Material getWandBase() {
+		return ModdedItemManager.LESSER_WAND_BASE;
 	}
 
 	@Override

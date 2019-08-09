@@ -1,17 +1,23 @@
 package com.gmail.robbiem.BukkitPluginMain.wands;
 
 import org.bukkit.EntityEffect;
+import org.bukkit.FluidCollisionMode;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Wolf;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import com.gmail.robbiem.BukkitPluginMain.Main;
+import org.bukkit.scoreboard.Team;
+import org.bukkit.util.RayTraceResult;
 
-public class WandOfPolymorph extends Wand implements Listener {
+import com.gmail.robbiem.BukkitPluginMain.Main;
+import com.gmail.robbiem.BukkitPluginMain.ModdedItemManager;
+
+public class WandOfPolymorph extends LeftClickableWand implements Listener {
 
 	public WandOfPolymorph(Main plugin) {
 		super(plugin);
@@ -19,25 +25,54 @@ public class WandOfPolymorph extends Wand implements Listener {
 
 	@Override
 	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
-		EntityType[] types = {EntityType.SHEEP, EntityType.COW, EntityType.WOLF, EntityType.OCELOT, EntityType.HORSE, EntityType.LLAMA, EntityType.IRON_GOLEM};
+//		EntityType[] types = {EntityType.SHEEP, EntityType.COW, EntityType.WOLF, EntityType.OCELOT, EntityType.HORSE, EntityType.LLAMA, EntityType.IRON_GOLEM};
 		boolean wasUsed = false;
 		for (LivingEntity e: world.getLivingEntities()) {
 			double dist = e.getLocation().distance(player.getLocation());
 			if (dist > 15) continue;
 			if (e instanceof Player) continue;
+			if (e instanceof Wolf) continue;
 			wasUsed = true;
 			e.playEffect(EntityEffect.ENTITY_POOF);
 			e.remove();
-			EntityType type = types[(int) (Math.random() * types.length)];
-			world.spawnEntity(e.getLocation(), type);
+//			EntityType type = types[(int) (Math.random() * types.length)];
+			Wolf wolf = (Wolf) world.spawnEntity(e.getLocation(), EntityType.WOLF);
+			wolf.setOwner(player);
 		}
 		return wasUsed;
+	}
+	
+	@Override
+	public boolean useAlt(ItemStack item, Player player, World world, Server server) {
+		RayTraceResult result = world.rayTrace(player.getLocation(), player.getLocation().getDirection(), 20, FluidCollisionMode.NEVER, false, 1, entity -> !entity.equals(player));
+		if (result != null && result.getHitEntity() != null) {
+			String entityId = result.getHitEntity().getUniqueId().toString();
+			Team team = server.getScoreboardManager().getMainScoreboard().getTeam(player.getName());
+			if (team != null) {
+				team.addEntry(entityId);
+			}
+			return true;
+		} else return false;
 	}
 
 	@Override
 	public long getPlayerCooldown() {
-		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	@Override
+	public long getItemCooldown() {
 		return 1500l;
+	}
+	
+	@Override
+	public long getAltPlayerCooldown() {
+		return 0;
+	}
+	
+	@Override
+	public long getAltItemCooldown() {
+		return 2500l;
 	}
 	
 	@Override
@@ -53,6 +88,11 @@ public class WandOfPolymorph extends Wand implements Listener {
 	@Override
 	public Material getWandTip() {
 		return Material.WHITE_WOOL;
+	}
+	
+	@Override
+	public Material getWandBase() {
+		return ModdedItemManager.LESSER_WAND_BASE;
 	}
 
 	@Override

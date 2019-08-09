@@ -6,8 +6,6 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.RayTraceResult;
-
 import com.gmail.robbiem.BukkitPluginMain.Main;
 
 public class WandOfLightning extends Wand {
@@ -18,13 +16,12 @@ public class WandOfLightning extends Wand {
 
 	@Override
 	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
-		RayTraceResult rayTrace = player.rayTraceBlocks(100);
-		if (rayTrace != null && rayTrace.getHitBlock() != null) {
-			Location loc = rayTrace.getHitPosition().toLocation(world);
-			world.strikeLightning(loc);
-			server.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-				world.strikeLightning(loc);
-			}, 10);
+		Location hit = Wand.getTarget(player, 100, false);
+		if (hit != null) {
+			world.strikeLightning(hit);
+//			server.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+//				world.strikeLightning(hit);
+//			}, 25);
 			return true;
 		} else {
 			return false;

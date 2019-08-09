@@ -12,6 +12,7 @@ import org.bukkit.Particle;
 import org.bukkit.Server;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -21,8 +22,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import com.gmail.robbiem.BukkitPluginMain.Main;
+import com.gmail.robbiem.BukkitPluginMain.ModdedItemManager;
 
-public class WandOfFrost extends ParticleWand implements Listener {
+public class WandOfFrost extends LeftClickableWand implements ParticleWand, Listener {
 	
 	public WandOfFrost(Main plugin) {
 		super(plugin);
@@ -45,6 +47,26 @@ public class WandOfFrost extends ParticleWand implements Listener {
 		return true;
 	}
 	
+	@Override
+	public boolean useAlt(ItemStack item, Player player, World world, Server server) {
+		final int radius = 5;
+		Location target = Wand.getBlockTarget(player, 8, false);
+		if (target != null) {
+			world.playSound(target, Sound.BLOCK_CHORUS_FLOWER_DEATH, 1, 1.5f);
+			for (int x = -radius; x <= radius; x++) {
+				for (int y = -radius; y <= radius; y++) {
+					for (int z = -radius; z <= radius; z++) {
+						Location l = target.clone().add(x, y, z);
+						if (l.distanceSquared(target) <= radius * radius && !ModdedItemManager.UNBREAKABLE_AND_SHULKERS.contains(l.getBlock().getType()) && !l.getBlock().isPassable()) {
+							l.getBlock().setType(Material.ICE);
+						}
+					}
+				}
+			}
+			return true;
+		} else return false;
+	}
+	
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent e) {
 		UUID id = e.getPlayer().getUniqueId();
@@ -63,7 +85,22 @@ public class WandOfFrost extends ParticleWand implements Listener {
 
 	@Override
 	public long getPlayerCooldown() {
-		return 1500l;
+		return 500l;
+	}
+	
+	@Override
+	public long getItemCooldown() {
+		return 6000l;
+	}
+	
+	@Override
+	public long getAltPlayerCooldown() {
+		return 0;
+	}
+	
+	@Override
+	public long getAltItemCooldown() {
+		return 500l;
 	}
 
 	@Override
@@ -72,17 +109,17 @@ public class WandOfFrost extends ParticleWand implements Listener {
 	}
 
 	@Override
-	int getRange() {
+	public int getRange() {
 		return 40;
 	}
 
 	@Override
-	float getEffectRadius() {
+	public float getEffectRadius() {
 		return 4f;
 	}
 
 	@Override
-	void spawnWandParticle(Location particleLocation) {
+	public void spawnWandParticle(Location particleLocation) {
 		particleLocation.getWorld().spawnParticle(Particle.END_ROD, particleLocation, 5, 0, 0, 0, 0.02);
 	}
 
