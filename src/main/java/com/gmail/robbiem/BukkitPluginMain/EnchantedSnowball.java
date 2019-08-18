@@ -38,7 +38,7 @@ public class EnchantedSnowball implements Listener {
 		ItemStack item = snowballItem.clone();
 		item.setAmount(8);
 		ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "enchanted_snowball"), item);
-		recipe.shape("sss", "sps", "sss").setIngredient('s', Material.SNOWBALL).setIngredient('p', Material.ENDER_PEARL);
+		recipe.shape("sss", "sts", "sss").setIngredient('s', Material.SNOWBALL).setIngredient('t', Material.GHAST_TEAR);
 		plugin.getServer().addRecipe(recipe);
 	}
 	

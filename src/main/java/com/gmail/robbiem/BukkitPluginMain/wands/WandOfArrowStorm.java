@@ -19,11 +19,11 @@ public class WandOfArrowStorm extends LeftClickableWand {
 
 	@Override
 	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
-		for (int tickDelay = 0; tickDelay < 10; tickDelay += 2) {
+		for (int tickDelay = 0; tickDelay <= 10; tickDelay += 2) {
 			server.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 				Location loc = player.getEyeLocation().toVector().add(player.getLocation().getDirection().multiply(0.5)).toLocation(world, player.getLocation().getYaw(), player.getLocation().getPitch());
 				Arrow arrow = (Arrow) world.spawnArrow(loc, loc.getDirection(), 2.5f, 8);
-				arrow.setKnockbackStrength(1);
+//				arrow.setKnockbackStrength(1);
 				arrow.setShooter(player);
 				arrow.setPickupStatus(PickupStatus.CREATIVE_ONLY);
 //				if (Math.random() > 0.9)

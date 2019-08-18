@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -50,14 +51,17 @@ public class WandOfFrost extends LeftClickableWand implements ParticleWand, List
 	@Override
 	public boolean useAlt(ItemStack item, Player player, World world, Server server) {
 		final int radius = 5;
-		Location target = Wand.getBlockTarget(player, 8, false);
-		if (target != null) {
+		Block targetBlock = player.getTargetBlockExact(8, FluidCollisionMode.ALWAYS);
+		if (targetBlock != null) {
+			Location target = targetBlock.getLocation();
 			world.playSound(target, Sound.BLOCK_CHORUS_FLOWER_DEATH, 1, 1.5f);
 			for (int x = -radius; x <= radius; x++) {
 				for (int y = -radius; y <= radius; y++) {
 					for (int z = -radius; z <= radius; z++) {
 						Location l = target.clone().add(x, y, z);
-						if (l.distanceSquared(target) <= radius * radius && !ModdedItemManager.UNBREAKABLE_AND_SHULKERS.contains(l.getBlock().getType()) && !l.getBlock().isPassable()) {
+						boolean isBreakable = !ModdedItemManager.UNBREAKABLE_AND_SHULKERS.contains(l.getBlock().getType());
+						boolean isSolidOrWater = !l.getBlock().isPassable() || l.getBlock().getType() == Material.WATER;
+						if (l.distanceSquared(target) <= radius * radius && isBreakable && isSolidOrWater) {
 							l.getBlock().setType(Material.ICE);
 						}
 					}

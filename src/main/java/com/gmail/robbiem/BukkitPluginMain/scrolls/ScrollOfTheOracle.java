@@ -72,7 +72,7 @@ class CrystalBall {
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName("Crystal Ball");
 		item.setItemMeta(meta);
-		plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, this::doTick, 0, 20);
+		plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, this::doTick, 0, 3 * 20);
 	}
 	
 	void doTick() {

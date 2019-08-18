@@ -16,7 +16,7 @@ public class WandOfLightning extends Wand {
 
 	@Override
 	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
-		Location hit = Wand.getTarget(player, 100, false);
+		Location hit = Wand.getTarget(player, 80, false);
 		if (hit != null) {
 			world.strikeLightning(hit);
 //			server.getScheduler().scheduleSyncDelayedTask(plugin, () -> {

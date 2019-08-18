@@ -57,8 +57,8 @@ public class WandOfTrapping extends Wand implements Listener {
 		OptionalInt trapIndex = IntStream.range(0, traps.size()).filter(i -> traps.get(i).block.equals(steppedOn)).findFirst();
 		if (trapIndex.isPresent() && e.getPlayer().getGameMode() == GameMode.SURVIVAL) {
 			e.getPlayer().getWorld().playSound(steppedOn.getLocation(), Sound.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON, 1, 1);
-			e.getPlayer().damage(18);
-			e.getPlayer().setVelocity(new Vector(-0.5 + Math.random(), 1, -0.5 + Math.random()));
+			e.getPlayer().damage(15);
+			e.getPlayer().setVelocity(new Vector(-0.5 + Math.random(), 0.5, -0.5 + Math.random()));
 			traps.get(trapIndex.getAsInt()).placer.sendMessage("One of your traps was activated!");;
 			traps.remove(trapIndex.getAsInt());
 		}

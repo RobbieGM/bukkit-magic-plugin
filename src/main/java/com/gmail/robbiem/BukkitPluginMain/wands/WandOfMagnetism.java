@@ -63,7 +63,7 @@ public class WandOfMagnetism extends Wand {
 	
 	@Override
 	public long getItemCooldown() {
-		return 2000l;
+		return 2500l;
 	}
 
 	@Override

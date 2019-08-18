@@ -70,7 +70,7 @@ class Spell {
 	
 	boolean rayIsObstructed(Location start, Location end) {
 		Vector direction = end.clone().subtract(start).toVector().normalize();
-		RayTraceResult result = start.getWorld().rayTrace(start, direction, end.distance(start), FluidCollisionMode.NEVER, true, 1, entity -> !entity.equals(caster));
+		RayTraceResult result = start.getWorld().rayTrace(start, direction, end.distance(start), FluidCollisionMode.NEVER, true, 0, entity -> !entity.equals(caster));
 		return result != null;
 	}
 	

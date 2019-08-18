@@ -64,8 +64,11 @@ public class Main extends JavaPlugin implements Listener {
 		tridentRecipe.shape("dsd", " s ", " s ").setIngredient('d', Material.DIAMOND).setIngredient('s', Material.STICK);
 		ShapelessRecipe enderPearlFromGhastTear = new ShapelessRecipe(new NamespacedKey(this, "ender_pearl_from_tear"), new ItemStack(Material.ENDER_PEARL, 1));
 		enderPearlFromGhastTear.addIngredient(2, Material.GHAST_TEAR);
+		ShapelessRecipe ghastTearsFromEnderPearl = new ShapelessRecipe(new NamespacedKey(this, "tears_from_ender_pearl"), new ItemStack(Material.GHAST_TEAR, 2));
+		ghastTearsFromEnderPearl.addIngredient(1, Material.ENDER_PEARL);
 		getServer().addRecipe(tridentRecipe);
 		getServer().addRecipe(enderPearlFromGhastTear);
+		getServer().addRecipe(ghastTearsFromEnderPearl);
 	}
 	
 	@Override

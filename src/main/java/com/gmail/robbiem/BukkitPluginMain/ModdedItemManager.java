@@ -18,9 +18,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 import com.gmail.robbiem.BukkitPluginMain.runes.*;
@@ -28,20 +28,23 @@ import com.gmail.robbiem.BukkitPluginMain.scrolls.*;
 import com.gmail.robbiem.BukkitPluginMain.wands.*;
 
 public class ModdedItemManager implements Listener {
-	
+
 	public PlayerCooldownManager cooldownManager;
 	List<Wand> wands = new ArrayList<>();
 	List<Scroll> scrolls = new ArrayList<>();
 	List<Rune> runes = new ArrayList<>();
 	Main plugin;
-	static final List<Material> SHULKER_BOXES = Arrays.asList(Material.RED_SHULKER_BOX, Material.CYAN_SHULKER_BOX, Material.WHITE_SHULKER_BOX, Material.LIGHT_GRAY_SHULKER_BOX, Material.GREEN_SHULKER_BOX, Material.YELLOW_SHULKER_BOX, Material.LIGHT_BLUE_SHULKER_BOX, Material.ORANGE_SHULKER_BOX);
-	static final List<Material> UNBREAKABLE = Arrays.asList(Material.BEDROCK, Material.BARRIER, Material.COMMAND_BLOCK, Material.CHAIN_COMMAND_BLOCK);
+	static final List<Material> SHULKER_BOXES = Arrays.asList(Material.RED_SHULKER_BOX, Material.CYAN_SHULKER_BOX,
+			Material.WHITE_SHULKER_BOX, Material.LIGHT_GRAY_SHULKER_BOX, Material.GREEN_SHULKER_BOX,
+			Material.YELLOW_SHULKER_BOX, Material.LIGHT_BLUE_SHULKER_BOX, Material.ORANGE_SHULKER_BOX);
+	static final List<Material> UNBREAKABLE = Arrays.asList(Material.BEDROCK, Material.BARRIER, Material.COMMAND_BLOCK,
+			Material.CHAIN_COMMAND_BLOCK);
 	public static final Material LESSER_WAND_BASE = Material.GHAST_TEAR;
-	public static final List<Material> UNBREAKABLE_AND_SHULKERS = Stream.concat(SHULKER_BOXES.stream(), UNBREAKABLE.stream()).collect(Collectors.toList());
+	public static final List<Material> UNBREAKABLE_AND_SHULKERS = Stream
+			.concat(SHULKER_BOXES.stream(), UNBREAKABLE.stream()).collect(Collectors.toList());
 	Glow glow;
-	
+
 	public ModdedItemManager(Main plugin) {
-		
 		cooldownManager = new PlayerCooldownManager(plugin);
 		this.plugin = plugin;
 		try {
@@ -51,11 +54,12 @@ public class ModdedItemManager implements Listener {
 			glow = new Glow(new NamespacedKey(plugin, "glow"));
 			Enchantment.registerEnchantment(glow);
 		} catch (Exception e) {
-			plugin.getLogger().info("Registering enchantment threw error because the enchantment was already registered (this is probably fine)");
+			plugin.getLogger().info(
+					"Registering enchantment threw error because the enchantment was already registered (this is probably fine)");
 		}
-		
+
 	}
-	
+
 	<T> List<T> createInstancesOfClasses(List<Class<? extends T>> classes) {
 		return classes.stream().map(clazz -> {
 			try {
@@ -78,7 +82,7 @@ public class ModdedItemManager implements Listener {
 	}
 	
 	void initItems() {
-		List<Class<? extends Wand>> wandClasses = Arrays.asList(WandOfArchitecture.class, WandOfArrowStorm.class, WandOfAvalanche.class, WandOfDecay.class, WandOfDestruction.class, WandOfFlak.class, WandOfFlame.class, WandOfForce.class, WandOfForceField.class, WandOfFrost.class, WandOfGrappling.class, WandOfLavaBolt.class, WandOfLightning.class, WandOfMagicMissile.class, WandOfMagnetism.class, WandOfOP.class, WandOfPoison.class, WandOfPolymorph.class, WandOfPropulsion.class, WandOfScience.class, WandOfTeleportation.class, WandOfTrapping.class);
+		List<Class<? extends Wand>> wandClasses = Arrays.asList(WandOfArchitecture.class, WandOfArrowStorm.class, WandOfAvalanche.class, WandOfDecay.class, WandOfDestruction.class, WandOfFlak.class, WandOfFlame.class, WandOfForce.class, WandOfForceField.class, WandOfFrost.class, WandOfGrappling.class, WandOfLavaBolt.class, WandOfLightning.class, WandOfMagicMissile.class, WandOfMagnetism.class, WandOfOP.class, WandOfPoison.class, WandOfPolymorph.class, WandOfPoseidon.class, WandOfPropulsion.class, WandOfScience.class, WandOfTeleportation.class, WandOfTrapping.class);
 		List<Class<? extends Scroll>> scrollClasses = Arrays.asList(ScrollOfAntiMagic.class, ScrollOfBlindness.class, ScrollOfElements.class, ScrollOfEquineSummoning.class, ScrollOfFlight.class, ScrollOfInvisibility.class, ScrollOfJealousy.class, ScrollOfNecromancy.class, ScrollOfOrganization.class, ScrollOfPlunder.class, ScrollOfProtection.class, ScrollOfScavenging.class, ScrollOfSurprise.class, ScrollOfTeleportation.class, ScrollOfTheEagle.class, ScrollOfTheHuntersVision.class, ScrollOfTheOracle.class, ScrollOfUpgrade.class);
 		List<Class<? extends Rune>> runeClasses = Arrays.asList(RuneOfBackstabbing.class, RuneOfBounce.class, RuneOfDisarmament.class, RuneOfFeatherFalling.class, RuneOfInfestation.class, RuneOfInvincibility.class, RuneOfVengeance.class);
 		wands = createInstancesOfClasses(wandClasses);
@@ -154,7 +158,8 @@ public class ModdedItemManager implements Listener {
 		boolean isRightClick = e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK;
 		boolean isLeftClick = e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK;
 		boolean isOtherInteraction = e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getClickedBlock().getType().isInteractable();
-		if (item != null && !isOtherInteraction) {
+		boolean isMainHand = e.getHand() == EquipmentSlot.HAND;
+		if (item != null && !isOtherInteraction && isMainHand) {
 			String itemName = item.getItemMeta().getDisplayName();
 			boolean isStick = item.getType() == Material.STICK;
 			boolean isPaper = item.getType() == Material.PAPER;

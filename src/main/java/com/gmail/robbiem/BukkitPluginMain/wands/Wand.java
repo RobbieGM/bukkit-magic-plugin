@@ -18,10 +18,10 @@ public abstract class Wand extends UseableItem {
 	}
 	
 	public static Location getTarget(Player player, int maxDistance, boolean alwaysHit) {
-		RayTraceResult result = player.getWorld().rayTrace(player.getEyeLocation(), player.getLocation().getDirection(), maxDistance, FluidCollisionMode.NEVER, false, 1, entity -> !entity.equals(player));
+		RayTraceResult result = player.getWorld().rayTrace(player.getEyeLocation(), player.getLocation().getDirection(), maxDistance, FluidCollisionMode.NEVER, false, 0, entity -> !entity.equals(player));
 		if (result == null) {
 			if (alwaysHit) {
-				return player.getTargetBlock(null, maxDistance).getLocation();
+				return player.getLocation().add(player.getLocation().getDirection().multiply(maxDistance));
 			} else return null;
 		}
 		return result.getHitPosition().toLocation(player.getWorld());
@@ -32,7 +32,7 @@ public abstract class Wand extends UseableItem {
 		RayTraceResult result = player.getWorld().rayTraceBlocks(player.getLocation(), player.getLocation().getDirection(), maxDistance);
 		if (result == null) {
 			if (alwaysHit) {
-				return player.getTargetBlock(null, maxDistance).getLocation();
+				return player.getLocation().add(player.getLocation().getDirection().multiply(maxDistance));
 			} else return null;
 		}
 		return result.getHitPosition().toLocation(player.getWorld());

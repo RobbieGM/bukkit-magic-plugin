@@ -31,7 +31,8 @@ public class WandOfLavaBolt extends Wand {
 				if (Math.random() > 0.8) // Particles can be laggy
 					world.spawnParticle(Particle.LAVA, blocks.get(innerI).getLocation(), 2, 0.5, 0.5, 0.5);
 				server.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-					setBlock(blocks.get(innerI), Material.AIR);
+					if (blocks.get(innerI).getType() == Material.LAVA)
+						setBlock(blocks.get(innerI), Material.AIR);
 				}, 5);
 			}, (int) (i * 0.5));
 		}

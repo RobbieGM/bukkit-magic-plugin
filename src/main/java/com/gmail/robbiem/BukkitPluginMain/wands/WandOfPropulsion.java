@@ -1,6 +1,11 @@
 package com.gmail.robbiem.BukkitPluginMain.wands;
 
+import static java.lang.Math.PI;
+
+import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -23,11 +28,30 @@ public WandOfPropulsion(Main plugin) {
 		if (player.getInventory().getChestplate() != null && player.getInventory().getChestplate().getType() == Material.ELYTRA) {
 			player.setGliding(true);
 		}
+		Location originalLocation = player.getLocation();
 		Vector vel = player.getLocation().getDirection().multiply(2);
 //		if (vel.length() > TERMINAL_VELOCITY) {
 //			vel.multiply(TERMINAL_VELOCITY / vel.length());
 //		}
+		player.setFallDistance(0);
 		player.setVelocity(vel);
+		int totalEffectTicks = 20;
+		long startTime = world.getFullTime();
+		int particleTaskId = server.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
+			long ticks = world.getFullTime() - startTime;
+			double fractionDone = (double) ticks / totalEffectTicks;
+			Vector v1 = new Vector(2, 0, 0).rotateAroundY(fractionDone * PI * 2).add(new Vector(0, 1 + fractionDone * 50, 0));
+			v1.rotateAroundX(Math.toRadians(-originalLocation.getPitch() - 90));
+			v1.rotateAroundY(Math.toRadians(-originalLocation.getYaw() + 180));
+			Vector v2 = new Vector(-2, 0, 0).rotateAroundY(fractionDone * PI * 2).add(new Vector(0, 1 + fractionDone * 50, 0));
+			v2.rotateAroundX(Math.toRadians(-originalLocation.getPitch() - 90));
+			v2.rotateAroundY(Math.toRadians(-originalLocation.getYaw() + 180));
+			world.spawnParticle(Particle.REDSTONE, v1.toLocation(world).add(originalLocation), 0, 0, 0, 0, 0, new Particle.DustOptions(Color.BLACK, 3f));
+			world.spawnParticle(Particle.REDSTONE, v2.toLocation(world).add(originalLocation), 0, 0, 0, 0, 0, new Particle.DustOptions(Color.BLACK, 3f));
+		}, 0, 1);
+		server.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+			server.getScheduler().cancelTask(particleTaskId);
+		}, totalEffectTicks);
 		return true;
 	}
 
@@ -38,7 +62,7 @@ public WandOfPropulsion(Main plugin) {
 	
 	@Override
 	public long getItemCooldown() {
-		return 2500l;
+		return 2500l; // 2500l;
 	}
 	
 	@Override
@@ -48,7 +72,7 @@ public WandOfPropulsion(Main plugin) {
 
 	@Override
 	public String getLore() {
-		return "With an elytra, propels you.";
+		return "Propels you where\nyou are looking.";
 	}
 
 	@Override

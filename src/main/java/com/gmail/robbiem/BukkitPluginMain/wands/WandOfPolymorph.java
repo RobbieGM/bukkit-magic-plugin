@@ -1,7 +1,7 @@
 package com.gmail.robbiem.BukkitPluginMain.wands;
 
 import org.bukkit.EntityEffect;
-import org.bukkit.FluidCollisionMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -12,7 +12,6 @@ import org.bukkit.entity.Wolf;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.Team;
-import org.bukkit.util.RayTraceResult;
 
 import com.gmail.robbiem.BukkitPluginMain.Main;
 import com.gmail.robbiem.BukkitPluginMain.ModdedItemManager;
@@ -44,15 +43,22 @@ public class WandOfPolymorph extends LeftClickableWand implements Listener {
 	
 	@Override
 	public boolean useAlt(ItemStack item, Player player, World world, Server server) {
-		RayTraceResult result = world.rayTrace(player.getLocation(), player.getLocation().getDirection(), 20, FluidCollisionMode.NEVER, false, 1, entity -> !entity.equals(player));
-		if (result != null && result.getHitEntity() != null) {
-			String entityId = result.getHitEntity().getUniqueId().toString();
+		Location clickLoc = Wand.getTarget(player, 20, false);
+		if (clickLoc == null) return false;
+		boolean wasUsed = false;
+		for (LivingEntity e: world.getLivingEntities()) {
+			double dist = e.getLocation().distance(clickLoc);
+			if (dist > 3) continue;
+			if (e instanceof Player) continue;
+			if (e instanceof Wolf) continue;
+			wasUsed = true;
+			e.playEffect(EntityEffect.ENTITY_POOF);
 			Team team = server.getScoreboardManager().getMainScoreboard().getTeam(player.getName());
 			if (team != null) {
-				team.addEntry(entityId);
+				team.addEntry(e.getUniqueId().toString());
 			}
-			return true;
-		} else return false;
+		}
+		return wasUsed;
 	}
 
 	@Override

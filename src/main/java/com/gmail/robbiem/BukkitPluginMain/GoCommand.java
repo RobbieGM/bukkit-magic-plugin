@@ -33,6 +33,7 @@ import org.bukkit.util.Vector;
 public class GoCommand implements CommandExecutor {
 	Main plugin;
 	static final int CHESTS_PER_PLAYER = 12;
+	static final int LATE_GAME_CHESTS_PER_PLAYER = 6;
 	static final int BORDER_WIDTH = 200;
 	static final int BORDER_RANDOMIZATION_RADIUS = 30;
 	static final int MIN_CHEST_DISTANCE = 10;
@@ -98,7 +99,7 @@ public class GoCommand implements CommandExecutor {
 		double borderCenterX = center.getX() - BORDER_RANDOMIZATION_RADIUS + 2 * BORDER_RANDOMIZATION_RADIUS * Math.random();
 		double borderCenterZ = center.getZ() - BORDER_RANDOMIZATION_RADIUS + 2 * BORDER_RANDOMIZATION_RADIUS * Math.random();
 		
-		placeChestsRandomly(world, CHESTS_PER_PLAYER * world.getPlayers().size(), borderCenterX, borderCenterZ, BORDER_WIDTH);
+		List<Location> originalChestLocations = placeChestsRandomly(world, CHESTS_PER_PLAYER * world.getPlayers().size(), borderCenterX, borderCenterZ, BORDER_WIDTH);
 		
 		if (isDefaultWorld) {
 			putPlayersOnPedestals(PEDESTALS.stream().map(v -> v.toLocation(world)).collect(Collectors.toList()), world.getPlayers());
@@ -123,6 +124,8 @@ public class GoCommand implements CommandExecutor {
 		shrinkBorderTask = plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 			world.getWorldBorder().setSize(20, 1000);
 			world.getPlayers().forEach(p -> p.sendMessage("The world border is shrinking!"));
+			originalChestLocations.stream().map(l -> l.getBlock()).filter(b -> b.getType() == Material.CHEST).forEach(b -> b.setType(Material.AIR));
+			placeChestsRandomly(world, LATE_GAME_CHESTS_PER_PLAYER * world.getPlayers().size(), borderCenterX, borderCenterZ, (int) (BORDER_WIDTH * 0.8));
 		}, 20 * 60 * 5);
 		return true;
 	}
@@ -182,7 +185,7 @@ public class GoCommand implements CommandExecutor {
 	}
 	
 	@SuppressWarnings("deprecation")
-	void placeChestsRandomly(World world, int numChests, double borderCenterX, double borderCenterZ, int borderWidth) {
+	List<Location> placeChestsRandomly(World world, int numChests, double borderCenterX, double borderCenterZ, int borderWidth) {
 		List<Location> locations = spreadLocations(world, numChests, borderCenterX, borderCenterZ, borderWidth, 10, 0.2f, true, true);
 		for (Location l: locations) {
 			Block chestBlock = world.getBlockAt(l);
@@ -191,6 +194,7 @@ public class GoCommand implements CommandExecutor {
 			chest.setLootTable(plugin.getServer().getLootTable(new NamespacedKey("hungergames", "chests/loot_table")));
 			chest.update();
 		}
+		return locations;
 	}
 	
 	boolean locationIsTooCloseToOthers(List<Location> locations, Location newLocation, double minDistance) {
