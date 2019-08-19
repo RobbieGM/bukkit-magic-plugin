@@ -50,21 +50,22 @@ public abstract class Rune implements Listener {
 		p.getWorld().spawnParticle(Particle.SPELL, p.getLocation(), 10, 1, 1, 1);
 	}
 
-	boolean playerHasRune(Player p) {
-		ItemStack item = new ItemStack(Material.EMERALD, 1);
-		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(getName());
-		item.setItemMeta(meta);
-		return p.getInventory().containsAtLeast(item, 1);
+	boolean playerHasRune(Player player) {
+		return getRuneItem(player) != null;
 	}
 
-	void consumeRune(Player p) {
-		for (ItemStack stack : p.getInventory().getContents()) {
+	void consumeRune(Player holder) {
+		ItemStack stack = getRuneItem(holder);
+		stack.setAmount(stack.getAmount() - 1);
+	}
+
+	private ItemStack getRuneItem(Player holder) {
+		for (ItemStack stack : holder.getInventory().getContents()) {
 			if (stack != null && stack.getType() == Material.EMERALD && stack.getItemMeta() != null
 					&& stack.getItemMeta().hasDisplayName() && stack.getItemMeta().getDisplayName().equals(getName())) {
-				stack.setAmount(stack.getAmount() - 1);
-				return;
+				return stack;
 			}
 		}
+		return null;
 	}
 }
