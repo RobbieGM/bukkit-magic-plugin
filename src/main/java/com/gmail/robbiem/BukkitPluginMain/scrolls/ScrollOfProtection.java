@@ -66,16 +66,20 @@ public class ScrollOfProtection extends Scroll {
 		}
 		
 		for (Block b: changedBlocks) {
-			if (!ModdedItemManager.UNBREAKABLE_AND_SHULKERS.contains(b.getType()))
+			if (!ModdedItemManager.UNBREAKABLE_AND_SHULKERS.contains(b.getType()) && !blockIsOnPlayer(b))
 				b.setType(Material.BARRIER);
 		}
 		server.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 			for (Block b: changedBlocks) {
-				if (!ModdedItemManager.UNBREAKABLE_AND_SHULKERS.contains(b.getType()) || b.getType() == Material.BARRIER)
+				if (b.getType() == Material.BARRIER)
 					b.setType(Material.AIR);
 			}
 		}, DURATION);
 		return true;
+	}
+
+	boolean blockIsOnPlayer(Block b) {
+		return b.getWorld().getPlayers().stream().anyMatch(player -> player.getLocation().distance(b.getLocation()) < 2);
 	}
 
 	@Override

@@ -28,7 +28,6 @@ public WandOfPropulsion(Main plugin) {
 		if (player.getInventory().getChestplate() != null && player.getInventory().getChestplate().getType() == Material.ELYTRA) {
 			player.setGliding(true);
 		}
-		Location originalLocation = player.getLocation();
 		Vector vel = player.getLocation().getDirection().multiply(2);
 //		if (vel.length() > TERMINAL_VELOCITY) {
 //			vel.multiply(TERMINAL_VELOCITY / vel.length());
@@ -40,14 +39,15 @@ public WandOfPropulsion(Main plugin) {
 		int particleTaskId = server.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
 			long ticks = world.getFullTime() - startTime;
 			double fractionDone = (double) ticks / totalEffectTicks;
-			Vector v1 = new Vector(2, 0, 0).rotateAroundY(fractionDone * PI * 2).add(new Vector(0, 1 + fractionDone * 50, 0));
-			v1.rotateAroundX(Math.toRadians(-originalLocation.getPitch() - 90));
-			v1.rotateAroundY(Math.toRadians(-originalLocation.getYaw() + 180));
-			Vector v2 = new Vector(-2, 0, 0).rotateAroundY(fractionDone * PI * 2).add(new Vector(0, 1 + fractionDone * 50, 0));
-			v2.rotateAroundX(Math.toRadians(-originalLocation.getPitch() - 90));
-			v2.rotateAroundY(Math.toRadians(-originalLocation.getYaw() + 180));
-			world.spawnParticle(Particle.REDSTONE, v1.toLocation(world).add(originalLocation), 0, 0, 0, 0, 0, new Particle.DustOptions(Color.BLACK, 3f));
-			world.spawnParticle(Particle.REDSTONE, v2.toLocation(world).add(originalLocation), 0, 0, 0, 0, 0, new Particle.DustOptions(Color.BLACK, 3f));
+			Location currentLocation = player.getLocation();
+			Vector v1 = new Vector(2, 3, 0).rotateAroundY(fractionDone * PI * 2);// .add(new Vector(0, 1 + fractionDone * 50, 0));
+			v1.rotateAroundX(Math.toRadians(-currentLocation.getPitch() - 90));
+			v1.rotateAroundY(Math.toRadians(-currentLocation.getYaw() + 180));
+			Vector v2 = new Vector(-2, 3, 0).rotateAroundY(fractionDone * PI * 2);// .add(new Vector(0, 1 + fractionDone * 50, 0));
+			v2.rotateAroundX(Math.toRadians(-currentLocation.getPitch() - 90));
+			v2.rotateAroundY(Math.toRadians(-currentLocation.getYaw() + 180));
+			world.spawnParticle(Particle.REDSTONE, v1.toLocation(world).add(currentLocation), 0, 0, 0, 0, 0, new Particle.DustOptions(Color.BLACK, 3f));
+			world.spawnParticle(Particle.REDSTONE, v2.toLocation(world).add(currentLocation), 0, 0, 0, 0, 0, new Particle.DustOptions(Color.BLACK, 3f));
 		}, 0, 1);
 		server.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 			server.getScheduler().cancelTask(particleTaskId);
@@ -62,7 +62,7 @@ public WandOfPropulsion(Main plugin) {
 	
 	@Override
 	public long getItemCooldown() {
-		return 2500l; // 2500l;
+		return isBuffed ? 1000l : 2500l;
 	}
 	
 	@Override

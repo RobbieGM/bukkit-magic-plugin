@@ -15,7 +15,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 public class BlockProtector implements Listener {
 	
 	boolean isProtected(Material material) {
-		return material.toString().contains("SHULKER");
+		return material.toString().contains("SHULKER") || ModdedItemManager.UNBREAKABLE_AND_SHULKERS.contains(material);
 	}
 	
 	@EventHandler(priority=EventPriority.HIGH)

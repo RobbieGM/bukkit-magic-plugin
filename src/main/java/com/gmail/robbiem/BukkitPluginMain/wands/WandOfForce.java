@@ -33,7 +33,7 @@ public class WandOfForce extends LeftClickableWand {
 			Vector playerLocation = player.getLocation().toVector();
 			if (mobLocation.isInSphere(playerLocation, 10) && !mobLocation.equals(playerLocation)) {
 				double distance = mobLocation.clone().subtract(playerLocation).length();
-				double force = 7 - 0.7 * distance; // Same location: 10, 10 blocks away: 0
+				double force = isBuffed ? (10 - 1 * distance) : (7 - 0.7 * distance); // Same location: 10, 10 blocks away: 0
 				Vector propelVector = mobLocation.subtract(playerLocation).normalize().multiply(force);
 				propelVector.setY(0.8);
 				world.spawnParticle(Particle.SPELL_INSTANT, mob.getLocation(), 5, 1, 1, 1);

@@ -1,0 +1,140 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Debug (Launch) - Current File",
+      "request": "launch",
+      "mainClass": "${file}"
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-DocsConnectionPropsHelper<BukkitModPlugin>",
+      "request": "launch",
+      "mainClass": "com.mysql.jdbc.DocsConnectionPropsHelper",
+      "projectName": "BukkitModPlugin"
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-ErrorMappingsDocGenerator<BukkitModPlugin>",
+      "request": "launch",
+      "mainClass": "com.mysql.jdbc.util.ErrorMappingsDocGenerator",
+      "projectName": "BukkitModPlugin"
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-PropertiesDocGenerator<BukkitModPlugin>",
+      "request": "launch",
+      "mainClass": "com.mysql.jdbc.util.PropertiesDocGenerator",
+      "projectName": "BukkitModPlugin"
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-TimezoneDump<BukkitModPlugin>",
+      "request": "launch",
+      "mainClass": "com.mysql.jdbc.util.TimezoneDump",
+      "projectName": "BukkitModPlugin"
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-VersionFSHierarchyMaker<BukkitModPlugin>",
+      "request": "launch",
+      "mainClass": "com.mysql.jdbc.util.VersionFSHierarchyMaker",
+      "projectName": "BukkitModPlugin"
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-Version<BukkitModPlugin>",
+      "request": "launch",
+      "mainClass": "io.netty.util.Version",
+      "projectName": "BukkitModPlugin"
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-PluginManager<BukkitModPlugin>",
+      "request": "launch",
+      "mainClass": "org.apache.logging.log4j.core.config.plugins.util.PluginManager",
+      "projectName": "BukkitModPlugin"
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-JmsQueueReceiver<BukkitModPlugin>",
+      "request": "launch",
+      "mainClass": "org.apache.logging.log4j.core.net.mom.jms.JmsQueueReceiver",
+      "projectName": "BukkitModPlugin"
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-JmsTopicReceiver<BukkitModPlugin>",
+      "request": "launch",
+      "mainClass": "org.apache.logging.log4j.core.net.mom.jms.JmsTopicReceiver",
+      "projectName": "BukkitModPlugin"
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-TcpSocketServer<BukkitModPlugin>",
+      "request": "launch",
+      "mainClass": "org.apache.logging.log4j.core.net.server.TcpSocketServer",
+      "projectName": "BukkitModPlugin"
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-UdpSocketServer<BukkitModPlugin>",
+      "request": "launch",
+      "mainClass": "org.apache.logging.log4j.core.net.server.UdpSocketServer",
+      "projectName": "BukkitModPlugin"
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-Generate$CustomLogger<BukkitModPlugin>",
+      "request": "launch",
+      "mainClass": "org.apache.logging.log4j.core.tools.Generate$CustomLogger",
+      "projectName": "BukkitModPlugin"
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-Generate$ExtendedLogger<BukkitModPlugin>",
+      "request": "launch",
+      "mainClass": "org.apache.logging.log4j.core.tools.Generate$ExtendedLogger",
+      "projectName": "BukkitModPlugin"
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-Main<BukkitModPlugin>",
+      "request": "launch",
+      "mainClass": "org.bukkit.craftbukkit.Main",
+      "projectName": "BukkitModPlugin"
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-ConsoleRunner<BukkitModPlugin>",
+      "request": "launch",
+      "mainClass": "org.bukkit.craftbukkit.libs.jline.console.internal.ConsoleRunner",
+      "projectName": "BukkitModPlugin"
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-Commodore<BukkitModPlugin>",
+      "request": "launch",
+      "mainClass": "org.bukkit.craftbukkit.v1_14_R1.util.Commodore",
+      "projectName": "BukkitModPlugin"
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-CraftLegacy<BukkitModPlugin>",
+      "request": "launch",
+      "mainClass": "org.bukkit.craftbukkit.v1_14_R1.util.CraftLegacy",
+      "projectName": "BukkitModPlugin"
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-OSInfo<BukkitModPlugin>",
+      "request": "launch",
+      "mainClass": "org.sqlite.util.OSInfo",
+      "projectName": "BukkitModPlugin"
+    }
+  ]
+}

@@ -74,13 +74,13 @@ public class WandOfAvalanche extends Wand implements Listener {
 					}, 4);
 				}, (long) (20 * delay));
 			}
-		}, (long) (20 * 0.5));
+		}, isBuffed ? 0 : 10);
 		return true;
 	}
 
 	@Override
 	public long getPlayerCooldown() {
-		return 2500l;
+		return isBuffed ? 1000l : 2500l;
 	}
 	
 	double taxicabDistance(Location l1, Location l2) {

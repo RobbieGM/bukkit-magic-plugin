@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import com.gmail.robbiem.BukkitPluginMain.Main;
+import com.gmail.robbiem.BukkitPluginMain.ModdedItemManager;
 
 public class WandOfTeleportation extends Wand {
 	
@@ -25,7 +26,7 @@ public class WandOfTeleportation extends Wand {
 	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
 		Location previousLocation = player.getLocation();
 		Location targetedLocation = player.getTargetBlock(null, RANGE).getLocation();
-		targetedLocation = clampToWorldBorder(targetedLocation);
+		clampToWorldBorder(targetedLocation);
 		targetedLocation = moveUpUntilStandable(targetedLocation);
 		Location highestBlockLocation = world.getHighestBlockAt(targetedLocation).getLocation();
 		if (targetedLocation.getY() > highestBlockLocation.getY()) { // Avoid teleporting into air, but allow teleporting under trees.
@@ -57,7 +58,7 @@ public class WandOfTeleportation extends Wand {
 		return l;
 	}
 	
-	Location clampToWorldBorder(Location orig) {
+	void clampToWorldBorder(Location orig) {
 		WorldBorder border = orig.getWorld().getWorldBorder();
 		if (orig.getX() < border.getCenter().getX() - border.getSize() / 2)
 			orig.setX(border.getCenter().getX() - border.getSize() / 2);
@@ -67,16 +68,16 @@ public class WandOfTeleportation extends Wand {
 			orig.setZ(border.getCenter().getZ() - border.getSize() / 2);
 		if (orig.getZ() > border.getCenter().getZ() + border.getSize() / 2)
 			orig.setZ(border.getCenter().getZ() + border.getSize() / 2);
-		return orig;
 	}
 	
+	@Override
 	public long getPlayerCooldown() {
 		return 1000l;
 	}
 	
 	@Override
 	public long getItemCooldown() {
-		return 5000l;
+		return isBuffed ? 3500l : 5000l;
 	}
 
 	@Override
@@ -92,6 +93,11 @@ public class WandOfTeleportation extends Wand {
 	@Override
 	public Material getWandTip() {
 		return Material.ENDER_PEARL;
+	}
+
+	@Override
+	public Material getWandBase() {
+		return ModdedItemManager.LESSER_WAND_BASE;
 	}
 
 	@Override

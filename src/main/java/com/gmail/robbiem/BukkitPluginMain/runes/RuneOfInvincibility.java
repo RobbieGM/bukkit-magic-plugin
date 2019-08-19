@@ -14,7 +14,7 @@ public class RuneOfInvincibility extends Rune {
 
 	@EventHandler(priority=EventPriority.HIGH)
 	public void onPlayerDamagedByEntity(EntityDamageByEntityEvent e) {
-		if (e.getEntity() instanceof Player && playerHasRune((Player) e.getEntity())) {
+		if (e.getEntity() instanceof Player && playerHasRune((Player) e.getEntity()) && ((Player) e.getEntity()).getHealth() - e.getFinalDamage() <= 6) {
 			Player p = (Player) e.getEntity();
 			consumeRune(p);
 			playRuneEffect(p);

@@ -17,7 +17,7 @@ import com.gmail.robbiem.BukkitPluginMain.ModdedItemManager;
 
 public class WandOfDestruction extends Wand {
 	
-	static final int RADIUS = 2;
+	static final int RADIUS = 3;
 
 	public WandOfDestruction(Main plugin) {
 		super(plugin);
@@ -43,7 +43,7 @@ public class WandOfDestruction extends Wand {
 			}
 		}
 		for (Block b: erased) {
-			int delay = (int) (Math.random() * 25);
+			int delay = (int) (Math.random() * getItemCooldown() * 20 / 1000);
 //			int delay = 4 * (int) (RADIUS - b.getLocation().subtract(targeted.getLocation()).length());
 			server.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 				setBlock(b, Material.AIR);
@@ -73,7 +73,7 @@ public class WandOfDestruction extends Wand {
 	
 	@Override
 	public long getItemCooldown() {
-		return 400l;
+		return isBuffed ? 500l : 1000l;
 	}
 
 	@Override

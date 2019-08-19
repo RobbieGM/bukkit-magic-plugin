@@ -26,7 +26,7 @@ public class WandOfForceField extends LeftClickableWand {
 
 	@Override
 	public boolean use(ItemStack item, Player player, World world, Server server) {
-		makeForceField(player, 6, 30, false);
+		makeForceField(player, 6, isBuffed ? 39 : 30, false);
 		return true;
 	}
 	

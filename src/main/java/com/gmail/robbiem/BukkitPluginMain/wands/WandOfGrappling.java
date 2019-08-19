@@ -19,19 +19,21 @@ public class WandOfGrappling extends Wand implements ParticleWand {
 		super(plugin);
 	}
 
-	static final double MAX_SPEED = 2;
+	double maxSpeed() {
+		return isBuffed ? 5 : 2;
+	}
 	
 	@Override
 	public boolean use(ItemStack item, Player player, World world, Server server) {
-		this.cast(player, plugin, (Location l) -> {
+		cast(player, plugin, (Location l) -> {
 			int taskId = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
 				player.setFallDistance(0);
 				try {
 					l.checkFinite();
 					Vector propelVector = l.clone().subtract(player.getLocation()).toVector().multiply(0.2);
 					double mag = propelVector.length();
-					if (mag > MAX_SPEED) {
-						propelVector.multiply(MAX_SPEED / mag);
+					if (mag > maxSpeed()) {
+						propelVector.multiply(maxSpeed() / mag);
 					}
 					propelVector.setY(propelVector.getY() + 0.2);
 					player.setVelocity(propelVector);
@@ -46,12 +48,12 @@ public class WandOfGrappling extends Wand implements ParticleWand {
 	
 	@Override
 	public float getSpeed() {
-		return 3f;
+		return isBuffed ? 5f : 3f;
 	}
 
 	@Override
 	public int getRange() {
-		return 50;
+		return isBuffed ? 90 : 50;
 	}
 
 	@Override

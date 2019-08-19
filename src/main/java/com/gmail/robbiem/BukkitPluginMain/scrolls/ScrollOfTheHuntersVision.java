@@ -5,6 +5,9 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+
 import com.gmail.robbiem.BukkitPluginMain.Main;
 
 public class ScrollOfTheHuntersVision extends Scroll {
@@ -17,16 +20,9 @@ public class ScrollOfTheHuntersVision extends Scroll {
 	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
 		for (Player p: world.getPlayers()) {
 			if (!p.equals(player)) {
-				p.setGlowing(true);
+				p.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20 * 10, 1));
 			}
 		}
-		server.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-			for (Player p: world.getPlayers()) {
-				if (!p.equals(player)) {
-					p.setGlowing(false);
-				}
-			}
-		}, 20 * 10);
 		return true;
 	}
 

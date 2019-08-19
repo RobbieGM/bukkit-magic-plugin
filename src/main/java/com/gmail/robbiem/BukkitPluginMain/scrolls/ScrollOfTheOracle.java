@@ -79,7 +79,7 @@ class CrystalBall {
 		List<String> data = new ArrayList<>();
 		Location center = holder.getWorld().getWorldBorder().getCenter();
 		data.add("Center X: " + center.getBlockX() + ", Z: " + center.getBlockZ());
-		if (opponent != null && opponent.getGameMode() == GameMode.SURVIVAL) {
+		if (opponent != null && opponent.getGameMode() == GameMode.SURVIVAL && opponent.getLocation().getWorld().equals(holder.getWorld())) {
 			data.add("Opp. dist: " + (int) opponent.getLocation().distance(holder.getLocation()));
 		} else {
 			data.add("Center dist: " + (int) center.distance(holder.getLocation()));

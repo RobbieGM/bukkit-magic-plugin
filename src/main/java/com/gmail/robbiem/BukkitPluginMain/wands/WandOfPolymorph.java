@@ -28,7 +28,7 @@ public class WandOfPolymorph extends LeftClickableWand implements Listener {
 		boolean wasUsed = false;
 		for (LivingEntity e: world.getLivingEntities()) {
 			double dist = e.getLocation().distance(player.getLocation());
-			if (dist > 15) continue;
+			if (dist > (isBuffed ? 25 : 15)) continue;
 			if (e instanceof Player) continue;
 			if (e instanceof Wolf) continue;
 			wasUsed = true;

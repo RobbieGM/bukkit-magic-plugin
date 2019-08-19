@@ -11,16 +11,18 @@ public class RuneOfBackstabbing extends Rune {
 
 	public RuneOfBackstabbing(Main plugin) {
 		super(plugin);
-		// TODO Auto-generated constructor stub
 	}
 
 	@EventHandler
 	public void onPlayerHurtByPlayer(EntityDamageByEntityEvent e) {
 		Entity damager = getDamageSource(e.getDamager());
-		if (e.getEntity() instanceof Player && damager instanceof Player && playerHasRune((Player) e.getEntity())) {
+		if (!e.isCancelled() && e.getEntity() instanceof Player && damager instanceof Player
+				&& playerHasRune((Player) e.getEntity())) {
 			Player damaged = (Player) e.getEntity();
 			consumeRune(damaged);
 			playRuneEffect(damaged);
+			e.setCancelled(true);
+			((Player) damager).damage(8, damaged);
 			Location newLoc = damager.getLocation();
 			newLoc.subtract(newLoc.getDirection().setY(0).normalize().multiply(2));
 			if (newLoc.getBlock().getType().isSolid())

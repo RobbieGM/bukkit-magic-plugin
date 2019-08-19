@@ -33,7 +33,7 @@ public class WandOfLavaBolt extends Wand {
 				server.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 					if (blocks.get(innerI).getType() == Material.LAVA)
 						setBlock(blocks.get(innerI), Material.AIR);
-				}, 5);
+				}, isBuffed ? 10 : 5);
 			}, (int) (i * 0.5));
 		}
 		return true;
@@ -46,8 +46,7 @@ public class WandOfLavaBolt extends Wand {
 
 	@Override
 	public long getPlayerCooldown() {
-		// TODO Auto-generated method stub
-		return 2000l;
+		return isBuffed ? 1500l : 2000l;
 	}
 
 	@Override

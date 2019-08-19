@@ -12,39 +12,47 @@ import com.gmail.robbiem.BukkitPluginMain.Main;
 import com.gmail.robbiem.BukkitPluginMain.UseableItem;
 
 public abstract class Wand extends UseableItem {
-	
+
+	public boolean isBuffed = false;
+
 	public Wand(Main plugin) {
 		super(plugin);
 	}
-	
+
+	@Nullable
 	public static Location getTarget(Player player, int maxDistance, boolean alwaysHit) {
-		RayTraceResult result = player.getWorld().rayTrace(player.getEyeLocation(), player.getLocation().getDirection(), maxDistance, FluidCollisionMode.NEVER, false, 0, entity -> !entity.equals(player));
+		RayTraceResult result = player.getWorld().rayTrace(player.getEyeLocation(), player.getLocation().getDirection(),
+				maxDistance, FluidCollisionMode.NEVER, false, 0, entity -> !entity.equals(player));
 		if (result == null) {
-			if (alwaysHit) {
+			if (alwaysHit)
 				return player.getLocation().add(player.getLocation().getDirection().multiply(maxDistance));
-			} else return null;
+			else
+				return null;
 		}
 		return result.getHitPosition().toLocation(player.getWorld());
 	}
-	
+
 	@Nullable
 	public static Location getBlockTarget(Player player, int maxDistance, boolean alwaysHit) {
-		RayTraceResult result = player.getWorld().rayTraceBlocks(player.getLocation(), player.getLocation().getDirection(), maxDistance);
+		RayTraceResult result = player.getWorld().rayTraceBlocks(player.getLocation(), player.getLocation().getDirection(),
+				maxDistance);
 		if (result == null) {
-			if (alwaysHit) {
+			if (alwaysHit)
 				return player.getLocation().add(player.getLocation().getDirection().multiply(maxDistance));
-			} else return null;
+			else
+				return null;
 		}
 		return result.getHitPosition().toLocation(player.getWorld());
 	}
-	
-	//	public abstract ShapedRecipe getCraftingRecipeFromResultingItem(ShapedRecipe startingRecipe);
+
+	// public abstract ShapedRecipe getCraftingRecipeFromResultingItem(ShapedRecipe
+	// startingRecipe);
 	public abstract Material getWandTip();
-	
+
 	public Material getWandBase() {
 		return Material.ENDER_PEARL;
 	}
-	
+
 	public boolean isWeapon() {
 		return true;
 	}

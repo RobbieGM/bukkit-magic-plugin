@@ -51,6 +51,7 @@ public abstract class Rune implements Listener {
 			if (stack != null && stack.getType() == Material.EMERALD && stack.getItemMeta() != null &&
 				stack.getItemMeta().hasDisplayName() && stack.getItemMeta().getDisplayName().equals(getRuneName())) {
 				stack.setAmount(stack.getAmount() - 1);
+				return;
 			}
 		}
 	}

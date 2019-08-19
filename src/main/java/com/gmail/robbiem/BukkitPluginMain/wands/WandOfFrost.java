@@ -94,7 +94,7 @@ public class WandOfFrost extends LeftClickableWand implements ParticleWand, List
 	
 	@Override
 	public long getItemCooldown() {
-		return 6000l;
+		return isBuffed ? 2000l : 6000l;
 	}
 	
 	@Override
@@ -119,7 +119,7 @@ public class WandOfFrost extends LeftClickableWand implements ParticleWand, List
 
 	@Override
 	public float getEffectRadius() {
-		return 4f;
+		return isBuffed ? 6f : 4f;
 	}
 
 	@Override

@@ -35,7 +35,7 @@ public class WandOfLightning extends Wand {
 	
 	@Override
 	public long getItemCooldown() {
-		return 2500l;
+		return isBuffed ? 1500l : 2500l;
 	}
 
 	@Override

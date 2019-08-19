@@ -26,7 +26,7 @@ public class WandOfFlak extends Wand implements ParticleWand {
 			world.createExplosion(x, y, z, 1f, false, false);
 		}, (entity, location) -> {
 			if (entity.isGliding()) {
-				entity.setVelocity(entity.getVelocity().multiply(0.5));
+				entity.setVelocity(entity.getVelocity().multiply(isBuffed ? 0.1 : 0.5));
 				entity.damage(4, player);
 			}
 			if (entity instanceof Player) {
@@ -35,7 +35,7 @@ public class WandOfFlak extends Wand implements ParticleWand {
 				if (elytra != null && elytra.getType() == Material.ELYTRA && entity.isGliding()) {
 					Damageable meta = (Damageable) elytra.getItemMeta();
 					plugin.getLogger().info("Damage: " + meta.getDamage());
-					meta.setDamage(meta.getDamage() + 150);
+					meta.setDamage(meta.getDamage() + (isBuffed ? 200 : 150));
 					elytra.setItemMeta((ItemMeta) meta);
 					hitPlayer.getInventory().setChestplate(elytra);
 				}
@@ -68,7 +68,7 @@ public class WandOfFlak extends Wand implements ParticleWand {
 
 	@Override
 	public float getEffectRadius() {
-		return 8f;
+		return isBuffed ? 10f : 8f;
 	}
 
 	@Override

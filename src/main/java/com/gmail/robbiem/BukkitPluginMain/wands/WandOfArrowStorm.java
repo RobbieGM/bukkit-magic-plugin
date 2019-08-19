@@ -22,8 +22,9 @@ public class WandOfArrowStorm extends LeftClickableWand {
 		for (int tickDelay = 0; tickDelay <= 10; tickDelay += 2) {
 			server.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 				Location loc = player.getEyeLocation().toVector().add(player.getLocation().getDirection().multiply(0.5)).toLocation(world, player.getLocation().getYaw(), player.getLocation().getPitch());
-				Arrow arrow = (Arrow) world.spawnArrow(loc, loc.getDirection(), 2.5f, 8);
-//				arrow.setKnockbackStrength(1);
+				Arrow arrow = (Arrow) world.spawnArrow(loc, loc.getDirection(), 2.5f, isBuffed ? 4 : 8);
+				if (isBuffed)
+					arrow.setKnockbackStrength(1);
 				arrow.setShooter(player);
 				arrow.setPickupStatus(PickupStatus.CREATIVE_ONLY);
 //				if (Math.random() > 0.9)
@@ -55,7 +56,7 @@ public class WandOfArrowStorm extends LeftClickableWand {
 	
 	@Override
 	public long getAltItemCooldown() {
-		return 1500l;
+		return isBuffed ? 1000l : 1500l;
 	}
 
 	@Override

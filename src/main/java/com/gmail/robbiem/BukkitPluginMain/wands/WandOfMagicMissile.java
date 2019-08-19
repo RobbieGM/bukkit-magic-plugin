@@ -56,7 +56,7 @@ public class WandOfMagicMissile extends Wand {
 	
 	@Override
 	public long getPlayerCooldown() {
-		return 1500l;
+		return isBuffed ? 0 : 1500l;
 	}
 
 	@Override

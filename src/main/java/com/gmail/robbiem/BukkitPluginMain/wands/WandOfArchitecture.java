@@ -15,17 +15,13 @@ import org.bukkit.util.Vector;
 import com.gmail.robbiem.BukkitPluginMain.Main;
 import com.gmail.robbiem.BukkitPluginMain.ModdedItemManager;
 
-import net.md_5.bungee.api.ChatColor;
-
 public class WandOfArchitecture extends LeftClickableWand {
-	
+
 	static final Material MATERIAL = Material.WHITE_CONCRETE;
-	
+
 	public WandOfArchitecture(Main plugin) {
 		super(plugin);
 	}
-
-//	List<TemporaryBlockBuilder> activeWands = new ArrayList<>();
 
 	@Override
 	public Material getWandTip() {
@@ -34,19 +30,10 @@ public class WandOfArchitecture extends LeftClickableWand {
 
 	@Override
 	public boolean use(ItemStack item, Player player, World world, Server server) {
-//		OptionalInt blockBuilderIndex = IntStream.range(0, activeWands.size()).filter(i -> activeWands.get(i).player.getUniqueId().equals(player.getUniqueId())).findFirst();
-//		if (blockBuilderIndex.isPresent()) {
-//			TemporaryBlockBuilder wand = activeWands.get(blockBuilderIndex.getAsInt());
-//			activeWands.remove(wand);
-//			wand.stop();
-//		} else {
-//		if (!blockBuilderIndex.isPresent()) {
-			new TemporaryBlockBuilder(player, plugin, MATERIAL, getItemCooldown(), ModdedItemManager.UNBREAKABLE_AND_SHULKERS);
-//			activeWands.add(tbb);
-//		}
+		new TemporaryBlockBuilder(player, plugin, MATERIAL, getItemCooldown(), ModdedItemManager.UNBREAKABLE_AND_SHULKERS);
 		return true;
 	}
-	
+
 	@Override
 	public boolean isWeapon() {
 		return false;
@@ -56,7 +43,7 @@ public class WandOfArchitecture extends LeftClickableWand {
 	public long getPlayerCooldown() {
 		return 0;
 	}
-	
+
 	@Override
 	public long getItemCooldown() {
 		return 500l;
@@ -75,10 +62,13 @@ public class WandOfArchitecture extends LeftClickableWand {
 	@Override
 	public boolean useAlt(ItemStack item, Player player, World world, Server server) {
 		Block b = player.getTargetBlockExact(10);
-		if (b != null && b.getType() == MATERIAL) {
+		boolean canBreak = b != null && (b.getType() == MATERIAL
+				|| (isBuffed && !ModdedItemManager.UNBREAKABLE_AND_SHULKERS.contains(b.getType())));
+		if (canBreak) {
 			b.setType(Material.AIR);
 			return true;
-		} else return false;
+		} else
+			return false;
 	}
 
 	@Override
@@ -94,14 +84,15 @@ public class WandOfArchitecture extends LeftClickableWand {
 }
 
 class TemporaryBlockBuilder {
-	
+
 	Location lastLocation = null;
 	Player player;
 	Material material;
 	int taskId;
 	List<Material> unbreakable;
-	
-	public TemporaryBlockBuilder(Player player, JavaPlugin plugin, Material material, long effectLength, List<Material> unbreakable) {
+
+	public TemporaryBlockBuilder(Player player, JavaPlugin plugin, Material material, long effectLength,
+			List<Material> unbreakable) {
 		Server server = plugin.getServer();
 		this.player = player;
 		this.material = material;
@@ -111,7 +102,7 @@ class TemporaryBlockBuilder {
 			server.getScheduler().cancelTask(taskId);
 		}, 20 * effectLength / 1000);
 	}
-	
+
 	void stop() {
 		player.getServer().getScheduler().cancelTask(taskId);
 	}
@@ -129,7 +120,7 @@ class TemporaryBlockBuilder {
 		});
 		lastLocation = l;
 	}
-	
+
 	void drawStar(Location location, Material type) {
 		setBlock(location.clone().add(0, 0, 0), type, true);
 		setBlock(location.clone().add(0, 1, 0), type, true);
@@ -139,11 +130,11 @@ class TemporaryBlockBuilder {
 		setBlock(location.clone().add(0, 0, 1), type, true);
 		setBlock(location.clone().add(0, 0, -1), type, true);
 	}
-	
+
 	boolean blockWouldSuffocatePlayer(Block block) {
 		return block.getWorld().getPlayers().stream().anyMatch(player -> player.getEyeLocation().getBlock().equals(block));
 	}
-	
+
 	void setBlock(Location location, Material type, boolean ignoreSolidBlocks) {
 		Block block = location.getBlock();
 		if (!unbreakable.contains(block.getType()) && !blockWouldSuffocatePlayer(block)) {
@@ -152,7 +143,7 @@ class TemporaryBlockBuilder {
 			}
 		}
 	}
-	
+
 	List<Block> getBlocksBetween(Location from, Location to) {
 		List<Block> blocks = new ArrayList<>();
 		Vector difference = to.clone().subtract(from).toVector();

@@ -26,7 +26,6 @@ public class WandOfOP extends Wand {
 
 	@Override
 	public long getPlayerCooldown() {
-		// TODO Auto-generated method stub
 		return 250l;
 	}
 

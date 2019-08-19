@@ -31,7 +31,6 @@ public class ScrollOfUpgrade extends Scroll {
 
 	@Override
 	public long getPlayerCooldown() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 

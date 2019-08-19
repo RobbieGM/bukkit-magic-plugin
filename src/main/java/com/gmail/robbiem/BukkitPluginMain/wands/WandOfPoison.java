@@ -24,14 +24,14 @@ public class WandOfPoison extends Wand implements ParticleWand {
 		cast(player, plugin, (location) -> {
 			location.getWorld().spawnParticle(Particle.SNEEZE, location, 100, 0.5, 0.5, 0.5, 0.2);
 		}, (entity, spellLocation) -> {
-			entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * 5, 255));
+			entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, isBuffed ? 20 * 7 : 20 * 5, 255));
 		});
 		return true;
 	}
 	
 	@Override
 	public float getSpeed() {
-		return 0.5f;
+		return isBuffed ? 1f : 0.75f;
 	}
 
 	@Override

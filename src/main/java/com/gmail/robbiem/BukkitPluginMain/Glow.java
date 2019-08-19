@@ -9,7 +9,6 @@ public class Glow extends Enchantment {
 
 	public Glow(NamespacedKey key) {
 		super(key);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -49,7 +48,7 @@ public class Glow extends Enchantment {
 
 	@Override
 	public boolean canEnchantItem(ItemStack item) {
-		return true;
+		return false;
 	}
 
 }

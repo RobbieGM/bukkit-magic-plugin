@@ -82,10 +82,15 @@ public class ModdedItemManager implements Listener {
 	}
 	
 	void initItems() {
-		List<Class<? extends Wand>> wandClasses = Arrays.asList(WandOfArchitecture.class, WandOfArrowStorm.class, WandOfAvalanche.class, WandOfDecay.class, WandOfDestruction.class, WandOfFlak.class, WandOfFlame.class, WandOfForce.class, WandOfForceField.class, WandOfFrost.class, WandOfGrappling.class, WandOfLavaBolt.class, WandOfLightning.class, WandOfMagicMissile.class, WandOfMagnetism.class, WandOfOP.class, WandOfPoison.class, WandOfPolymorph.class, WandOfPoseidon.class, WandOfPropulsion.class, WandOfScience.class, WandOfTeleportation.class, WandOfTrapping.class);
+		List<Class<? extends Wand>> wandClasses = Arrays.asList(WandOfArchitecture.class, WandOfArrowStorm.class, WandOfAvalanche.class, WandOfConfusion.class, WandOfDecay.class, WandOfDestruction.class, WandOfFlak.class, WandOfFlame.class, WandOfForce.class, WandOfForceField.class, WandOfFrost.class, WandOfGrappling.class, WandOfLavaBolt.class, WandOfLightning.class, WandOfMagicMissile.class, WandOfMagnetism.class, WandOfOP.class, WandOfPoison.class, WandOfPolymorph.class, WandOfPoseidon.class, WandOfPropulsion.class, WandOfScience.class, WandOfTeleportation.class, WandOfTrapping.class);
 		List<Class<? extends Scroll>> scrollClasses = Arrays.asList(ScrollOfAntiMagic.class, ScrollOfBlindness.class, ScrollOfElements.class, ScrollOfEquineSummoning.class, ScrollOfFlight.class, ScrollOfInvisibility.class, ScrollOfJealousy.class, ScrollOfNecromancy.class, ScrollOfOrganization.class, ScrollOfPlunder.class, ScrollOfProtection.class, ScrollOfScavenging.class, ScrollOfSurprise.class, ScrollOfTeleportation.class, ScrollOfTheEagle.class, ScrollOfTheHuntersVision.class, ScrollOfTheOracle.class, ScrollOfUpgrade.class);
-		List<Class<? extends Rune>> runeClasses = Arrays.asList(RuneOfBackstabbing.class, RuneOfBounce.class, RuneOfDisarmament.class, RuneOfFeatherFalling.class, RuneOfInfestation.class, RuneOfInvincibility.class, RuneOfVengeance.class);
+		List<Class<? extends Rune>> runeClasses = Arrays.asList(RuneOfBackstabbing.class, RuneOfBounce.class, RuneOfDisarmament.class, RuneOfFeatherFalling.class, RuneOfInfestation.class, RuneOfInvincibility.class, RuneOfPsionicBlast.class, RuneOfVengeance.class);
 		wands = createInstancesOfClasses(wandClasses);
+		for (int i = 0; i < 2; i++) {
+			Wand buffed = wands.get((int) (Math.random() * wands.size()));
+			plugin.getLogger().info("The " + buffed.getName() + " has been randomly selected to be buffed");
+			buffed.isBuffed = true;
+		}
 		scrolls = createInstancesOfClasses(scrollClasses);
 		runes = createInstancesOfClasses(runeClasses);
 	}
