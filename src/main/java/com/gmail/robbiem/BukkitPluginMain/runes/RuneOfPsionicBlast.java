@@ -5,8 +5,8 @@ import java.util.List;
 import com.gmail.robbiem.BukkitPluginMain.Main;
 
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.Particle;
-import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -58,8 +58,18 @@ public class RuneOfPsionicBlast extends Rune {
   }
 
   @Override
-  String getRuneName() {
+  public String getName() {
     return "Rune of Psionic Blast";
+  }
+
+  @Override
+  public Material getCraftingRecipeCenterItem() {
+    return Material.TNT;
+  }
+
+  @Override
+  public String getLore() {
+    return "When attacked by a player and your\nhealth goes below 3 hearts,\ncreate an explosion around you.";
   }
 
 }

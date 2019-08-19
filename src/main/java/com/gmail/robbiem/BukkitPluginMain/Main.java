@@ -109,7 +109,8 @@ public class Main extends JavaPlugin implements Listener {
 		if (e.getView().getType() == InventoryType.WORKBENCH &&
 			e.getInventory().getResult().getItemMeta() != null &&
 			(e.getInventory().getResult().getItemMeta().getDisplayName().startsWith("Wand of") ||
-			e.getInventory().getResult().getItemMeta().getDisplayName().startsWith("Scroll of"))) {
+			e.getInventory().getResult().getItemMeta().getDisplayName().startsWith("Scroll of") || 
+			e.getInventory().getResult().getItemMeta().getDisplayName().startsWith("Rune of"))) {
 			e.getWhoClicked().getWorld().playSound(e.getWhoClicked().getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 1, 1);
 		}
 	}

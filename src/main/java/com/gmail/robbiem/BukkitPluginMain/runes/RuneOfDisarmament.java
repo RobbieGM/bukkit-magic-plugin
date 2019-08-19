@@ -33,8 +33,18 @@ public class RuneOfDisarmament extends Rune {
 	}
 
 	@Override
-	String getRuneName() {
+	public String getName() {
 		return "Rune of Disarmament";
+	}
+
+	@Override
+	public Material getCraftingRecipeCenterItem() {
+		return Material.CHEST;
+	}
+
+	@Override
+	public String getLore() {
+		return "When attacking a player,\nmake them drop the item\nin their hand.";
 	}
 
 }

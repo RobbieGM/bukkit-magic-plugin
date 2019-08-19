@@ -1,5 +1,6 @@
 package com.gmail.robbiem.BukkitPluginMain.runes;
 
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -34,8 +35,23 @@ public class RuneOfInfestation extends Rune {
 	}
 
 	@Override
-	String getRuneName() {
+	public String getName() {
 		return "Rune of Infestation";
+	}
+
+	@Override
+	int getCraftingYield() {
+		return 3;
+	}
+
+	@Override
+	public Material getCraftingRecipeCenterItem() {
+		return Material.COBBLESTONE;
+	}
+
+	@Override
+	public String getLore() {
+		return "When a player breaks a block\nnear you, spawn silverfish\nthere.";
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.gmail.robbiem.BukkitPluginMain.runes;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
@@ -28,8 +29,23 @@ public class RuneOfVengeance extends Rune {
 	}
 	
 	@Override
-	String getRuneName() {
+	public String getName() {
 		return "Rune of Vengeance";
+	}
+
+	@Override
+	int getCraftingYield() {
+		return 6;
+	}
+
+	@Override
+	public Material getCraftingRecipeCenterItem() {
+		return Material.BONE;
+	}
+
+	@Override
+	public String getLore() {
+		return "When attacked by a mob,\nkill it.";
 	}
 
 }

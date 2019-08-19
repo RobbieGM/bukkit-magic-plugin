@@ -1,5 +1,6 @@
 package com.gmail.robbiem.BukkitPluginMain.runes;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -27,8 +28,18 @@ public class RuneOfInvincibility extends Rune {
 	}
 
 	@Override
-	String getRuneName() {
+	public String getName() {
 		return "Rune of Invincibility";
+	}
+
+	@Override
+	public Material getCraftingRecipeCenterItem() {
+		return Material.DIAMOND_CHESTPLATE;
+	}
+
+	@Override
+	public String getLore() {
+		return "When attacked by a player and your\nhealth goes below 3 hearts,\nbecome invincible for 5 seconds.";
 	}
 
 }

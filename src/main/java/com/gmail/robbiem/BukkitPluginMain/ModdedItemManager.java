@@ -111,9 +111,7 @@ public class ModdedItemManager implements Listener {
 		wands.forEach((Wand wand) -> {
 			ShapedRecipe wandRecipe = createRecipeFromResult(Material.STICK, wand.getName(), wand.getLore());
 			wandRecipe.shape("  t", " s ", "b  ").setIngredient('t', wand.getWandTip()).setIngredient('s', Material.STICK).setIngredient('b', wand.getWandBase());
-			if (wandRecipe != null) {
-				plugin.getServer().addRecipe(wandRecipe);
-			}
+			plugin.getServer().addRecipe(wandRecipe);
 			if (wand.isEventHandler() && wand instanceof Listener) {
 				pm.registerEvents((Listener) wand, plugin);
 			}
@@ -121,15 +119,16 @@ public class ModdedItemManager implements Listener {
 		scrolls.forEach((Scroll scroll) -> {
 			ShapedRecipe scrollRecipe = createRecipeFromResult(Material.PAPER, scroll.getName(), scroll.getLore());
 			scrollRecipe.shape("ppp", "pxp", "ppp").setIngredient('p', Material.PAPER).setIngredient('x', scroll.getCraftingRecipeCenterItem());
-			if (scrollRecipe != null) {
-				plugin.getServer().addRecipe(scrollRecipe);
-			}
+			plugin.getServer().addRecipe(scrollRecipe);
 			if (scroll.isEventHandler() && scroll instanceof Listener) {
 				pm.registerEvents((Listener) scroll, plugin);
 			}
 		});
 		runes.forEach((Rune rune) -> {
 			pm.registerEvents(rune, plugin);
+			ShapedRecipe runeRecipe = createRecipeFromResult(Material.EMERALD, rune.getName(), rune.getLore());
+			runeRecipe.shape("eee", "exe", "eee").setIngredient('e', Material.EMERALD).setIngredient('x', rune.getCraftingRecipeCenterItem());
+			plugin.getServer().addRecipe(runeRecipe);
 		});
 	}
 	

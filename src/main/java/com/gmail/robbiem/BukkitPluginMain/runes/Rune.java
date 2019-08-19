@@ -14,15 +14,27 @@ import org.bukkit.projectiles.ProjectileSource;
 import com.gmail.robbiem.BukkitPluginMain.Main;
 
 public abstract class Rune implements Listener {
-	
+
 	Main plugin;
-	
+
 	public Rune(Main plugin) {
 		this.plugin = plugin;
 	}
-	
-	abstract String getRuneName();
-	
+
+	public abstract String getName();
+
+	public abstract String getLore();
+
+	/**
+	 * @return The number of runes that will be yielded when this is crafted from 8
+	 *         runes and a center item. Should be <= 8.
+	 */
+	int getCraftingYield() {
+		return 1;
+	}
+
+	public abstract Material getCraftingRecipeCenterItem();
+
 	static Entity getDamageSource(Entity damager) {
 		if (damager instanceof Projectile) {
 			ProjectileSource source = ((Projectile) damager).getShooter();
@@ -32,24 +44,24 @@ public abstract class Rune implements Listener {
 		}
 		return damager;
 	}
-	
+
 	static void playRuneEffect(Player p) {
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 2);
 		p.getWorld().spawnParticle(Particle.SPELL, p.getLocation(), 10, 1, 1, 1);
 	}
-	
+
 	boolean playerHasRune(Player p) {
 		ItemStack item = new ItemStack(Material.EMERALD, 1);
 		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(getRuneName());
+		meta.setDisplayName(getName());
 		item.setItemMeta(meta);
 		return p.getInventory().containsAtLeast(item, 1);
 	}
-	
+
 	void consumeRune(Player p) {
-		for (ItemStack stack: p.getInventory().getContents()) {
-			if (stack != null && stack.getType() == Material.EMERALD && stack.getItemMeta() != null &&
-				stack.getItemMeta().hasDisplayName() && stack.getItemMeta().getDisplayName().equals(getRuneName())) {
+		for (ItemStack stack : p.getInventory().getContents()) {
+			if (stack != null && stack.getType() == Material.EMERALD && stack.getItemMeta() != null
+					&& stack.getItemMeta().hasDisplayName() && stack.getItemMeta().getDisplayName().equals(getName())) {
 				stack.setAmount(stack.getAmount() - 1);
 				return;
 			}

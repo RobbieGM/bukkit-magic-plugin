@@ -23,8 +23,10 @@ public class ScrollOfUpgrade extends Scroll {
 	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
 		PlayerInventory inv = player.getInventory();
 		inv.setHelmet(upgrade(inv.getHelmet(), Material.LEATHER_HELMET, Material.IRON_HELMET, Material.DIAMOND_HELMET));
-		inv.setChestplate(upgrade(inv.getChestplate(), Material.LEATHER_CHESTPLATE, Material.IRON_CHESTPLATE, Material.DIAMOND_CHESTPLATE));
-		inv.setLeggings(upgrade(inv.getLeggings(), Material.LEATHER_LEGGINGS, Material.IRON_LEGGINGS, Material.DIAMOND_LEGGINGS));
+		inv.setChestplate(upgrade(inv.getChestplate(), Material.LEATHER_CHESTPLATE, Material.IRON_CHESTPLATE,
+				Material.DIAMOND_CHESTPLATE));
+		inv.setLeggings(
+				upgrade(inv.getLeggings(), Material.LEATHER_LEGGINGS, Material.IRON_LEGGINGS, Material.DIAMOND_LEGGINGS));
 		inv.setBoots(upgrade(inv.getBoots(), Material.LEATHER_BOOTS, Material.IRON_BOOTS, Material.DIAMOND_BOOTS));
 		return true;
 	}
@@ -38,12 +40,14 @@ public class ScrollOfUpgrade extends Scroll {
 	public Material getCraftingRecipeCenterItem() {
 		return Material.ENCHANTED_BOOK;
 	}
-	
+
 	ItemStack upgrade(ItemStack item, Material... upgradeTiers) {
-		if (item == null) return null;
+		if (item == null)
+			return null;
 		List<Material> upgrades = Arrays.asList(upgradeTiers);
 		int currentIndex = upgrades.indexOf(item.getType());
-		if (currentIndex == -1) return item;
+		if (currentIndex == -1)
+			return item;
 		if (currentIndex == upgrades.size() - 1) {
 			return randomEnchantment(item);
 		} else {
@@ -51,29 +55,31 @@ public class ScrollOfUpgrade extends Scroll {
 			return item;
 		}
 	}
-	
-    ItemStack randomEnchantment(ItemStack item) {
-        List<Enchantment> possible = new ArrayList<Enchantment>();
-     
-        for (Enchantment ench: Enchantment.values()) {
-            if (ench.canEnchantItem(item)) {
-                possible.add(ench);
-            }
-        }
-        
-        for (int i = 0; i < 2; ) {
-        	if (possible.size() >= 1) {
+
+	@SuppressWarnings("deprecation")
+	ItemStack randomEnchantment(ItemStack item) {
+		List<Enchantment> possible = new ArrayList<Enchantment>();
+
+		for (Enchantment ench : Enchantment.values()) {
+			if (ench.canEnchantItem(item)) {
+				possible.add(ench);
+			}
+		}
+
+		for (int i = 0; i < 2;) {
+			if (possible.size() >= 1) {
 				Enchantment chosen = possible.get((int) (Math.random() * possible.size()));
 				if (!chosen.isCursed()) {
 					possible.remove(chosen);
 					item.addEnchantment(chosen, 1 + (int) (Math.random() * ((chosen.getMaxLevel() - 1) + 1)));
 					i++;
-				} else continue;
-	        }
-        }
+				} else
+					continue;
+			}
+		}
 
-        return item;
-    }
+		return item;
+	}
 
 	@Override
 	public String getLore() {

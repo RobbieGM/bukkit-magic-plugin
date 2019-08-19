@@ -4,6 +4,7 @@ package com.gmail.robbiem.BukkitPluginMain.runes;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -40,8 +41,23 @@ public class RuneOfBounce extends Rune {
 	}
 
 	@Override
-	String getRuneName() {
+	public String getName() {
 		return "Rune of Bounce";
+	}
+
+	@Override
+	int getCraftingYield() {
+		return 8;
+	}
+
+	@Override
+	public Material getCraftingRecipeCenterItem() {
+		return Material.SHIELD;
+	}
+
+	@Override
+	public String getLore() {
+		return "When hit by a projectile,\nbounce it off.";
 	}
 
 }

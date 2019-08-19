@@ -1,6 +1,7 @@
 package com.gmail.robbiem.BukkitPluginMain.runes;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -32,7 +33,22 @@ public class RuneOfBackstabbing extends Rune {
 	}
 
 	@Override
-	String getRuneName() {
+	public String getName() {
 		return "Rune of Backstabbing";
+	}
+
+	@Override
+	int getCraftingYield() {
+		return 4;
+	}
+
+	@Override
+	public Material getCraftingRecipeCenterItem() {
+		return Material.IRON_SWORD;
+	}
+
+	@Override
+	public String getLore() {
+		return "When attacked by a player,\nteleport behind them.";
 	}
 }

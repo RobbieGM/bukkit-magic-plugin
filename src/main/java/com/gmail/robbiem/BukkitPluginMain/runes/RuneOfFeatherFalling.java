@@ -1,5 +1,6 @@
 package com.gmail.robbiem.BukkitPluginMain.runes;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -23,8 +24,18 @@ public class RuneOfFeatherFalling extends Rune {
 	}
 
 	@Override
-	String getRuneName() {
+	public String getName() {
 		return "Rune of Feather Falling";
+	}
+
+	@Override
+	public Material getCraftingRecipeCenterItem() {
+		return Material.FEATHER;
+	}
+
+	@Override
+	public String getLore() {
+		return "When taking more than 2\nhearts of fall damage, instead\ntake no damage.";
 	}
 
 }
