@@ -73,11 +73,6 @@ public class WandOfArrowStorm extends LeftClickableWand {
 	public Material getWandTip() {
 		return Material.ARROW;
 	}
-	
-	@Override
-	public Material getWandBase() {
-		return ModdedItemManager.LESSER_WAND_BASE;
-	}
 
 	@Override
 	public String getName() {
