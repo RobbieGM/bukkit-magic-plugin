@@ -63,12 +63,12 @@ public class WandOfConfusion extends Wand implements ParticleWand {
 
   @Override
   public int getRange() {
-    return 40;
+    return 25;
   }
 
   @Override
   public float getEffectRadius() {
-    return 3f;
+    return 2.5f;
   }
 
   @Override
@@ -79,7 +79,7 @@ public class WandOfConfusion extends Wand implements ParticleWand {
 
   @Override
   public float getSpread() {
-    return isBuffed ? 0 : 0.15f;
+    return isBuffed ? 0 : 0.1f;
   }
 
   @Override
@@ -99,7 +99,7 @@ public class WandOfConfusion extends Wand implements ParticleWand {
 
   @Override
   public long getItemCooldown() {
-    return 500l;
+    return 1000l;
   }
 
   @Override

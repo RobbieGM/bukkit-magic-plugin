@@ -36,7 +36,7 @@ public class ScrollOfNecromancy extends Scroll {
 				Mob e = (Mob) world.spawnEntity(mobLocation, monsterType);
 				e.playEffect(EntityEffect.ENTITY_POOF);
 				server.getScoreboardManager().getMainScoreboard().getTeam(player.getName()).addEntry(e.getUniqueId().toString());
-				if (!p.equals(player)) // Make not attack the scroll user
+				if (!p.equals(player)) // Make monsters not attack the scroll user
 					e.setTarget(p);
 			}
 		}
