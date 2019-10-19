@@ -9,7 +9,6 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import com.gmail.robbiem.BukkitPluginMain.Main;
-import com.gmail.robbiem.BukkitPluginMain.ModdedItemManager;
 
 public class WandOfArrowStorm extends LeftClickableWand {
 
@@ -19,16 +18,16 @@ public class WandOfArrowStorm extends LeftClickableWand {
 
 	@Override
 	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
-		for (int tickDelay = 0; tickDelay <= 10; tickDelay += 2) {
+		for (int tickDelay = 0; tickDelay <= 9; tickDelay += 3) {
 			server.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 				Location loc = player.getEyeLocation().toVector().add(player.getLocation().getDirection().multiply(0.5)).toLocation(world, player.getLocation().getYaw(), player.getLocation().getPitch());
-				Arrow arrow = (Arrow) world.spawnArrow(loc, loc.getDirection(), 2.5f, isBuffed ? 4 : 8);
+				Arrow arrow = (Arrow) world.spawnArrow(loc, loc.getDirection(), 1.8f, isBuffed ? 4 : 8);
 				if (isBuffed)
 					arrow.setKnockbackStrength(1);
 				arrow.setShooter(player);
 				arrow.setPickupStatus(PickupStatus.CREATIVE_ONLY);
-//				if (Math.random() > 0.9)
-//					arrow.setFireTicks(20 * 5);
+				// if (Math.random() > 0.9)
+				// 	arrow.setFireTicks(20 * 5);
 			}, tickDelay);
 		}
 		return true;
@@ -37,10 +36,11 @@ public class WandOfArrowStorm extends LeftClickableWand {
 	@Override
 	public boolean useAlt(ItemStack item, Player player, World world, Server server) {
 		Location loc = player.getEyeLocation().toVector().add(player.getLocation().getDirection().multiply(0.5)).toLocation(world, player.getLocation().getYaw(), player.getLocation().getPitch());
-		Arrow arrow = (Arrow) world.spawnArrow(loc, loc.getDirection(), 5f, 0);
-		arrow.setKnockbackStrength(3);
+		Arrow arrow = (Arrow) world.spawnArrow(loc, loc.getDirection(), 3f, 0);
+		// arrow.setGravity(false);
+		arrow.setKnockbackStrength(1);
 		arrow.setShooter(player);
-		arrow.setFireTicks(20 * 3);
+		arrow.setPickupStatus(PickupStatus.CREATIVE_ONLY);
 		return true;
 	}
 
@@ -56,12 +56,12 @@ public class WandOfArrowStorm extends LeftClickableWand {
 	
 	@Override
 	public long getAltItemCooldown() {
-		return isBuffed ? 1000l : 1500l;
+		return isBuffed ? 1250l : 1750l;
 	}
 
 	@Override
 	public long getAltPlayerCooldown() {
-		return 0;
+		return 500l;
 	}
 
 	@Override

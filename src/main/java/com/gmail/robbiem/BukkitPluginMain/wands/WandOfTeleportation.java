@@ -20,12 +20,12 @@ public class WandOfTeleportation extends Wand {
 		super(plugin);
 	}
 
-	static final int RANGE = 100;
+	static final int RANGE = 70;
 	
 	@Override
 	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
 		Location previousLocation = player.getLocation();
-		Location targetedLocation = player.getTargetBlock(null, RANGE).getLocation();
+		Location targetedLocation = Wand.getTarget(player, RANGE, true);
 		clampToWorldBorder(targetedLocation);
 		targetedLocation = moveUpUntilStandable(targetedLocation);
 		Location highestBlockLocation = world.getHighestBlockAt(targetedLocation).getLocation();
@@ -72,12 +72,12 @@ public class WandOfTeleportation extends Wand {
 	
 	@Override
 	public long getPlayerCooldown() {
-		return 1000l;
+		return 2000l;
 	}
 	
 	@Override
 	public long getItemCooldown() {
-		return isBuffed ? 3500l : 5000l;
+		return isBuffed ? 5500l : 7000l;
 	}
 
 	@Override

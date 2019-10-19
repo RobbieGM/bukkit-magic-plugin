@@ -2,8 +2,10 @@ package com.gmail.robbiem.BukkitPluginMain.wands;
 
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.util.RayTraceResult;
@@ -84,7 +86,16 @@ class Spell {
 		Vector direction = end.clone().subtract(start).toVector().normalize();
 		RayTraceResult result = start.getWorld().rayTrace(start, direction, end.distance(start), FluidCollisionMode.NEVER,
 				true, 0, entity -> !entity.equals(caster));
-		return result != null;
+		return result != null && !(result.getHitBlock() != null && blockIsPassableForCaster(result.getHitBlock()));
+	}
+
+	boolean blockIsPassableForCaster(Block block) {
+		for (MetadataValue value : block.getMetadata("placerId")) {
+			if (value.value().equals(caster.getUniqueId())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	void doTick() {

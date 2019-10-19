@@ -118,7 +118,7 @@ class MagicMissile {
 	void move() {
 		Vector dir = target.toVector().subtract(location.toVector()).normalize();
 		velocity.add(dir.clone().multiply(0.2));
-		velocity.multiply(0.8); // Drag
+		velocity.multiply(0.9); // Drag
 		location.add(velocity);
 		location.getWorld().spawnParticle(PARTICLE, location, 0, dir.getX(), dir.getY(), dir.getZ(), 0.4, null, true);
 	}
@@ -138,7 +138,7 @@ class MagicMissile {
 		location.getWorld().spawnParticle(Particle.FLASH, location, 1);
 		location.getWorld().playSound(location, Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 1, 1);
 		for (LivingEntity entity: location.getWorld().getLivingEntities()) {
-			if (entity.getLocation().distanceSquared(location) <= 4 * 4)
+			if (entity.getLocation().distanceSquared(location) <= 2.5 * 2.5)
 				entity.damage(10, caster);
 		}
 	}

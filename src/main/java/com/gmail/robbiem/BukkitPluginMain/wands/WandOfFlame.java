@@ -21,7 +21,7 @@ public class WandOfFlame extends LeftClickableWand {
 	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
 		Location loc = player.getEyeLocation().toVector().add(player.getLocation().getDirection().multiply(6)).toLocation(world, player.getLocation().getYaw(), player.getLocation().getPitch());
 		LargeFireball fireball = world.spawn(loc, LargeFireball.class);
-		fireball.setYield(isBuffed ? 2.5f : 1.6f);
+		fireball.setYield(isBuffed ? 2.5f : 2.0f);
 		fireball.setShooter(player);
 		world.playSound(player.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 1, 1.4f);
 		return true;
@@ -38,12 +38,12 @@ public class WandOfFlame extends LeftClickableWand {
 
 	@Override
 	public long getPlayerCooldown() {
-		return isBuffed ? 1000l : 1200l;
+		return isBuffed ? 800l : 1000l;
 	}
 
 	@Override
 	public long getAltPlayerCooldown() {
-		return 350l;
+		return 250l;
 	}
 
 	@Override

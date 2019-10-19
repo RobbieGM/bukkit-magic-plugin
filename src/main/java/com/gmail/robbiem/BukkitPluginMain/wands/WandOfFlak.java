@@ -35,7 +35,7 @@ public class WandOfFlak extends Wand implements ParticleWand {
 				if (elytra != null && elytra.getType() == Material.ELYTRA && entity.isGliding()) {
 					Damageable meta = (Damageable) elytra.getItemMeta();
 					plugin.getLogger().info("Damage: " + meta.getDamage());
-					meta.setDamage(meta.getDamage() + (isBuffed ? 200 : 150));
+					meta.setDamage(meta.getDamage() + (isBuffed ? 200 : 75 /*150*/));
 					elytra.setItemMeta((ItemMeta) meta);
 					hitPlayer.getInventory().setChestplate(elytra);
 				}

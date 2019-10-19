@@ -23,10 +23,10 @@ public class WandOfBlasting extends Wand {
 
   @Override
   public boolean use(ItemStack item, Player player, World world, Server server) {
-    for (int delay = 0; delay < getEffectDuration() * 20 / 1000; delay += 3) {
+    for (int delay = 0; delay < getEffectDuration() * 20 / 1000; delay += 4) {
       server.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
         TNTPrimed tnt = (TNTPrimed) world.spawnEntity(player.getEyeLocation(), EntityType.PRIMED_TNT);
-        tnt.setYield(2f);
+        tnt.setYield(4.5f);
         tnt.setVelocity(player.getLocation().getDirection().multiply(3));
         tnt.setFuseTicks(20);
       }, delay);

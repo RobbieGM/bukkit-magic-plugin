@@ -89,7 +89,7 @@ public class WandOfConfusion extends Wand implements ParticleWand {
 
   @Override
   public Material getWandTip() {
-    return Material.FERMENTED_SPIDER_EYE;
+    return Material.OBSIDIAN;
   }
 
   @Override

@@ -39,11 +39,13 @@ public class WandOfFrost extends LeftClickableWand implements ParticleWand, List
 			world.spawnParticle(Particle.SNOWBALL, location, 20, 0.5, 0.5, 0.5);
 			world.playSound(location, Sound.BLOCK_CHORUS_FLOWER_DEATH, 1, 1.5f);
 		}, (entity, location) -> {
-			entity.damage(4, player);
+			entity.damage(8, player);
 			entity.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 20 * 3, 128)); // Jump boost 128 = no jumping to evade slowness
 			entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 3, 255));
-			if (entity instanceof Player)
+			if (entity instanceof Player) {
+				plugin.moddedItemManager.cooldownManager.setPlayerCooldown((Player) entity, (long) 2000);
 				frozenPlayers.put(entity.getUniqueId(), new Date().getTime() + 1000 * 3);
+			}
 		});
 		return true;
 	}

@@ -2,8 +2,7 @@ package com.gmail.robbiem.BukkitPluginMain.wands;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.OptionalInt;
-import java.util.stream.IntStream;
+import java.util.stream.Collectors;
 
 import org.bukkit.Color;
 import org.bukkit.GameMode;
@@ -23,7 +22,9 @@ import org.bukkit.util.Vector;
 import com.gmail.robbiem.BukkitPluginMain.Main;
 import com.gmail.robbiem.BukkitPluginMain.ModdedItemManager;
 
-public class WandOfTrapping extends Wand implements Listener {
+public class WandOfTrapping extends LeftClickableWand implements Listener {
+
+	static final double TRAP_RANGE = 3;
 	
 	public WandOfTrapping(Main plugin) {
 		super(plugin);
@@ -39,6 +40,10 @@ public class WandOfTrapping extends Wand implements Listener {
 				b = b.getLocation().add(0, -1, 0).getBlock();
 			}
 			world.spawnParticle(Particle.REDSTONE, b.getLocation().add(0.5, 1, 0.5), 0, 0, 1, 0, 1, new Particle.DustOptions(Color.WHITE, 2f));
+			List<Trap> playerTraps = traps.stream().filter(trap -> trap.placer.equals(player)).collect(Collectors.toList());
+			if (playerTraps.size() >= 4) {
+				traps.remove(playerTraps.get(0));
+			}
 			traps.add(new Trap(b, player));
 			return true;
 		} else {
@@ -53,14 +58,14 @@ public class WandOfTrapping extends Wand implements Listener {
 	
 	@EventHandler
 	public void onPlayerStepOnBlock(PlayerMoveEvent e) {
-		Block steppedOn = e.getTo().clone().subtract(0, 1, 0).getBlock();
-		OptionalInt trapIndex = IntStream.range(0, traps.size()).filter(i -> traps.get(i).block.equals(steppedOn)).findFirst();
-		if (trapIndex.isPresent() && e.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-			e.getPlayer().getWorld().playSound(steppedOn.getLocation(), Sound.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON, 1, 1);
-			e.getPlayer().damage(isBuffed ? 19 : 15);
+		Trap trap = traps.stream().filter(t -> t.block.getWorld().equals(e.getTo().getWorld()) && t.block.getLocation().distanceSquared(e.getTo()) < TRAP_RANGE * TRAP_RANGE).findAny().orElse(null);
+		if (trap != null && e.getPlayer().getGameMode() == GameMode.SURVIVAL && !e.getPlayer().equals(trap.placer)) {
+			boolean isProtected = e.getPlayer().getInventory().getBoots() == null;
+			e.getPlayer().getWorld().playSound(trap.block.getLocation(), Sound.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON, 1, 1);
+			e.getPlayer().damage(isProtected ? 2 : 6);
 			e.getPlayer().setVelocity(new Vector(-0.5 + Math.random(), 0.5, -0.5 + Math.random()).multiply(isBuffed ? 2 : 1));
-			traps.get(trapIndex.getAsInt()).placer.sendMessage("One of your traps was activated!");;
-			traps.remove(trapIndex.getAsInt());
+			trap.placer.sendMessage("One of your traps was activated!");;
+			traps.remove(trap);
 		}
 	}
 
@@ -92,6 +97,29 @@ public class WandOfTrapping extends Wand implements Listener {
 	@Override
 	public String getName() {
 		return "Wand of Trapping";
+	}
+
+	@Override
+	public boolean useAlt(ItemStack item, Player player, World world, Server server) {
+		boolean foundTrap = false;
+		for (Trap trap: traps) {
+			if (trap.block.getLocation().getWorld().equals(player.getWorld()) && trap.block.getLocation().distanceSquared(player.getLocation()) < 10 * 10) {
+				foundTrap = true;
+				if (trap.placer.equals(player)) {
+					world.spawnParticle(Particle.REDSTONE, trap.block.getLocation().add(0.5, 1, 0.5), 0, 0, 1, 0, 1,
+							new Particle.DustOptions(Color.WHITE, 2f));
+				} else {
+					world.playSound(trap.block.getLocation(), Sound.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON, 1, 1);
+					traps.remove(trap);
+				}
+			}
+		}
+		return foundTrap;
+	}
+
+	@Override
+	public long getAltPlayerCooldown() {
+		return 3000l;
 	}
 
 }

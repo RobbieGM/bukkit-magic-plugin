@@ -2,7 +2,6 @@ package com.gmail.robbiem.BukkitPluginMain.runes;
 
 import com.gmail.robbiem.BukkitPluginMain.Main;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;

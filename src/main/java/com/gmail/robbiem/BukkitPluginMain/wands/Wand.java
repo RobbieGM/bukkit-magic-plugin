@@ -22,10 +22,10 @@ public abstract class Wand extends UseableItem {
 	@Nullable
 	public static Location getTarget(Player player, int maxDistance, boolean alwaysHit) {
 		RayTraceResult result = player.getWorld().rayTrace(player.getEyeLocation(), player.getLocation().getDirection(),
-				maxDistance, FluidCollisionMode.NEVER, false, 0, entity -> !entity.equals(player));
+				maxDistance, FluidCollisionMode.NEVER, true, 0, entity -> !entity.equals(player));
 		if (result == null) {
 			if (alwaysHit)
-				return player.getLocation().add(player.getLocation().getDirection().multiply(maxDistance));
+				return player.getEyeLocation().add(player.getLocation().getDirection().multiply(maxDistance));
 			else
 				return null;
 		}
@@ -34,11 +34,11 @@ public abstract class Wand extends UseableItem {
 
 	@Nullable
 	public static Location getBlockTarget(Player player, int maxDistance, boolean alwaysHit) {
-		RayTraceResult result = player.getWorld().rayTraceBlocks(player.getLocation(), player.getLocation().getDirection(),
-				maxDistance);
+		RayTraceResult result = player.getWorld().rayTraceBlocks(player.getEyeLocation(),
+				player.getLocation().getDirection(), maxDistance);
 		if (result == null) {
 			if (alwaysHit)
-				return player.getLocation().add(player.getLocation().getDirection().multiply(maxDistance));
+				return player.getEyeLocation().add(player.getLocation().getDirection().multiply(maxDistance));
 			else
 				return null;
 		}

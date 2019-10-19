@@ -28,7 +28,7 @@ public WandOfPropulsion(Main plugin) {
 		if (player.getInventory().getChestplate() != null && player.getInventory().getChestplate().getType() == Material.ELYTRA) {
 			player.setGliding(true);
 		}
-		Vector vel = player.getLocation().getDirection().multiply(2);
+		Vector vel = player.getLocation().getDirection().multiply(2.5);
 //		if (vel.length() > TERMINAL_VELOCITY) {
 //			vel.multiply(TERMINAL_VELOCITY / vel.length());
 //		}
