@@ -30,7 +30,6 @@ public class WandOfArchitecture extends LeftClickableWand {
 	@Override
 	public boolean use(ItemStack item, Player player, World world, Server server) {
 		float pitch = -player.getLocation().getPitch();
-		plugin.getLogger().info("pitch " + pitch);
 		Block standingOn = player.getLocation().getBlock().getRelative(BlockFace.DOWN);
 		if (-20 <= pitch && pitch <= 20) { // Planks going outward
 			makePlanksOutward(standingOn, player.getLocation().getDirection().setY(0).normalize());
@@ -99,7 +98,6 @@ public class WandOfArchitecture extends LeftClickableWand {
 		for (Block block : blocks) {
 			double dist = block.getLocation().distanceSquared(bottomCenter.getLocation());
 			setTimeout(() -> {
-				plugin.getLogger().info("dist" + dist);
 				setBlock(block, Material.OAK_PLANKS);
 			}, (int) (40 * dist / (FARTHEST_BLOCK_DIST * FARTHEST_BLOCK_DIST)));
 		}

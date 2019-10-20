@@ -28,7 +28,7 @@ public abstract class Rune implements Listener {
 	 * @return The number of runes that will be yielded when this is crafted from 8
 	 *         runes and a center item. Should be <= 8.
 	 */
-	int getCraftingYield() {
+	public int getCraftingYield() {
 		return 1;
 	}
 

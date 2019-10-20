@@ -10,20 +10,22 @@ import org.bukkit.event.block.BlockBreakEvent;
 import com.gmail.robbiem.BukkitPluginMain.Main;
 
 public class RuneOfInfestation extends Rune {
-	
+
 	public static final int DISTANCE = 10;
 
 	public RuneOfInfestation(Main plugin) {
 		super(plugin);
 	}
-	
+
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent e) {
-		if (e.isCancelled() || e.getPlayer() == null) return; // BlockProtector/shulkers = no silverfish spawned
+		if (e.isCancelled() || e.getPlayer() == null)
+			return; // BlockProtector/shulkers = no silverfish spawned
 		Player breaker = e.getPlayer();
 		World world = e.getPlayer().getWorld();
-		for (Player player: world.getPlayers()) {
-			if (playerHasRune(player) && e.getBlock().getLocation().distance(player.getLocation()) <= DISTANCE && !player.equals(breaker)) {
+		for (Player player : world.getPlayers()) {
+			if (playerHasRune(player) && e.getBlock().getLocation().distance(player.getLocation()) <= DISTANCE
+					&& !player.equals(breaker)) {
 				consumeRune(player);
 				playRuneEffect(player);
 				for (int i = 0; i < 3; i++) {
@@ -40,7 +42,7 @@ public class RuneOfInfestation extends Rune {
 	}
 
 	@Override
-	int getCraftingYield() {
+	public int getCraftingYield() {
 		return 3;
 	}
 

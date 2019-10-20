@@ -17,7 +17,8 @@ public class RuneOfVengeance extends Rune {
 
 	@EventHandler
 	public void onPlayerDamagedByEntity(EntityDamageByEntityEvent e) {
-		if (e.getEntity() instanceof Player && playerHasRune((Player) e.getEntity()) && !(e.getDamager() instanceof Creeper)) {
+		if (e.getEntity() instanceof Player && playerHasRune((Player) e.getEntity())
+				&& !(e.getDamager() instanceof Creeper)) {
 			Entity damager = getDamageSource(e.getDamager());
 			if (damager instanceof Damageable && !(damager instanceof Player)) {
 				Player damaged = (Player) e.getEntity();
@@ -27,14 +28,14 @@ public class RuneOfVengeance extends Rune {
 			}
 		}
 	}
-	
+
 	@Override
 	public String getName() {
 		return "Rune of Vengeance";
 	}
 
 	@Override
-	int getCraftingYield() {
+	public int getCraftingYield() {
 		return 6;
 	}
 

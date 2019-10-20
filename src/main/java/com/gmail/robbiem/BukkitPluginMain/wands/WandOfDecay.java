@@ -14,7 +14,7 @@ import com.gmail.robbiem.BukkitPluginMain.Main;
 import com.gmail.robbiem.BukkitPluginMain.ModdedItemManager;
 
 public class WandOfDecay extends Wand implements ParticleWand {
-	
+
 	public WandOfDecay(Main plugin) {
 		super(plugin);
 	}
@@ -29,11 +29,6 @@ public class WandOfDecay extends Wand implements ParticleWand {
 		});
 		return true;
 	}
-	
-	@Override
-	public float getSpeed() {
-		return 0.75f;
-	}
 
 	@Override
 	public long getPlayerCooldown() {
@@ -47,7 +42,7 @@ public class WandOfDecay extends Wand implements ParticleWand {
 
 	@Override
 	public int getRange() {
-		return 40;
+		return 60;
 	}
 
 	@Override
@@ -64,7 +59,7 @@ public class WandOfDecay extends Wand implements ParticleWand {
 	public Material getWandTip() {
 		return Material.WITHER_ROSE;
 	}
-	
+
 	@Override
 	public Material getWandBase() {
 		return ModdedItemManager.LESSER_WAND_BASE;

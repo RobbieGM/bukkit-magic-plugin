@@ -32,11 +32,6 @@ public class VampiricWand extends Wand implements ParticleWand {
   }
 
   @Override
-  public float getSpeed() {
-    return 0.75f;
-  }
-
-  @Override
   public long getPlayerCooldown() {
     return 750l;
   }
@@ -53,7 +48,7 @@ public class VampiricWand extends Wand implements ParticleWand {
 
   @Override
   public int getRange() {
-    return 40;
+    return 60;
   }
 
   @Override
@@ -73,7 +68,7 @@ public class VampiricWand extends Wand implements ParticleWand {
 
   @Override
   public String getName() {
-    return "Vampiric Wand";
+    return "Wand of Bloodsucking";
   }
 
 }

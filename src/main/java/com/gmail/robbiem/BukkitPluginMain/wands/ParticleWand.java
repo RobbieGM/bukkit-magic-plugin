@@ -40,15 +40,16 @@ public interface ParticleWand {
 
 class Spell {
 	static final boolean ALLOW_SELF_HIT = false;
+	static final Vector ACCELERATION = new Vector(0, -0.01, 0);
 
 	WandBlastCollideEvent onWandBlastCollide, makeParticleEffect;
 	EntityHitBySpellEvent onEntityHit;
 	int repeatingTaskId;
 	int eventualCollisionTaskId;
 	int tick = 1;
-	final long totalTicks;
-	final Location eyeLocation;
-	final Vector difference;
+	// final Vector difference;
+	Location location;
+	Vector velocity;
 	ParticleWand wand;
 	BukkitScheduler scheduler;
 	Player caster;
@@ -61,25 +62,26 @@ class Spell {
 		this.makeParticleEffect = makeParticleEffect;
 		this.caster = player;
 		this.wand = wand;
+		location = caster.getEyeLocation();
 		scheduler = plugin.getServer().getScheduler();
 		Vector randomVec = new Vector(-1 + 2 * Math.random(), -1 + 2 * Math.random(), -1 + 2 * Math.random());
 		randomVec.multiply(wand.getSpread());
-		eyeLocation = player.getEyeLocation();
-		Location targeted = eyeLocation.clone()
-				.add(player.getLocation().getDirection().add(randomVec).multiply(wand.getRange()));
-		difference = targeted.toVector().subtract(eyeLocation.toVector());
-		double distance = difference.length();
-		totalTicks = (long) (distance / wand.getSpeed());
+		// Location targeted = eyeLocation.clone()
+		// .add(player.getLocation().getDirection().add(randomVec).multiply(wand.getRange()));
+		// difference = targeted.toVector().subtract(eyeLocation.toVector());
+		// double distance = difference.length();
+		velocity = caster.getLocation().getDirection().add(randomVec).multiply(wand.getSpeed()); // .add(caster.getVelocity());
 		repeatingTaskId = scheduler.scheduleSyncRepeatingTask(plugin, () -> {
 			doTick();
 		}, 0, 1);
+		long projectileLifetime = (long) (wand.getRange() / wand.getSpeed());
 		eventualCollisionTaskId = scheduler.scheduleSyncDelayedTask(plugin, () -> {
 			if (explodeByDefault && !hasExploded) {
-				explode(targeted);
+				explode(location);
 			} else {
 				plugin.getServer().getScheduler().cancelTask(repeatingTaskId);
 			}
-		}, (long) totalTicks);
+		}, projectileLifetime);
 	}
 
 	boolean rayIsObstructed(Location start, Location end) {
@@ -99,17 +101,14 @@ class Spell {
 	}
 
 	void doTick() {
-		double fraction = (double) tick / totalTicks;
-		double lastFraction = ((double) (tick - 1) / totalTicks);
-		Location particleLocation = eyeLocation.toVector().add(difference.clone().multiply(fraction))
-				.toLocation(eyeLocation.getWorld());
-		Location lastLocation = eyeLocation.toVector().add(difference.clone().multiply(lastFraction))
-				.toLocation(eyeLocation.getWorld());
-		boolean hit = rayIsObstructed(lastLocation, particleLocation);
+		Location lastLocation = location.clone();
+		velocity.add(ACCELERATION);
+		location.add(velocity);
+		boolean hit = rayIsObstructed(lastLocation, location);
 		if (hit) {
-			explode(particleLocation);
+			explode(location);
 		} else {
-			makeParticleEffect.run(particleLocation);
+			makeParticleEffect.run(location);
 		}
 		tick++;
 	}

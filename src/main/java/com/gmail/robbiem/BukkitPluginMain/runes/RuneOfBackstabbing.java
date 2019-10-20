@@ -38,7 +38,7 @@ public class RuneOfBackstabbing extends Rune {
 	}
 
 	@Override
-	int getCraftingYield() {
+	public int getCraftingYield() {
 		return 4;
 	}
 

@@ -27,7 +27,8 @@ public class WandOfConfusion extends Wand implements ParticleWand {
   @Override
   public boolean use(ItemStack item, Player player, World world, Server server) {
     cast(player, plugin, collideLocation -> {
-      world.spawnParticle(Particle.REDSTONE, collideLocation.add(0, 0.5, 0), 5, 0, 0, 0, 0.05, new Particle.DustOptions(Color.YELLOW, 3));
+      world.spawnParticle(Particle.REDSTONE, collideLocation.add(0, 0.5, 0), 5, 0, 0, 0, 0.05,
+          new Particle.DustOptions(Color.YELLOW, 3));
     }, (hitEntity, collideLocation) -> {
       if (hitEntity instanceof Player) {
         Player hit = (Player) hitEntity;
@@ -63,7 +64,7 @@ public class WandOfConfusion extends Wand implements ParticleWand {
 
   @Override
   public int getRange() {
-    return 25;
+    return 40;
   }
 
   @Override
@@ -84,7 +85,7 @@ public class WandOfConfusion extends Wand implements ParticleWand {
 
   @Override
   public float getSpeed() {
-    return isBuffed ? 2.5f : 1f;
+    return isBuffed ? 2f : 1f;
   }
 
   @Override

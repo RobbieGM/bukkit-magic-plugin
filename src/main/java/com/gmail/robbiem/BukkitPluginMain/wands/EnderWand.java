@@ -34,14 +34,14 @@ public class EnderWand extends LeftClickableWand {
     Location loc = player.getEyeLocation().toVector().add(player.getLocation().getDirection()).toLocation(world,
         player.getLocation().getYaw(), player.getLocation().getPitch());
     EnderPearl pearl = world.spawn(loc, EnderPearl.class);
-    pearl.setVelocity(player.getLocation().getDirection());
+    pearl.setVelocity(player.getLocation().getDirection().multiply(2));
     pearl.setShooter(player);
     return true;
   }
 
   @Override
   public long getItemCooldown() {
-    return isBuffed ? 2000l : 2500l;
+    return isBuffed ? 3500l : 4000l;
   }
 
   @Override
@@ -71,7 +71,7 @@ public class EnderWand extends LeftClickableWand {
 
   @Override
   public String getName() {
-    return "Ender Wand";
+    return "Wand of Ender";
   }
 
 }

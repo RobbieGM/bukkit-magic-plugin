@@ -14,7 +14,7 @@ import com.gmail.robbiem.BukkitPluginMain.Main;
 import com.gmail.robbiem.BukkitPluginMain.ModdedItemManager;
 
 public class WandOfPoison extends Wand implements ParticleWand {
-	
+
 	public WandOfPoison(Main plugin) {
 		super(plugin);
 	}
@@ -28,17 +28,12 @@ public class WandOfPoison extends Wand implements ParticleWand {
 		});
 		return true;
 	}
-	
-	@Override
-	public float getSpeed() {
-		return isBuffed ? 1f : 0.75f;
-	}
 
 	@Override
 	public long getItemCooldown() {
 		return 500l;
 	}
-	
+
 	@Override
 	public long getPlayerCooldown() {
 		return 300l;
@@ -51,7 +46,7 @@ public class WandOfPoison extends Wand implements ParticleWand {
 
 	@Override
 	public int getRange() {
-		return 50;
+		return 70;
 	}
 
 	@Override
@@ -68,7 +63,7 @@ public class WandOfPoison extends Wand implements ParticleWand {
 	public Material getWandTip() {
 		return Material.SPIDER_EYE;
 	}
-	
+
 	@Override
 	public Material getWandBase() {
 		return ModdedItemManager.LESSER_WAND_BASE;
@@ -78,5 +73,5 @@ public class WandOfPoison extends Wand implements ParticleWand {
 	public String getName() {
 		return "Wand of Poison";
 	}
-	
+
 }

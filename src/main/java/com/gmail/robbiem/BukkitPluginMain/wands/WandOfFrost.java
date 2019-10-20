@@ -1,6 +1,5 @@
 package com.gmail.robbiem.BukkitPluginMain.wands;
 
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +25,7 @@ import com.gmail.robbiem.BukkitPluginMain.Main;
 import com.gmail.robbiem.BukkitPluginMain.ModdedItemManager;
 
 public class WandOfFrost extends LeftClickableWand implements ParticleWand, Listener {
-	
+
 	public WandOfFrost(Main plugin) {
 		super(plugin);
 	}
@@ -40,7 +39,8 @@ public class WandOfFrost extends LeftClickableWand implements ParticleWand, List
 			world.playSound(location, Sound.BLOCK_CHORUS_FLOWER_DEATH, 1, 1.5f);
 		}, (entity, location) -> {
 			entity.damage(8, player);
-			entity.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 20 * 3, 128)); // Jump boost 128 = no jumping to evade slowness
+			entity.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 20 * 3, 128)); // Jump boost 128 = no jumping to
+																																										// evade slowness
 			entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 3, 255));
 			if (entity instanceof Player) {
 				plugin.moddedItemManager.cooldownManager.setPlayerCooldown((Player) entity, (long) 2000);
@@ -49,7 +49,7 @@ public class WandOfFrost extends LeftClickableWand implements ParticleWand, List
 		});
 		return true;
 	}
-	
+
 	@Override
 	public boolean useAlt(ItemStack item, Player player, World world, Server server) {
 		final int radius = 5;
@@ -70,9 +70,10 @@ public class WandOfFrost extends LeftClickableWand implements ParticleWand, List
 				}
 			}
 			return true;
-		} else return false;
+		} else
+			return false;
 	}
-	
+
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent e) {
 		UUID id = e.getPlayer().getUniqueId();
@@ -83,7 +84,7 @@ public class WandOfFrost extends LeftClickableWand implements ParticleWand, List
 			e.setTo(from);
 		}
 	}
-	
+
 	@Override
 	public boolean isEventHandler() {
 		return true;
@@ -93,17 +94,17 @@ public class WandOfFrost extends LeftClickableWand implements ParticleWand, List
 	public long getPlayerCooldown() {
 		return 500l;
 	}
-	
+
 	@Override
 	public long getItemCooldown() {
 		return isBuffed ? 2000l : 6000l;
 	}
-	
+
 	@Override
 	public long getAltPlayerCooldown() {
 		return 0;
 	}
-	
+
 	@Override
 	public long getAltItemCooldown() {
 		return 500l;
@@ -116,7 +117,7 @@ public class WandOfFrost extends LeftClickableWand implements ParticleWand, List
 
 	@Override
 	public int getRange() {
-		return 40;
+		return 60;
 	}
 
 	@Override

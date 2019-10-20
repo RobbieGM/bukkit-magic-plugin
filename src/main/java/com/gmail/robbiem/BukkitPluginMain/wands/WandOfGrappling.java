@@ -14,7 +14,7 @@ import com.gmail.robbiem.BukkitPluginMain.Main;
 import com.gmail.robbiem.BukkitPluginMain.ModdedItemManager;
 
 public class WandOfGrappling extends Wand implements ParticleWand {
-	
+
 	public WandOfGrappling(Main plugin) {
 		super(plugin);
 	}
@@ -22,7 +22,7 @@ public class WandOfGrappling extends Wand implements ParticleWand {
 	double maxSpeed() {
 		return isBuffed ? 5 : 2;
 	}
-	
+
 	@Override
 	public boolean use(ItemStack item, Player player, World world, Server server) {
 		cast(player, plugin, (Location l) -> {
@@ -37,15 +37,17 @@ public class WandOfGrappling extends Wand implements ParticleWand {
 					}
 					propelVector.setY(propelVector.getY() + 0.2);
 					player.setVelocity(propelVector);
-				} catch (IllegalArgumentException e) {}
+				} catch (IllegalArgumentException e) {
+				}
 			}, 0, 1);
 			plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 				plugin.getServer().getScheduler().cancelTask(taskId);
 			}, 15);
-		}, (LivingEntity e, Location l) -> {});
+		}, (LivingEntity e, Location l) -> {
+		});
 		return true;
 	}
-	
+
 	@Override
 	public float getSpeed() {
 		return isBuffed ? 5f : 3f;
@@ -53,7 +55,7 @@ public class WandOfGrappling extends Wand implements ParticleWand {
 
 	@Override
 	public int getRange() {
-		return isBuffed ? 90 : 50;
+		return isBuffed ? 110 : 70;
 	}
 
 	@Override
@@ -70,12 +72,12 @@ public class WandOfGrappling extends Wand implements ParticleWand {
 	public long getPlayerCooldown() {
 		return 1000l;
 	}
-	
+
 	@Override
 	public long getItemCooldown() {
 		return 1500l;
 	}
-	
+
 	@Override
 	public boolean isWeapon() {
 		return false;
@@ -90,7 +92,7 @@ public class WandOfGrappling extends Wand implements ParticleWand {
 	public Material getWandTip() {
 		return Material.STRING;
 	}
-	
+
 	@Override
 	public Material getWandBase() {
 		return ModdedItemManager.LESSER_WAND_BASE;

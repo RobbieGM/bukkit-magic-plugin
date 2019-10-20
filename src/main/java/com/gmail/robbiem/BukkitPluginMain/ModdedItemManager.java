@@ -198,7 +198,8 @@ public class ModdedItemManager implements Listener {
 		});
 		runes.forEach((Rune rune) -> {
 			pm.registerEvents(rune, plugin);
-			ShapedRecipe runeRecipe = createRecipeFromResult(Material.EMERALD, rune.getName(), rune.getLore());
+			ShapedRecipe runeRecipe = createRecipeFromResult(Material.EMERALD, rune.getName(), rune.getLore(),
+					rune.getCraftingYield());
 			runeRecipe.shape("eee", "exe", "eee").setIngredient('e', Material.EMERALD).setIngredient('x',
 					rune.getCraftingRecipeCenterItem());
 			plugin.getServer().addRecipe(runeRecipe);
@@ -211,8 +212,8 @@ public class ModdedItemManager implements Listener {
 		runes.clear();
 	}
 
-	ShapedRecipe createRecipeFromResult(Material itemMaterial, String name, String lore) {
-		ItemStack item = new ItemStack(itemMaterial);
+	ShapedRecipe createRecipeFromResult(Material itemMaterial, String name, String lore, int count) {
+		ItemStack item = new ItemStack(itemMaterial, count);
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(name);
 		meta.setLore(Arrays.asList(lore.split("\n")));
@@ -220,6 +221,10 @@ public class ModdedItemManager implements Listener {
 		item.setItemMeta(meta);
 		String keyName = name.toLowerCase().replaceAll("[^a-z0-9/._-]", "");
 		return new ShapedRecipe(new NamespacedKey(plugin, keyName), item);
+	}
+
+	ShapedRecipe createRecipeFromResult(Material itemMaterial, String name, String lore) {
+		return createRecipeFromResult(itemMaterial, name, lore, 1);
 	}
 
 	public <T extends UseableItem> T getUseableItem(List<T> items, String name) {
@@ -237,7 +242,6 @@ public class ModdedItemManager implements Listener {
 		boolean isOtherInteraction = e.getAction() == Action.RIGHT_CLICK_BLOCK
 				&& e.getClickedBlock().getType().isInteractable()
 				&& !e.getClickedBlock().getType().toString().contains("STAIRS");
-		plugin.getLogger().info("Is other interaction? " + isOtherInteraction);
 		boolean isMainHand = e.getHand() == EquipmentSlot.HAND;
 		if (item != null && !isOtherInteraction && isMainHand) {
 			String itemName = item.getItemMeta().getDisplayName();

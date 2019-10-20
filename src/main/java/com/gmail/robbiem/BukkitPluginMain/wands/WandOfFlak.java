@@ -34,8 +34,7 @@ public class WandOfFlak extends Wand implements ParticleWand {
 				ItemStack elytra = hitPlayer.getInventory().getChestplate();
 				if (elytra != null && elytra.getType() == Material.ELYTRA && entity.isGliding()) {
 					Damageable meta = (Damageable) elytra.getItemMeta();
-					plugin.getLogger().info("Damage: " + meta.getDamage());
-					meta.setDamage(meta.getDamage() + (isBuffed ? 200 : 75 /*150*/));
+					meta.setDamage(meta.getDamage() + (isBuffed ? 200 : 150));
 					elytra.setItemMeta((ItemMeta) meta);
 					hitPlayer.getInventory().setChestplate(elytra);
 				}
@@ -48,7 +47,7 @@ public class WandOfFlak extends Wand implements ParticleWand {
 	public long getPlayerCooldown() {
 		return 200l;
 	}
-	
+
 	@Override
 	public float getSpeed() {
 		return 5f;
@@ -61,8 +60,8 @@ public class WandOfFlak extends Wand implements ParticleWand {
 
 	@Override
 	public int getRange() {
-		int min = 15;
-		int max = 50;
+		int min = 20;
+		int max = 60;
 		return min + (int) (Math.random() * (max - min));
 	}
 

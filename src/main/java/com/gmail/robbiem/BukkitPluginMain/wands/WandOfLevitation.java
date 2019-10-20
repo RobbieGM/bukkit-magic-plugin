@@ -25,7 +25,7 @@ public class WandOfLevitation extends Wand {
       LivingEntity closestToHit = null;
       for (LivingEntity entity : world.getLivingEntities()) {
         double dist = entity.getLocation().distanceSquared(hit);
-        if (entity.getUniqueId() != player.getUniqueId() && dist < 5 * 5
+        if (entity.getUniqueId() != player.getUniqueId() && dist < 10 * 10
             && (closestToHit == null || dist < closestToHit.getLocation().distanceSquared(hit))) {
           closestToHit = entity;
         }
@@ -33,6 +33,7 @@ public class WandOfLevitation extends Wand {
       if (closestToHit != null) {
         ShulkerBullet bullet = (ShulkerBullet) world
             .spawnEntity(player.getEyeLocation().add(player.getLocation().getDirection()), EntityType.SHULKER_BULLET);
+        bullet.setShooter(player);
         bullet.setTarget(closestToHit);
         return true;
       }
@@ -47,7 +48,7 @@ public class WandOfLevitation extends Wand {
 
   @Override
   public long getItemCooldown() {
-    return isBuffed ? 500l : 750l;
+    return isBuffed ? 750l : 1250l;
   }
 
   @Override
