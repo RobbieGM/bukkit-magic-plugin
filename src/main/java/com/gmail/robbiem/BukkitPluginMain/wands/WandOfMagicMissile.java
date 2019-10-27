@@ -22,13 +22,13 @@ import org.bukkit.util.Vector;
 import com.gmail.robbiem.BukkitPluginMain.Main;
 
 public class WandOfMagicMissile extends Wand {
-	
+
 	public WandOfMagicMissile(Main plugin) {
 		super(plugin);
 	}
 
 	static final int RANGE = 100;
-	
+
 	Map<Player, MagicMissile> playerMissileMap = new HashMap<>();
 
 	@Override
@@ -36,11 +36,12 @@ public class WandOfMagicMissile extends Wand {
 		if (playerMissileMap.containsKey(player)) {
 			playerMissileMap.get(player).stop();
 		}
-		MagicMissile missile = new MagicMissile(player.getEyeLocation(), getPlayerLookTarget(player, RANGE), player, plugin, RANGE);
+		MagicMissile missile = new MagicMissile(player.getEyeLocation(), getPlayerLookTarget(player, RANGE), player, plugin,
+				RANGE);
 		playerMissileMap.put(player, missile);
 		return true;
 	}
-	
+
 	Location getPlayerLookTarget(Player p, int range) {
 		Block targetedBlock = p.getTargetBlockExact(range);
 		if (targetedBlock != null)
@@ -53,7 +54,7 @@ public class WandOfMagicMissile extends Wand {
 	public long getItemCooldown() {
 		return 2500l;
 	}
-	
+
 	@Override
 	public long getPlayerCooldown() {
 		return isBuffed ? 0 : 1500l;
@@ -76,9 +77,9 @@ public class WandOfMagicMissile extends Wand {
 }
 
 class MagicMissile {
-	
+
 	static final Particle PARTICLE = Particle.DRAGON_BREATH;
-	
+
 	Location location;
 	Vector velocity;
 	Location target;
@@ -86,7 +87,7 @@ class MagicMissile {
 	JavaPlugin plugin;
 	int taskId;
 	int range;
-	
+
 	MagicMissile(Location original, Location target, Player shooter, JavaPlugin plugin, int range) {
 		location = original;
 		velocity = new Vector();
@@ -96,11 +97,11 @@ class MagicMissile {
 		this.plugin = plugin;
 		taskId = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, this::doTick, 0, 1);
 	}
-	
+
 	void setTarget(Location newTarget) {
 		target = newTarget;
 	}
-	
+
 	void doTick() {
 		setTarget(Wand.getTarget(caster, range, true));
 		Location lastLocation = location.clone();
@@ -110,11 +111,11 @@ class MagicMissile {
 			stop();
 		}
 	}
-	
+
 	void stop() {
 		plugin.getServer().getScheduler().cancelTask(taskId);
 	}
-	
+
 	void move() {
 		Vector dir = target.toVector().subtract(location.toVector()).normalize();
 		velocity.add(dir.clone().multiply(0.2));
@@ -122,24 +123,25 @@ class MagicMissile {
 		location.add(velocity);
 		location.getWorld().spawnParticle(PARTICLE, location, 0, dir.getX(), dir.getY(), dir.getZ(), 0.4, null, true);
 	}
-	
+
 	boolean hasCollided() {
 		return !Arrays.asList(Material.AIR, Material.CAVE_AIR).contains(location.getBlock().getType());
 	}
-	
+
 	boolean rayIsObstructed(Location start, Location end) {
 		Vector direction = end.clone().subtract(start).toVector().normalize();
-		RayTraceResult result = start.getWorld().rayTrace(start, direction, end.distance(start), FluidCollisionMode.NEVER, true, 1, entity -> !entity.equals(caster));
+		RayTraceResult result = start.getWorld().rayTrace(start, direction, end.distance(start), FluidCollisionMode.NEVER,
+				true, 1, entity -> !entity.equals(caster));
 		return result != null;
 	}
-	
+
 	void explode() {
 		location.getWorld().spawnParticle(PARTICLE, location, 200, 0, 0, 0, 0.15, null, true);
 		location.getWorld().spawnParticle(Particle.FLASH, location, 1);
 		location.getWorld().playSound(location, Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 1, 1);
-		for (LivingEntity entity: location.getWorld().getLivingEntities()) {
+		for (LivingEntity entity : location.getWorld().getLivingEntities()) {
 			if (entity.getLocation().distanceSquared(location) <= 2.5 * 2.5)
-				entity.damage(10, caster);
+				entity.damage(10); // , caster);
 		}
 	}
 

@@ -9,66 +9,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.gmail.robbiem.BukkitPluginMain.runes.Rune;
-import com.gmail.robbiem.BukkitPluginMain.runes.RuneOfBackstabbing;
-import com.gmail.robbiem.BukkitPluginMain.runes.RuneOfBounce;
-import com.gmail.robbiem.BukkitPluginMain.runes.RuneOfDisarmament;
-import com.gmail.robbiem.BukkitPluginMain.runes.RuneOfFeatherFalling;
-import com.gmail.robbiem.BukkitPluginMain.runes.RuneOfInfestation;
-import com.gmail.robbiem.BukkitPluginMain.runes.RuneOfInvincibility;
-import com.gmail.robbiem.BukkitPluginMain.runes.RuneOfPsionicBlast;
-import com.gmail.robbiem.BukkitPluginMain.runes.RuneOfVengeance;
-import com.gmail.robbiem.BukkitPluginMain.scrolls.Scroll;
-import com.gmail.robbiem.BukkitPluginMain.scrolls.ScrollOfAntiMagic;
-import com.gmail.robbiem.BukkitPluginMain.scrolls.ScrollOfBlindness;
-import com.gmail.robbiem.BukkitPluginMain.scrolls.ScrollOfElements;
-import com.gmail.robbiem.BukkitPluginMain.scrolls.ScrollOfEquineSummoning;
-import com.gmail.robbiem.BukkitPluginMain.scrolls.ScrollOfFlight;
-import com.gmail.robbiem.BukkitPluginMain.scrolls.ScrollOfInvisibility;
-import com.gmail.robbiem.BukkitPluginMain.scrolls.ScrollOfJealousy;
-import com.gmail.robbiem.BukkitPluginMain.scrolls.ScrollOfNecromancy;
-import com.gmail.robbiem.BukkitPluginMain.scrolls.ScrollOfOrganization;
-import com.gmail.robbiem.BukkitPluginMain.scrolls.ScrollOfPlunder;
-import com.gmail.robbiem.BukkitPluginMain.scrolls.ScrollOfProtection;
-import com.gmail.robbiem.BukkitPluginMain.scrolls.ScrollOfScavenging;
-import com.gmail.robbiem.BukkitPluginMain.scrolls.ScrollOfSurprise;
-import com.gmail.robbiem.BukkitPluginMain.scrolls.ScrollOfTeleportation;
-import com.gmail.robbiem.BukkitPluginMain.scrolls.ScrollOfTheEagle;
-import com.gmail.robbiem.BukkitPluginMain.scrolls.ScrollOfTheHuntersVision;
-import com.gmail.robbiem.BukkitPluginMain.scrolls.ScrollOfTheOracle;
-import com.gmail.robbiem.BukkitPluginMain.scrolls.ScrollOfUpgrade;
-import com.gmail.robbiem.BukkitPluginMain.wands.EnderWand;
-import com.gmail.robbiem.BukkitPluginMain.wands.LeftClickableWand;
-import com.gmail.robbiem.BukkitPluginMain.wands.VampiricWand;
-import com.gmail.robbiem.BukkitPluginMain.wands.Wand;
-import com.gmail.robbiem.BukkitPluginMain.wands.WandOfArchitecture;
-import com.gmail.robbiem.BukkitPluginMain.wands.WandOfArrowStorm;
-import com.gmail.robbiem.BukkitPluginMain.wands.WandOfAvalanche;
-import com.gmail.robbiem.BukkitPluginMain.wands.WandOfBlasting;
-import com.gmail.robbiem.BukkitPluginMain.wands.WandOfConfusion;
-import com.gmail.robbiem.BukkitPluginMain.wands.WandOfDecay;
-import com.gmail.robbiem.BukkitPluginMain.wands.WandOfDestruction;
-import com.gmail.robbiem.BukkitPluginMain.wands.WandOfFlak;
-import com.gmail.robbiem.BukkitPluginMain.wands.WandOfFlame;
-import com.gmail.robbiem.BukkitPluginMain.wands.WandOfForce;
-import com.gmail.robbiem.BukkitPluginMain.wands.WandOfForceField;
-import com.gmail.robbiem.BukkitPluginMain.wands.WandOfFrost;
-import com.gmail.robbiem.BukkitPluginMain.wands.WandOfGrappling;
-import com.gmail.robbiem.BukkitPluginMain.wands.WandOfLavaBolt;
-import com.gmail.robbiem.BukkitPluginMain.wands.WandOfLevitation;
-import com.gmail.robbiem.BukkitPluginMain.wands.WandOfLightning;
-import com.gmail.robbiem.BukkitPluginMain.wands.WandOfMagicMissile;
-import com.gmail.robbiem.BukkitPluginMain.wands.WandOfMagnetism;
-import com.gmail.robbiem.BukkitPluginMain.wands.WandOfOP;
-import com.gmail.robbiem.BukkitPluginMain.wands.WandOfPerception;
-import com.gmail.robbiem.BukkitPluginMain.wands.WandOfPoison;
-import com.gmail.robbiem.BukkitPluginMain.wands.WandOfPolymorph;
-import com.gmail.robbiem.BukkitPluginMain.wands.WandOfPoseidon;
-import com.gmail.robbiem.BukkitPluginMain.wands.WandOfPropulsion;
-import com.gmail.robbiem.BukkitPluginMain.wands.WandOfScience;
-import com.gmail.robbiem.BukkitPluginMain.wands.WandOfTeleportation;
-import com.gmail.robbiem.BukkitPluginMain.wands.WandOfTransparency;
-import com.gmail.robbiem.BukkitPluginMain.wands.WandOfTrapping;
+import com.gmail.robbiem.BukkitPluginMain.runes.*;
+import com.gmail.robbiem.BukkitPluginMain.scrolls.*;
+import com.gmail.robbiem.BukkitPluginMain.wands.*;
 
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -140,13 +83,13 @@ public class ModdedItemManager implements Listener {
 	}
 
 	void initItems() {
-		List<Class<? extends Wand>> wandClasses = Arrays.asList(EnderWand.class, VampiricWand.class,
-				WandOfArchitecture.class, WandOfArrowStorm.class, WandOfAvalanche.class, WandOfBlasting.class,
-				WandOfConfusion.class, WandOfDecay.class, WandOfDestruction.class, WandOfFlak.class, WandOfFlame.class,
-				WandOfForce.class, WandOfForceField.class, WandOfFrost.class, WandOfGrappling.class, WandOfLavaBolt.class,
-				WandOfLevitation.class, WandOfLightning.class, WandOfMagicMissile.class, WandOfMagnetism.class, WandOfOP.class,
-				WandOfPerception.class, WandOfPoison.class, WandOfPolymorph.class, WandOfPoseidon.class, WandOfPropulsion.class,
-				WandOfScience.class, WandOfTeleportation.class, WandOfTransparency.class, WandOfTrapping.class);
+		List<Class<? extends Wand>> wandClasses = Arrays.asList(VampiricWand.class, WandOfArchitecture.class,
+				WandOfArrowStorm.class, WandOfAvalanche.class, WandOfBlasting.class, WandOfConfusion.class, WandOfDecay.class,
+				WandOfDestruction.class, WandOfFlak.class, WandOfFlame.class, WandOfForce.class, WandOfForceField.class,
+				WandOfFrost.class, WandOfGrappling.class, WandOfHarming.class, WandOfLavaBolt.class, WandOfLevitation.class,
+				WandOfLightning.class, WandOfMagicMissile.class, WandOfMagnetism.class, WandOfOP.class, WandOfPerception.class,
+				WandOfPoison.class, WandOfPolymorph.class, WandOfPoseidon.class, WandOfPropulsion.class, WandOfScience.class,
+				WandOfTeleportation.class, WandOfTransparency.class, WandOfTrapping.class);
 		List<Class<? extends Scroll>> scrollClasses = Arrays.asList(ScrollOfAntiMagic.class, ScrollOfBlindness.class,
 				ScrollOfElements.class, ScrollOfEquineSummoning.class, ScrollOfFlight.class, ScrollOfInvisibility.class,
 				ScrollOfJealousy.class, ScrollOfNecromancy.class, ScrollOfOrganization.class, ScrollOfPlunder.class,

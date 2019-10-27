@@ -64,7 +64,7 @@ public class WandOfTransparency extends Wand {
 
   @Override
   public Material getWandTip() {
-    return Material.GLASS;
+    return Material.OBSIDIAN;
   }
 
   @Override

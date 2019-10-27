@@ -27,7 +27,7 @@ public class WandOfFlak extends Wand implements ParticleWand {
 		}, (entity, location) -> {
 			if (entity.isGliding()) {
 				entity.setVelocity(entity.getVelocity().multiply(isBuffed ? 0.1 : 0.5));
-				entity.damage(4, player);
+				entity.damage(4); // , player);
 			}
 			if (entity instanceof Player) {
 				Player hitPlayer = (Player) entity;

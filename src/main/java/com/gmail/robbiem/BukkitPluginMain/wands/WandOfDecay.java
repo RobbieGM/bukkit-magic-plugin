@@ -24,7 +24,7 @@ public class WandOfDecay extends Wand implements ParticleWand {
 		cast(player, plugin, (location) -> {
 			location.getWorld().spawnParticle(Particle.SMOKE_LARGE, location, 50, 0, 0, 0, 0.15);
 		}, (entity, spellLocation) -> {
-			entity.damage(1, player);
+			entity.damage(1); // , player);
 			entity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, isBuffed ? 20 * 7 : 20 * 4, 4));
 		});
 		return true;

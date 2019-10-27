@@ -23,7 +23,7 @@ public class VampiricWand extends Wand implements ParticleWand {
     }, (entity, spellLocation) -> {
       double damage = isBuffed ? 5 : 3;
       if (entity.getHealth() >= damage + 2) { // leave at least 1 heart
-        entity.damage(0, player);
+        entity.damage(1); // , player);
         entity.setHealth(entity.getHealth() - 2);
         player.setHealth(Math.min(player.getHealth() + 2, 20));
       }

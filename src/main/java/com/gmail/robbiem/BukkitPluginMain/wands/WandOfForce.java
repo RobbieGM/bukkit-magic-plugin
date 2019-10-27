@@ -25,17 +25,17 @@ public class WandOfForce extends LeftClickableWand {
 	public boolean use(ItemStack wandItem, Player player, World world, Server server) {
 		List<LivingEntity> mobs = world.getLivingEntities();
 		boolean pushedMob = false;
-		for (LivingEntity mob: mobs) {
-			pushedMob = true;
+		for (LivingEntity mob : mobs) {
 			if (mob instanceof Player && ((Player) mob).getGameMode() != GameMode.SURVIVAL)
 				continue;
 			Vector mobLocation = mob.getLocation().toVector();
 			Vector playerLocation = player.getLocation().toVector();
-			if (mobLocation.isInSphere(playerLocation, 10) && !mobLocation.equals(playerLocation)) {
+			if (mobLocation.isInSphere(playerLocation, isBuffed ? 15 : 10) && !mobLocation.equals(playerLocation)) {
+				pushedMob = true;
 				double distance = mobLocation.clone().subtract(playerLocation).length();
-				double force = isBuffed ? (10 - 1 * distance) : (7 - 0.7 * distance); // Same location: 10, 10 blocks away: 0
+				double force = isBuffed ? (15 - 1.5 * distance) : (10 - 1 * distance); // Same location: 10, 10 blocks away: 0
 				Vector propelVector = mobLocation.subtract(playerLocation).normalize().multiply(force);
-				propelVector.setY(0.8);
+				propelVector.setY(0.7);
 				world.spawnParticle(Particle.SPELL_INSTANT, mob.getLocation(), 5, 1, 1, 1);
 				mob.setVelocity(propelVector);
 			}
@@ -44,7 +44,7 @@ public class WandOfForce extends LeftClickableWand {
 			world.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1.5f);
 		return pushedMob;
 	}
-	
+
 	@Override
 	public boolean useAlt(ItemStack item, Player player, World world, Server server) {
 		world.spawnParticle(Particle.CLOUD, player.getLocation(), 10, 0, 0, 0, 0.05);
@@ -54,19 +54,19 @@ public class WandOfForce extends LeftClickableWand {
 
 	@Override
 	public long getPlayerCooldown() {
-		return 2500l; 
+		return 2500l;
 	}
-	
+
 	@Override
 	public long getAltPlayerCooldown() {
 		return 0;
 	}
-	
+
 	@Override
 	public long getAltItemCooldown() {
 		return 1000l;
 	}
-	
+
 	@Override
 	public String getLore() {
 		return "Pushes all mobs and players away from\nyou with considerable velocity";

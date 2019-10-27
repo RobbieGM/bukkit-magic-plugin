@@ -23,7 +23,7 @@ public class RuneOfBackstabbing extends Rune {
 			consumeRune(damaged);
 			playRuneEffect(damaged);
 			e.setCancelled(true);
-			((Player) damager).damage(8, damaged);
+			((Player) damager).damage(8); // , damaged);
 			Location newLoc = damager.getLocation();
 			newLoc.subtract(newLoc.getDirection().setY(0).normalize().multiply(2));
 			if (newLoc.getBlock().getType().isSolid())
