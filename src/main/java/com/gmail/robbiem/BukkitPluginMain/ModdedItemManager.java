@@ -83,13 +83,14 @@ public class ModdedItemManager implements Listener {
 	}
 
 	void initItems() {
-		List<Class<? extends Wand>> wandClasses = Arrays.asList(VampiricWand.class, WandOfArchitecture.class,
-				WandOfArrowStorm.class, WandOfAvalanche.class, WandOfBlasting.class, WandOfConfusion.class, WandOfDecay.class,
-				WandOfDestruction.class, WandOfFlak.class, WandOfFlame.class, WandOfForce.class, WandOfForceField.class,
-				WandOfFrost.class, WandOfGrappling.class, WandOfHarming.class, WandOfLavaBolt.class, WandOfLevitation.class,
-				WandOfLightning.class, WandOfMagicMissile.class, WandOfMagnetism.class, WandOfOP.class, WandOfPerception.class,
-				WandOfPoison.class, WandOfPolymorph.class, WandOfPoseidon.class, WandOfPropulsion.class, WandOfScience.class,
-				WandOfTeleportation.class, WandOfTransparency.class, WandOfTrapping.class);
+		List<Class<? extends Wand>> wandClasses = Arrays.asList(VampiricWand.class, WandOfAmok.class,
+				WandOfArchitecture.class, WandOfArrowStorm.class, WandOfAvalanche.class, WandOfBlasting.class,
+				WandOfConfusion.class, WandOfDecay.class, WandOfDestruction.class, WandOfFlak.class, WandOfFlame.class,
+				WandOfForce.class, WandOfForceField.class, WandOfFrost.class, WandOfGrappling.class,
+				WandOfHarming.class, WandOfLavaBolt.class, WandOfLevitation.class, WandOfLightning.class,
+				WandOfMagicMissile.class, WandOfMagnetism.class, WandOfOP.class, WandOfPerception.class,
+				WandOfPoison.class, WandOfPolymorph.class, WandOfPoseidon.class, WandOfPropulsion.class,
+				WandOfScience.class, WandOfTeleportation.class, WandOfTransparency.class, WandOfTrapping.class);
 		List<Class<? extends Scroll>> scrollClasses = Arrays.asList(ScrollOfAntiMagic.class, ScrollOfBlindness.class,
 				ScrollOfElements.class, ScrollOfEquineSummoning.class, ScrollOfFlight.class, ScrollOfInvisibility.class,
 				ScrollOfJealousy.class, ScrollOfNecromancy.class, ScrollOfOrganization.class, ScrollOfPlunder.class,
@@ -123,8 +124,8 @@ public class ModdedItemManager implements Listener {
 
 		wands.forEach((Wand wand) -> {
 			ShapedRecipe wandRecipe = createRecipeFromResult(Material.STICK, wand.getName(), wand.getLore());
-			wandRecipe.shape("  t", " s ", "b  ").setIngredient('t', wand.getWandTip()).setIngredient('s', Material.STICK)
-					.setIngredient('b', wand.getWandBase());
+			wandRecipe.shape("  t", " s ", "b  ").setIngredient('t', wand.getWandTip())
+					.setIngredient('s', Material.STICK).setIngredient('b', wand.getWandBase());
 			plugin.getServer().addRecipe(wandRecipe);
 			if (wand.isEventHandler() && wand instanceof Listener) {
 				pm.registerEvents((Listener) wand, plugin);
