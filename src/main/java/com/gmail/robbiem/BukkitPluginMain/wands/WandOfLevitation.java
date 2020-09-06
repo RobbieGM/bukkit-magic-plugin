@@ -48,7 +48,7 @@ public class WandOfLevitation extends Wand {
 
   @Override
   public long getItemCooldown() {
-    return isBuffed ? 750l : 1250l;
+    return isBuffed ? 550l : 750l;
   }
 
   @Override

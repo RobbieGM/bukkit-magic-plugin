@@ -7,6 +7,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import com.gmail.robbiem.BukkitPluginMain.Main;
+import com.gmail.robbiem.BukkitPluginMain.ModdedItemManager;
 
 public class WandOfLightning extends Wand {
 
@@ -19,9 +20,9 @@ public class WandOfLightning extends Wand {
 		Location hit = Wand.getTarget(player, 80, false);
 		if (hit != null) {
 			world.strikeLightning(hit);
-//			server.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-//				world.strikeLightning(hit);
-//			}, 25);
+			server.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+				world.strikeLightning(hit);
+			}, 25);
 			return true;
 		} else {
 			return false;
@@ -46,6 +47,11 @@ public class WandOfLightning extends Wand {
 	@Override
 	public Material getWandTip() {
 		return Material.TRIDENT;
+	}
+	
+	@Override
+	public Material getWandBase() {
+		return ModdedItemManager.LESSER_WAND_BASE;
 	}
 
 	@Override
